@@ -1,4 +1,4 @@
-package model.autonomous;
+package org.usfirst.frc.team3414.autonomous;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -12,7 +12,7 @@ import java.util.HashSet;
  * @generated
  */
 
-public class ObjectDetector implements IDetectObjects, IDetectObjects
+public class ObjectDetector implements IDetectObjects
 {
 	/**
 	 * <!-- begin-user-doc -->

@@ -1,8 +1,8 @@
-package model.actuators;
-import model.teleop.Display;
-import model.teleop.Log;
-import model.teleop.TeleopControl;
-import model.autonomous.AutonomousControl;
+package org.usfirst.frc.team3414.actuators;
+import org.usfirst.frc.team3414.teleop.Display;
+import org.usfirst.frc.team3414.teleop.Log;
+import org.usfirst.frc.team3414.teleop.TeleopControl;
+import org.usfirst.frc.team3414.autonomous.AutonomousControl;
 
 
 /**

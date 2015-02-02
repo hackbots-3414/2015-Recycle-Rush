@@ -1,9 +1,9 @@
-package model.autonomous;
-import model.actuators.IDriveTrain;
-import model.sensors.IMeasureDistance;
-import model.teleop.Display;
-import model.teleop.Log;
-import model.teleop.TeleopControl;
+package org.usfirst.frc.team3414.autonomous;
+import org.usfirst.frc.team3414.actuators.IDriveTrain;
+import org.usfirst.frc.team3414.sensors.IMeasureDistance;
+import org.usfirst.frc.team3414.teleop.Display;
+import org.usfirst.frc.team3414.teleop.Log;
+import org.usfirst.frc.team3414.teleop.TeleopControl;
 
 
 /**

@@ -1,7 +1,7 @@
-package model.autonomous;
-import model.teleop.Log;
-import model.teleop.Display;
-import model.sensors.ISwitch;
+package org.usfirst.frc.team3414.autonomous;
+import org.usfirst.frc.team3414.teleop.Log;
+import org.usfirst.frc.team3414.teleop.Display;
+import org.usfirst.frc.team3414.sensors.ISwitch;
 
 
 /**

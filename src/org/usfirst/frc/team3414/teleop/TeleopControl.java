@@ -1,7 +1,7 @@
-package model.teleop;
-import model.sensors.ITimer;
-import model.actuators.ILiftAssist;
-import model.autonomous.IDriverAssist;
+package org.usfirst.frc.team3414.teleop;
+import org.usfirst.frc.team3414.sensors.ITimer;
+import org.usfirst.frc.team3414.actuators.ILiftAssist;
+import org.usfirst.frc.team3414.autonomous.IDriverAssist;
 
 
 /**

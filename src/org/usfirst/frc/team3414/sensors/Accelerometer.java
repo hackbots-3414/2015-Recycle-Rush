@@ -1,7 +1,7 @@
-package model.sensors;
-import model.actuators.MecanumDrive;
-import model.teleop.Log;
-import model.teleop.Display;
+package org.usfirst.frc.team3414.sensors;
+import org.usfirst.frc.team3414.actuators.MecanumDrive;
+import org.usfirst.frc.team3414.teleop.Log;
+import org.usfirst.frc.team3414.teleop.Display;
 
 
 /**

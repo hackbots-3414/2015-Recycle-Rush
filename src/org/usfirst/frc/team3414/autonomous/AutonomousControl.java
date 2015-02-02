@@ -1,7 +1,7 @@
-package model.autonomous;
-import model.sensors.IDetectLines;
-import model.actuators.ILiftAssist;
-import model.sensors.ISwitch;
+package org.usfirst.frc.team3414.autonomous;
+import org.usfirst.frc.team3414.sensors.IDetectLines;
+import org.usfirst.frc.team3414.actuators.ILiftAssist;
+import org.usfirst.frc.team3414.sensors.ISwitch;
 
 
 /**

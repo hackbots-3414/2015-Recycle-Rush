@@ -1,8 +1,8 @@
-package model;
-import model.sensors.ITimer;
-import model.teleop.Log;
-import model.sensors.ITimeListener;
-import model.teleop.TeleopControl;
+package org.usfirst.frc.team3414.sensors;
+import org.usfirst.frc.team3414.sensors.ITimer;
+import org.usfirst.frc.team3414.teleop.Log;
+import org.usfirst.frc.team3414.sensors.ITimeListener;
+import org.usfirst.frc.team3414.teleop.TeleopControl;
 
 
 /**

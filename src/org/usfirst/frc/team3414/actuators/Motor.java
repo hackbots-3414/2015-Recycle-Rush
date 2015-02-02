@@ -1,6 +1,6 @@
-package model.actuators;
-import model.teleop.Log;
-import model.teleop.Display;
+package org.usfirst.frc.team3414.actuators;
+import org.usfirst.frc.team3414.teleop.Log;
+import org.usfirst.frc.team3414.teleop.Display;
 
 
 /**

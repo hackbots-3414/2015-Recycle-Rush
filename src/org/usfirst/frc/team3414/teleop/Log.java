@@ -1,12 +1,12 @@
-package model.teleop;
-import model.sensors.IMeasureAcceleration;
-import model.sensors.ITimer;
-import model.sensors.IDetectLines;
-import model.sensors.IMeasureDirection;
-import model.actuators.ILiftAssist;
-import model.autonomous.IDriverAssist;
-import model.actuators.IMotor;
-import model.sensors.ISwitch;
+package org.usfirst.frc.team3414.teleop;
+import org.usfirst.frc.team3414.sensors.IMeasureAcceleration;
+import org.usfirst.frc.team3414.sensors.ITimer;
+import org.usfirst.frc.team3414.sensors.IDetectLines;
+import org.usfirst.frc.team3414.sensors.IMeasureDirection;
+import org.usfirst.frc.team3414.actuators.ILiftAssist;
+import org.usfirst.frc.team3414.autonomous.IDriverAssist;
+import org.usfirst.frc.team3414.actuators.IMotor;
+import org.usfirst.frc.team3414.sensors.ISwitch;
 
 
 /**
