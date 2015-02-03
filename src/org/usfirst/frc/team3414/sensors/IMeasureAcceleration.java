@@ -1,4 +1,4 @@
-package org.usfirst.frc.team3414.sensors;
+package  org.usfirst.frc.team3414.sensors;
 
 
 
@@ -16,7 +16,7 @@ public  interface IMeasureAcceleration
 	 * @ordered
 	 */
 	
-	public getAccelX() ;
+	public double getAccelX() ;
 	
 	/**
 	 * <!-- begin-user-doc -->
@@ -25,7 +25,7 @@ public  interface IMeasureAcceleration
 	 * @ordered
 	 */
 	
-	public getAccelY() ;
+	public double getAccelY() ;
 	
 	/**
 	 * <!-- begin-user-doc -->
@@ -34,7 +34,7 @@ public  interface IMeasureAcceleration
 	 * @ordered
 	 */
 	
-	public getAccelZ() ;
+	public double getAccelZ() ;
 	
 	/**
 	 * <!-- begin-user-doc -->
@@ -43,7 +43,7 @@ public  interface IMeasureAcceleration
 	 * @ordered
 	 */
 	
-	public reset() ;
+	public void reset() ;
 	
 	
 }

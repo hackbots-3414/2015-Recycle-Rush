@@ -1,63 +1,44 @@
 package org.usfirst.frc.team3414.sensors;
-import org.usfirst.frc.team3414.teleop.Log;
-import org.usfirst.frc.team3414.teleop.Display;
-import org.usfirst.frc.team3414.autonomous.AutonomousControl;
-
+import main.java.model.autonomous.SwitchPositions;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 /**
- * <!-- begin-user-doc -->
- * <!--  end-user-doc  -->
+ * 
+ * The class responsible for controlling limit switches on digital IO ports. 
+ * 
  * @generated
  */
 
 public class LimitSwitch implements ISwitch
 {
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public Display display;
+	DigitalInput limitSwitch;
 	
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public AutonomousControl autonomousControl;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public Log log;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
+	 * 
+	 * A constructor for the limit switch. It's arguments are the digital IO port that it's connected to on the RoboRIO.
+	 * 
 	 * @generated
 	 */
-	public LimitSwitch(){
-		super();
+	public LimitSwitch(int channel){
+		limitSwitch = new DigitalInput(channel);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
+	 * 
+	 * Gets the position of the limit switch, weather it's depressed (ON) or released (OFF).
+	 * 
 	 * @generated
 	 * @ordered
 	 */
 	
 	public SwitchPositions getPosition() {
-		// TODO implement me
-		return SwitchPositions.ON;	
+		if (limitSwitch.get())
+		{
+			return SwitchPositions.ON;
+		} else
+		{
+			return SwitchPositions.OFF;
+		}
 	}
 	
 }

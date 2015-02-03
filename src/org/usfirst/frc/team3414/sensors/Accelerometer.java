@@ -1,98 +1,85 @@
 package org.usfirst.frc.team3414.sensors;
-import org.usfirst.frc.team3414.actuators.MecanumDrive;
-import org.usfirst.frc.team3414.teleop.Log;
-import org.usfirst.frc.team3414.teleop.Display;
+import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 
 
 /**
- * <!-- begin-user-doc -->
- * <!--  end-user-doc  -->
+ * 
+ * This implements the built-in accelerometer inside the RoboRIO and allows it's values to be zeroed out.
+ * 
  * @generated
  */
 
 public class Accelerometer implements IMeasureAcceleration
 {
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
 	
-	public MecanumDrive mecanumDrive;
+	double xOffset = 0;
+	double yOffset = 0;
+	double zOffset = 0;
+	
+	BuiltInAccelerometer accel;
 	
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public Log log;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public Display display;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
+	 * 
+	 * The constructor for the accelerometer.
+	 * 
 	 * @generated
 	 */
 	public Accelerometer(){
-		super();
+		accel = new BuiltInAccelerometer();
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
+	 * 
+	 * Gets the acceleration on the X axis.
+	 * 
 	 * @generated
 	 * @ordered
 	 */
 	
-	public long getAccelZ() {
-		// TODO implement me
-		return 0L;	
+	public double getAccelX() {
+		return (accel.getX() + xOffset); 
 	}
 	
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
+	 * 
+	 * Gets the acceleration on the Y axis.
+	 * 
 	 * @generated
 	 * @ordered
 	 */
 	
-	public long getAccelX() {
-		// TODO implement me
-		return 0L;	
+	public double getAccelY() {
+		return (accel.getY() + yOffset); 
 	}
 	
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
+	 * 
+	 * Gets the acceleration on the Z axis.
+	 * 
+	 * @generated
+	 * @ordered
+	 */
+	
+	public double getAccelZ() {
+		return (accel.getZ() + zOffset); 
+	}
+	
+	/**
+	 * 
+	 * Zeroes the accelerometer values.
+	 * 
 	 * @generated
 	 * @ordered
 	 */
 	
 	public void reset() {
-		// TODO implement me	
-	}
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public long getAccelY() {
-		// TODO implement me
-		return 0L;	
+		xOffset = accel.getX();
+		yOffset = accel.getY();
+		zOffset = accel.getZ();
+		
+		xOffset = -xOffset;
+		yOffset = -yOffset;
+		zOffset = -zOffset;
 	}
 	
 }
