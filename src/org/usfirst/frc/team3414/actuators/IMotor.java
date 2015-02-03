@@ -7,53 +7,21 @@ package org.usfirst.frc.team3414.actuators;
  * <!--  end-user-doc  -->
  * @generated
  */
-public  interface IMotor 
+public interface IMotor 
 {
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public backward(long speed) ;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public forward(long speed) ;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public getSpeed() ;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public getVoltage() ;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public stop() ;
-	
+	public abstract void stop();
+
+    public abstract void backward(double speed);
+
+    public abstract void forward(double speed, int motorStep);
+
+    public abstract void forward(double speed);
+
+    public abstract void backward(double speed, int motorStep);
+
+    public abstract double getSpeed();
 	
 }
+
+
 

@@ -16,26 +16,12 @@ public  interface IDriveTrain
 	 * @ordered
 	 */
 	
-	public move(long angle, long velocity, long rotation) ;
+	public void move(double angle, double velocity, double rotation) ;
 	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
+	public void rotateToDegrees(double degrees);
 	
-	public rotateToDegrees(long degrees) ;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public stop() ;
-	
-	
+	public void stop();
 }
+	
+	
 

@@ -1,8 +1,8 @@
 package org.usfirst.frc.team3414.actuators;
-import org.usfirst.frc.team3414.teleop.Display;
-import org.usfirst.frc.team3414.teleop.Log;
-import org.usfirst.frc.team3414.teleop.TeleopControl;
-import org.usfirst.frc.team3414.autonomous.AutonomousControl;
+import main.java.model.autonomous.SwitchPositions;
+import main.java.model.sensors.ISwitch;
+import edu.wpi.first.wpilibj.CANTalon.ControlMode;
+import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
 
 
 /**
@@ -13,51 +13,38 @@ import org.usfirst.frc.team3414.autonomous.AutonomousControl;
 
 public class ForkLift implements ILiftAssist
 {
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
+	IMotor liftMotor;
+	ICanMotor canMotor;
+	double speedSetpoint;
 	
-	public TeleopControl teleopControl;
+	ISwitch topSwitch;
+	ISwitch bottomSwitch;
 	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
+	long encoderPosition;
 	
-	public Display display;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public Log log;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public AutonomousControl autonomousControl;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 */
-	public ForkLift(){
-		super();
+	public ForkLift(ICanMotor tempCanMotor, IMotor tempLiftMotor, ISwitch tempTopSwitch, ISwitch tempBottomSwitch, int forkLiftPort, FeedbackDevice device){
+		tempCanMotor = canMotor;
+		tempLiftMotor = liftMotor;
+		tempTopSwitch = topSwitch;
+		tempBottomSwitch = bottomSwitch;
+		
+		
+		
+		//Sets the Kp, Ki and Kd constants.
+		canMotor.setPID(1, 0, 0);
+		
+		//Speed setpoint for the closed loop system.
+		speedSetpoint = 5;
 	}
 
+	public ForkLift(ICanMotor tempCanMotor, IMotor tempLiftMotor, int forkLiftPort){
+		tempLiftMotor = liftMotor;
+		tempCanMotor = canMotor;
+		
+		//Speed setpoint for the closed loop system.
+		speedSetpoint = 1.0;
+	}
+	
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!--  end-user-doc  -->
@@ -66,7 +53,22 @@ public class ForkLift implements ILiftAssist
 	 */
 	
 	public void stop() {
-		// TODO implement me	
+		/*double rampRate = (liftMotor.getSpeed()/10);
+		
+		for(int i = 0; i < 10; i++)
+		{
+			liftMotor.forward(liftMotor.getSpeed()-(rampRate*i));
+			
+			try {
+				Thread.sleep(300);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}*/
+		
+			
+		}
+		liftMotor.set(0.0);
 	}
 	
 	/**
@@ -76,8 +78,16 @@ public class ForkLift implements ILiftAssist
 	 * @ordered
 	 */
 	
-	public void move(LiftDirection parameter) {
-		// TODO implement me	
+	public void goToTop() {
+		liftMotor.set(speedSetpoint);
+		
+		
+		while(topSwitch.getPosition() == SwitchPositions.OFF)
+		{
+			
+		}
+		
+		stop();
 	}
 	
 	/**
@@ -87,7 +97,19 @@ public class ForkLift implements ILiftAssist
 	 * @ordered
 	 */
 	
-	public void goTo(LiftPoint location) {
+	public void previousToteLength() {
+		liftMotor.set(-speedSetpoint);
+		
+	}
+	
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!--  end-user-doc  -->
+	 * @generated
+	 * @ordered
+	 */
+	
+	public void nextToteLength() {
 		// TODO implement me	
 	}
 	
@@ -99,51 +121,25 @@ public class ForkLift implements ILiftAssist
 	 */
 	
 	public void goToBottom() {
-		// TODO implement me	
+		liftMotor.set(-speedSetpoint);
+		
+		
+		while(topSwitch.getPosition() == SwitchPositions.OFF)
+		{
+			
+		}
+		
+		stop();
 	}
 	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public void previousStep() {
-		// TODO implement me	
+	public void previousBinLength()
+	{
+		
 	}
 	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public void nextStep() {
-		// TODO implement me	
-	}
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public void goToTop() {
-		// TODO implement me	
-	}
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public void autoHeight() {
-		// TODO implement me	
+	public void nextBinLength()
+	{
+		
 	}
 	
 }

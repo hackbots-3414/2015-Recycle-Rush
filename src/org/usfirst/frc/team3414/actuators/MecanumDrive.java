@@ -1,5 +1,7 @@
 package org.usfirst.frc.team3414.actuators;
-import org.usfirst.frc.team3414.sensors.IMeasureDirection;
+import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.SpeedController;
+import main.java.model.sensors.IMeasureDirection;
 
 
 /**
@@ -9,59 +11,11 @@ import org.usfirst.frc.team3414.sensors.IMeasureDirection;
  */
 
 public class MecanumDrive implements IDriveTrain
-{
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
+{	
+	RobotDrive drive;
 	
-	public IMeasureDirection iMeasureDirection;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public IMotor iMotor;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public IMotor iMotor;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public IMotor iMotor;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public IMotor iMotor;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 */
-	public MecanumDrive(){
-		super();
+	public MecanumDrive(IMeasureDirection tempDirectionSensor, SpeedController frontLeftChannel, SpeedController frontRightChannel, SpeedController backLeftChannel, SpeedController backRightChannel){
+		drive = new RobotDrive(frontLeftChannel, backLeftChannel, frontRightChannel, backRightChannel);
 	}
 
 	/**
@@ -71,9 +25,8 @@ public class MecanumDrive implements IDriveTrain
 	 * @ordered
 	 */
 	
-	public long rotateToDegrees(long degrees) {
-		// TODO implement me
-		return 0L;	
+	public void move(double velocity, double angle, double rotation) {
+		drive.mecanumDrive_Polar(velocity, angle, rotation);
 	}
 	
 	/**
@@ -83,8 +36,8 @@ public class MecanumDrive implements IDriveTrain
 	 * @ordered
 	 */
 	
-	public void move(long angle, long velocity, long rotation) {
-		// TODO implement me	
+	public void rotateToDegrees(double degrees) {
+		drive.mecanumDrive_Polar(0, degrees, 0);
 	}
 	
 	/**
@@ -95,8 +48,7 @@ public class MecanumDrive implements IDriveTrain
 	 */
 	
 	public void stop() {
-		// TODO implement me	
+		drive.mecanumDrive_Polar(0.0, 0, 0);
 	}
-	
 }
 

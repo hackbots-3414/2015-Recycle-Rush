@@ -1,6 +1,5 @@
 package org.usfirst.frc.team3414.actuators;
-import org.usfirst.frc.team3414.teleop.Log;
-import org.usfirst.frc.team3414.teleop.Display;
+import org.usfirst.frc.team3414.actuators.IMotor;
 
 
 /**
@@ -11,116 +10,48 @@ import org.usfirst.frc.team3414.teleop.Display;
 
 public class DoubleMotor implements IMotor
 {
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
 	
-	public Motor motor;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public Motor motor;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public Display display;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public Log log;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public Log log;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 */
-	public DoubleMotor(){
-		super();
-	}
+	private final IMotor motorOne;
+    private final IMotor motorTwo;
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public void stop() {
-		// TODO implement me	
-	}
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public long getSpeed() {
-		// TODO implement me
-		return 0L;	
-	}
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public long getVoltage() {
-		// TODO implement me
-		return 0L;	
-	}
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public void forward(long speed) {
-		// TODO implement me	
-	}
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public void backward(long speed) {
-		// TODO implement me	
-	}
-	
+    public DoubleMotor(Motor motorOne, Motor motorTwo)
+    {
+        this.motorOne = motorOne;
+        this.motorTwo = motorTwo;
+    }
+
+    public void stop()
+    {
+        motorOne.stop();
+        motorTwo.stop();
+    }
+
+    public void backward(double speed)
+    {
+        motorOne.backward(speed);
+        motorTwo.backward(speed);
+    }
+
+    public void forward(double speed, int motorStep)
+    {
+        motorOne.forward(speed, motorStep);
+        motorTwo.forward(speed, motorStep);
+    }
+
+    public void forward(double speed)
+    {
+        motorOne.forward(speed);
+        motorTwo.forward(speed);
+    }
+
+    public void backward(double speed, int motorStep)
+    {
+        motorOne.forward(speed, motorStep);
+        motorTwo.forward(speed, motorStep);
+    }
+
+    public double getSpeed()
+    {
+        return (motorOne.getSpeed() + motorTwo.getSpeed()) / 2;
+    }
 }
-
