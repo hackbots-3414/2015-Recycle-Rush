@@ -1,75 +1,35 @@
 package org.usfirst.frc.team3414.sensors;
 
+public class MapClasher {
 
-/**
- * <!-- begin-user-doc -->
- * <!--  end-user-doc  -->
- * @generated
- */
-
-public class MapClasher
-{
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
+	ITimeListener listener;
+	boolean continuous;
+	long startTime;
+	long timeToExtend;
 	
-	public VirtualClock virtualClock;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 */
-	public MapClasher(){
-		super();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public void getITimeListener() {
-		// TODO implement me	
+	public MapClasher(ITimeListener listener, boolean continuous, long startTime, long timeToExtend) {
+		this.listener = listener;
+		this.continuous = continuous;
+		this.startTime = startTime;
+		this.timeToExtend = timeToExtend;
 	}
 	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public void getContinuous() {
-		// TODO implement me	
+	public ITimeListener getITimeListener() {
+		return listener;
 	}
 	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public void getStartTime() {
-		// TODO implement me	
+	public boolean getContinuous() {
+		return continuous;
 	}
 	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public void getTimeToExtend() {
-		// TODO implement me	
+	public long getStartTime() {
+		return startTime;
 	}
+	
+	public long getTimeToExtend() {
+		return timeToExtend;
+	}
+	
+	
 	
 }
-

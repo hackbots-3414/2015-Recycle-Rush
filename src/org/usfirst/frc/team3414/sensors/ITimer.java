@@ -1,68 +1,15 @@
 package org.usfirst.frc.team3414.sensors;
 
+public interface ITimer {
 
-
-/**
- * <!-- begin-user-doc -->
- * <!--  end-user-doc  -->
- * @generated
- */
-public  interface ITimer 
-{
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
+	public long addListenerSec(ITimeListener listener, boolean continuous, long timeToExtendSec);
 	
-	public addListenerMS(ITimeListener listener, boolean continuous, long timeToExtendMS) ;
+	public long addListenerMS(ITimeListener listener, boolean continuous, long timeToExtendMS);
 	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
+	public void removeListener(long eventID);
 	
-	public addListenerSec(ITimeListener listener, boolean continuous, long timeToExtendSec) ;
+	public double getTimeInMS();
 	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public getTimeInMillis() ;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public getTimeInMinutes() ;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public getTimeInSeconds() ;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public removeListener(long eventID) ;
-	
+	public double getTimeInSec();
 	
 }
-

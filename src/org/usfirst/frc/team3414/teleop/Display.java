@@ -1,132 +1,55 @@
 package org.usfirst.frc.team3414.teleop;
-import org.usfirst.frc.team3414.sensors.IMeasureAcceleration;
-import org.usfirst.frc.team3414.sensors.IDetectLines;
-import org.usfirst.frc.team3414.autonomous.IDetectObjects;
-import org.usfirst.frc.team3414.sensors.IMeasureDirection;
-import org.usfirst.frc.team3414.actuators.ILiftAssist;
-import org.usfirst.frc.team3414.autonomous.IDriverAssist;
-import org.usfirst.frc.team3414.actuators.IMotor;
-import org.usfirst.frc.team3414.sensors.ISwitch;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-/**
- * <!-- begin-user-doc -->
- * <!--  end-user-doc  -->
- * @generated
- */
-
-public class Display implements IDisplay
+public class Display
 {
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
 	
-	public ILiftAssist iLiftAssist;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public IMeasureAcceleration iMeasureAcceleration;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public IMeasureDirection iMeasureDirection;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public ISwitch iSwitch;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public IDetectObjects iDetectObjects;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public IDriverAssist iDriverAssist;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public IMotor iMotor;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public IDetectLines iDetectLines;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public TeleopControl teleopControl;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 */
-	public Display(){
-		super();
-	}
+    private static Display singleton = null;
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
+    private Display()
+    {
+    }
+
+    public static Display createInstance()
+    {
+        if (singleton == null)
+        {
+            singleton = new Display();
+        }
+
+        return singleton;
+    }
+
+    public static Display getInstance()
+    {
+        if (singleton == null)
+        {
+            throw new NullPointerException("Display hasn't been created yet");
+        }
+
+        return singleton;
+    }
 	
-	public void printGamemode() {
-		// TODO implement me	
+	
+	
+	
+	
+	
+	private int time;
+	
+	boolean lo = false;
+	
+	public void putGameData() {
+		SmartDashboard.putBoolean("Bool: " , lo);
+		SmartDashboard.putNumber("Time: ", time);
+	}
+	public void putDiagnosticsData() {
+		SmartDashboard.putBoolean("Bool: " , lo);
 	}
 	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public void printDiagnostic() {
-		// TODO implement me	
+	public void setTimerLog(int time) {
+		this.time = time;
 	}
 	
 }
