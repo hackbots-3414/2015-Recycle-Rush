@@ -12,7 +12,7 @@ public class TeleopControl
 	public void runTeleop(IDriveTrain s) {
 		driverControl.getJoy().getVerticalAxis();
 		//drive.move(driverControl.getJoy());
-                IDriveTrain a = s;
+               
                 
 	}
 
