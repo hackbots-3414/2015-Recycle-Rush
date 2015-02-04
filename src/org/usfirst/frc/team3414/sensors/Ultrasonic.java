@@ -1,81 +1,66 @@
 package org.usfirst.frc.team3414.sensors;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 
-/**
- * <!-- begin-user-doc -->
- * <!--  end-user-doc  -->
- * @generated
- */
 
-public class Ultrasonic implements IMeasureDistance
-{
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 */
-	public Ultrasonic(){
-		super();
+public class Ultrasonic implements IMeasureDistance {
+
+
+	private final AnalogInput ultrasonic;
+
+	public Ultrasonic(AnalogInput ultrasonic) {
+		this.ultrasonic = ultrasonic;
+		ultrasonic.setAverageBits(30);
 	}
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public long getInches() {
-		// TODO implement me
-		return 0L;	
-	}
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
+
 	public void removeListener(long distanceEventID) {
-		// TODO implement me	
-	}
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public long getFeet() {
 		// TODO implement me
-		return 0L;	
 	}
-	
+
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 * @ordered
 	 */
-	
-	public long getCm() {
-		// TODO implement me
-		return 0L;	
+
+	public double getCm() {
+		return ultrasonic.getAverageVoltage() / .1024;
 	}
-	
+
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
+	 * Use average voltage to get distance in feet
+	 * 
 	 * @generated
 	 * @ordered
 	 */
-	
+
+	public double getFeet() {
+		return getCm() * .0328084;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered
+	 */
+
 	public long addListener(IMeasureDistanceListener listener, long distance) {
 		// TODO implement me
-		return 0L;	
+		return 0L;
 	}
-	
-}
 
+	/**
+	 * Gets distance in feet and converts to inches
+	 * 
+	 * @generated
+	 * @ordered
+	 */
+
+	public double getInches() {
+		return getFeet() * 12;
+	}
+
+}
