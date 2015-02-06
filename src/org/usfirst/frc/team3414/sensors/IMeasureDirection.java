@@ -16,7 +16,7 @@ public  interface IMeasureDirection
 	 * @ordered
 	 */
 	
-	public getChangeInDirection() ;
+	public double getChangeInDirection() ;
 	
 	/**
 	 * <!-- begin-user-doc -->
@@ -25,7 +25,7 @@ public  interface IMeasureDirection
 	 * @ordered
 	 */
 	
-	public getDegrees() ;
+	public double getDegreesX() ;
 	
 	/**
 	 * <!-- begin-user-doc -->
@@ -34,7 +34,7 @@ public  interface IMeasureDirection
 	 * @ordered
 	 */
 	
-	public getRadians() ;
+	public double getRadians() ;
 	
 	
 }
