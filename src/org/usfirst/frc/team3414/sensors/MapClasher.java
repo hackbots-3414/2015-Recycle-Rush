@@ -2,10 +2,10 @@ package org.usfirst.frc.team3414.sensors;
 
 public class MapClasher {
 
-	ITimeListener listener;
-	boolean continuous;
-	long startTime;
-	long timeToExtend;
+	private ITimeListener listener;
+	private boolean continuous;
+	private long startTime;
+	private long timeToExtend;
 	
 	public MapClasher(ITimeListener listener, boolean continuous, long startTime, long timeToExtend) {
 		this.listener = listener;
@@ -24,6 +24,10 @@ public class MapClasher {
 	
 	public long getStartTime() {
 		return startTime;
+	}
+	
+	public void setStartTime(long _startTime) {
+		this.startTime = _startTime;
 	}
 	
 	public long getTimeToExtend() {
