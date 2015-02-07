@@ -29,8 +29,7 @@ public class Motor implements IMotor {
 	}
 
 	public void backward(double speed) {
-		double actualSpeed = inverseDirection ? -Math.abs(speed) : Math
-				.abs(speed);
+		double actualSpeed = inverseDirection ? -Math.abs(speed) : Math.abs(speed);
 		motorController.set(-actualSpeed);
 	}
 
@@ -49,8 +48,7 @@ public class Motor implements IMotor {
 	}
 
 	public void forward(double speed) {
-		double actualSpeed = inverseDirection ? -Math.abs(speed) : Math
-				.abs(speed);
+		double actualSpeed = inverseDirection ? -Math.abs(speed) : Math.abs(speed);
 		motorController.set(actualSpeed);
 	}
 

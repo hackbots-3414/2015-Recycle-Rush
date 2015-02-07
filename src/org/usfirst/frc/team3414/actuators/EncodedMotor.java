@@ -1,16 +1,18 @@
 package org.usfirst.frc.team3414.actuators;
 
+import org.usfirst.frc.team3414.sensors.MyEncoder;
+
 import edu.wpi.first.wpilibj.CANTalon;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedController;
 
 public class EncodedMotor extends Motor implements IEncodedMotor {
 
-	private Encoder encoder;
+	private MyEncoder encoder;
 	
-	public EncodedMotor(SpeedController controller, Encoder encoder, boolean reverse) {
+	public EncodedMotor(SpeedController controller, MyEncoder encoder, boolean reverse) {
 		super(controller, reverse);
 		this.encoder= encoder;
+		encoder.setDistancePerPulse(.5);
 	}
 	
 	public EncodedMotor(CANTalon controller, boolean reverse) {
@@ -45,7 +47,7 @@ public class EncodedMotor extends Motor implements IEncodedMotor {
 		int position = 0;
 		if(encoder != null)
 		{
-			position = encoder.get();
+			position = encoder.getPosition();
 		}
 		else if(motorController instanceof CANTalon)
 		{

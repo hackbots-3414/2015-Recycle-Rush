@@ -18,7 +18,7 @@ public class CasterWheel implements IMeasureDirection
 	 * @ordered
 	 */
 	
-	public Encoder encoder;
+	public MyEncoder encoder;
 	
 	/**
 	 * <!-- begin-user-doc -->

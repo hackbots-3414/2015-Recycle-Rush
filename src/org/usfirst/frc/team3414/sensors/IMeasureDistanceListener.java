@@ -16,7 +16,7 @@ public  interface IMeasureDistanceListener
 	 * @ordered
 	 */
 	
-	public distanceEvent(DistanceEventArgs distanceEvent) ;
+	public void distanceEvent(DistanceEventArgs distanceEvent) ;
 	
 	
 }

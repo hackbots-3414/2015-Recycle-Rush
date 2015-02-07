@@ -1,146 +1,164 @@
 package org.usfirst.frc.team3414.actuators;
-import main.java.model.autonomous.SwitchPositions;
-import main.java.model.sensors.ISwitch;
-import edu.wpi.first.wpilibj.CANTalon.ControlMode;
-import edu.wpi.first.wpilibj.CANTalon.FeedbackDevice;
 
-
-/**
- * <!-- begin-user-doc -->
- * <!--  end-user-doc  -->
- * @generated
- */
+import org.usfirst.frc.team3414.sensors.MyEncoder;
+import org.usfirst.frc.team3414.sensors.LimitSwitch;
+import edu.wpi.first.wpilibj.SpeedController;
 
 public class ForkLift implements ILiftAssist
 {
-	IMotor liftMotor;
-	ICanMotor canMotor;
-	double speedSetpoint;
-	
-	ISwitch topSwitch;
-	ISwitch bottomSwitch;
-	
-	long encoderPosition;
-	
-	public ForkLift(ICanMotor tempCanMotor, IMotor tempLiftMotor, ISwitch tempTopSwitch, ISwitch tempBottomSwitch, int forkLiftPort, FeedbackDevice device){
-		tempCanMotor = canMotor;
-		tempLiftMotor = liftMotor;
-		tempTopSwitch = topSwitch;
-		tempBottomSwitch = bottomSwitch;
-		
-		
-		
-		//Sets the Kp, Ki and Kd constants.
-		canMotor.setPID(1, 0, 0);
-		
-		//Speed setpoint for the closed loop system.
-		speedSetpoint = 5;
+	private IEncodedMotor encodedMotor;
+	private MyEncoder encoder;
+	LimitSwitch topSwitch;
+	LimitSwitch botSwitch;
+	private SpeedController speedCont;
+
+	private double topEncPo;
+	private double bottomEncPo;
+	private double binEncPo;
+	private double toteEncPo;
+	private boolean joystickOverride;
+	private boolean isEncZeroed;
+
+	private static ForkLift singleton = null;
+
+	private ForkLift()
+	{
+		encodedMotor = new EncodedMotor(speedCont, encoder, false);
+		topSwitch = new LimitSwitch(1, false);
+		botSwitch = new LimitSwitch(2, false);
+		isEncZeroed = false;
 	}
 
-	public ForkLift(ICanMotor tempCanMotor, IMotor tempLiftMotor, int forkLiftPort){
-		tempLiftMotor = liftMotor;
-		tempCanMotor = canMotor;
-		
-		//Speed setpoint for the closed loop system.
-		speedSetpoint = 1.0;
-	}
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public void stop() {
-		/*double rampRate = (liftMotor.getSpeed()/10);
-		
-		for(int i = 0; i < 10; i++)
-		{
-			liftMotor.forward(liftMotor.getSpeed()-(rampRate*i));
-			
-			try {
-				Thread.sleep(300);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}*/
-		
-			
-		}
-		liftMotor.set(0.0);
-	}
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public void goToTop() {
-		liftMotor.set(speedSetpoint);
-		
-		
-		while(topSwitch.getPosition() == SwitchPositions.OFF)
-		{
-			
-		}
-		
-		stop();
-	}
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public void previousToteLength() {
-		liftMotor.set(-speedSetpoint);
-		
-	}
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public void nextToteLength() {
-		// TODO implement me	
-	}
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public void goToBottom() {
-		liftMotor.set(-speedSetpoint);
-		
-		
-		while(topSwitch.getPosition() == SwitchPositions.OFF)
-		{
-			
-		}
-		
-		stop();
-	}
-	
-	public void previousBinLength()
+	public static ForkLift createInstance()
 	{
-		
+		if (singleton == null)
+		{
+			singleton = new ForkLift();
+		}
+
+		return singleton;
 	}
-	
+
+	public static ForkLift getInstance()
+	{
+		if (singleton == null)
+		{
+			throw new NullPointerException("ForkLift hasn't been created yet");
+		}
+
+		return singleton;
+	}
+
+	/*
+	 * public ForkLift(ICanMotor pCanMotor, int forkLiftPort) { this.canMotor =
+	 * pCanMotor; // tempTopSwitch = topSwitch; // tempBottomSwitch =
+	 * bottomSwitch;
+	 * 
+	 * }
+	 * 
+	 * public ForkLift(ICanMotor tempCanMotor, int forkLiftPort) { tempCanMotor
+	 * = canMotor;
+	 * 
+	 * // Speed setpoint for the closed loop system. speedSetpoint = 1.0; }
+	 */
+	public void goToTop()
+	{
+		while ((encodedMotor.getEncoderPosition() < topEncPo) && !joystickOverride && !topSwitch.get() && !botSwitch.get())
+		{
+			encodedMotor.forward(1, 10);
+		}
+		this.stop();
+	}
+
+	public void goToBottom()
+	{
+		while (!joystickOverride && !topSwitch.get() && !botSwitch.get())
+		{
+			if ((encodedMotor.getEncoderPosition() > bottomEncPo))
+			{
+				encodedMotor.backward(1, 10);
+			}
+			if ((encodedMotor.getEncoderPosition() < bottomEncPo))
+			{
+				encodedMotor.forward(1, 10);
+			}
+		}
+		this.stop();
+
+	}
+
+	public void nextToteLength()
+	{
+		double current = encodedMotor.getEncoderPosition();
+		while ((encodedMotor.getEncoderPosition() < current + toteEncPo) && !joystickOverride && !topSwitch.get() && !botSwitch.get())
+		{
+			encodedMotor.forward(1, 10);
+		}
+		this.stop();
+	}
+
+	public void previousToteLength()
+	{
+		double current = encodedMotor.getEncoderPosition();
+		while ((encodedMotor.getEncoderPosition() > current - toteEncPo) && !joystickOverride && !topSwitch.get() && !botSwitch.get())
+		{
+			encodedMotor.backward(1, 10);
+		}
+		this.stop();
+	}
+
 	public void nextBinLength()
 	{
-		
+		double current = encodedMotor.getEncoderPosition();
+		while ((encodedMotor.getEncoderPosition() < current + binEncPo) && !joystickOverride && !topSwitch.get() && !botSwitch.get())
+		{
+			encodedMotor.forward(1, 10);
+		}
+		this.stop();
 	}
-	
-}
 
+	public void previousBinLength()
+	{
+		double current = encodedMotor.getEncoderPosition();
+		while ((encodedMotor.getEncoderPosition() > current - binEncPo) && !joystickOverride && !topSwitch.get() && !botSwitch.get())
+		{
+			encodedMotor.backward(1, 10);
+		}
+		this.stop();
+	}
+
+	public void stop()
+	{
+		double rampRate = (encodedMotor.getSpeed() / 10);
+
+		for (int i = 0; i <= 10; i++)
+		{
+			encodedMotor.forward(encodedMotor.getSpeed() - (rampRate * i));
+
+			try
+			{
+				Thread.sleep(300);
+			} catch (InterruptedException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+
+	}
+
+	public void goToBotLimSwitch()
+	{
+		while (!joystickOverride && !isEncZeroed)
+		{
+			encodedMotor.backward(.5, 20);
+			if (botSwitch.get())
+			{
+				encoder.reset();
+				isEncZeroed = true;
+			}
+		}
+		this.goToBottom();
+	}
+}

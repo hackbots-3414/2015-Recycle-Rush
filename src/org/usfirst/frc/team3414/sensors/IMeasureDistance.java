@@ -16,7 +16,7 @@ public  interface IMeasureDistance
 	 * @ordered
 	 */
 	
-	public long addListener(IMeasureDistanceListener listener, long distance) ;
+	public void addListener(IMeasureDistanceListener listener, long distance) ;
 	
 	/**
 	 * <!-- begin-user-doc -->
@@ -25,16 +25,7 @@ public  interface IMeasureDistance
 	 * @ordered
 	 */
 	
-	public double getCm() ;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  --
-	 * @generated
-	 * @ordered
-	 */
-	
-	public double getFeet() ;
+	public double getDistanceCm() ;
 	
 	/**
 	 * <!-- begin-user-doc -->
@@ -43,7 +34,16 @@ public  interface IMeasureDistance
 	 * @ordered
 	 */
 	
-	public double getInches() ;
+	public double getDistanceFt() ;
+	
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!--  end-user-doc  -->
+	 * @generated
+	 * @ordered
+	 */
+	
+	public double getDistanceIn() ;
 	
 	/**
 	 * <!-- begin-user-doc -->
