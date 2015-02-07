@@ -25,7 +25,7 @@ public  interface IMeasureDirection
 	 * @ordered
 	 */
 	
-	public double getDegreesX() ;
+	public double getDegrees() ;
 	
 	/**
 	 * <!-- begin-user-doc -->

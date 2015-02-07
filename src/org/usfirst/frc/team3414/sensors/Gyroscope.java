@@ -2,67 +2,43 @@ package org.usfirst.frc.team3414.sensors;
 
 import edu.wpi.first.wpilibj.Gyro;
 import org.usfirst.frc.team3414.teleop.Display;
-import org.usfirst.frc.team3414.teleop.Log;
 
-public class Gyroscope implements IMeasureDirection
+public class Gyroscope
 {
-	double xDegrees = 0;
+	
+	private double angleOffset = 0;
+	private double rateOffset = 1;
 	
 	private Gyro OnlyGyro;
 
 	public Gyroscope(int channel)
 	{
 		OnlyGyro = new Gyro(channel);
-		initGyro();
+		OnlyGyro.initGyro();
 	}
-
-	public void getangle()
+	
+	public double getAngle()
 	{
-		return (OnlyGyro.get() + xDegrees );
+		return(OnlyGyro.getAngle() + angleOffset);
 	}
-
-	private void initGyro()
+	
+	public double getRate()
 	{
-
+		return (OnlyGyro.getRate() * rateOffset);
 	}
 
-	public void autonomousperiodic()
+	public void setSensitivity(double voltsPerDegreePerSecond)
 	{
-
+		OnlyGyro.setSensitivity(voltsPerDegreePerSecond);
 	}
 
-	public void autonomousInit()
+	public void reset()
 	{
-
+		OnlyGyro.reset();
 	}
 
-	public void teleopInit()
-	{
-
+	public void display() {
+		Display.getInstance().setGyroData(this.getAngle(), this.getRate());
 	}
-
-	public void teleopperiodic()
-	{
-
-	}
-
-	public double getChangeInDirection()
-	{
-		return 0;
-	}
-
-	public double getDegreesX()
-	{
-		return (OnlyGyro.getX() + xDegrees );
-	}
-
-	public double getRadians()
-	{
-		return 0;
-	}
-
-	public Display display;
-
-	public Log log;
 
 }
