@@ -62,5 +62,15 @@ public class Display
         */
 	}
 	
+	public void setGyroData(double gyroAngle, double gyroRate) {
+		/*
+    	SmartDashboard.putNumber("Gyro Value (rate)", gyro.getRate());
+        SmartDashboard.putNumber("Joystick Value Magnitude", joystick.getMagnitude());
+        SmartDashboard.putNumber("Joystick Value Direction", joystick.getDirectionDegrees());
+        SmartDashboard.putNumber("Joystick Direction - gyro rate", angle-(gyro.getRate()*Kp));
+        SmartDashboard.putNumber("Joystick Value Twist", joystick.getTwist());
+        */
+	}
+	
 }
 
