@@ -3,7 +3,7 @@ import org.usfirst.frc.team3414.actuators.*;
 
 public class TeleopControl
 {
-	Controller driverControl;
+	private Controller driverControl;
 	
 	public TeleopControl(){
 		driverControl = new Controller();
@@ -15,5 +15,4 @@ public class TeleopControl
                
                 
 	}
-
 }

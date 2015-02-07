@@ -52,5 +52,15 @@ public class Display
 		this.time = time;
 	}
 	
+	public void setDriveData(double getGyroRate, double getJoyMagnitude, double getJoyDirection, double getJoyDirectionAdjustWithGyro, double getJoyTwist){
+		/*
+    	SmartDashboard.putNumber("Gyro Value (rate)", gyro.getRate());
+        SmartDashboard.putNumber("Joystick Value Magnitude", joystick.getMagnitude());
+        SmartDashboard.putNumber("Joystick Value Direction", joystick.getDirectionDegrees());
+        SmartDashboard.putNumber("Joystick Direction - gyro rate", angle-(gyro.getRate()*Kp));
+        SmartDashboard.putNumber("Joystick Value Twist", joystick.getTwist());
+        */
+	}
+	
 }
 
