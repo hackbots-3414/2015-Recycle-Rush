@@ -9,17 +9,17 @@ package org.usfirst.frc.team3414.actuators;
  */
 public interface IMotor 
 {
-	public abstract void stop();
+	public void stop();
 
-    public abstract void backward(double speed);
+    public void backward(double speed);
 
-    public abstract void forward(double speed, int motorStep);
+    public void forward(double speed, int motorStep);
 
-    public abstract void forward(double speed);
+    public void forward(double speed);
 
-    public abstract void backward(double speed, int motorStep);
+    public void backward(double speed, int motorStep);
 
-    public abstract double getSpeed();
+    public double getSpeed();
 	
 }
 

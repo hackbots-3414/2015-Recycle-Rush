@@ -47,6 +47,14 @@ public class MyJoystick implements IAxis, IButtons
 	}
 	
 	public boolean getButtonOne() {
+/*
+		if button & !a
+		action 
+		a = true
+		
+		if !button & a
+		a = false
+	*/	
 		return joy.getRawButton(1);
 	}
 	public boolean getButtonTwo() {

@@ -1,51 +1,16 @@
 package org.usfirst.frc.team3414.sensors;
 
-
-/**
- * <!-- begin-user-doc -->
- * <!--  end-user-doc  -->
- * @generated
- */
-
 public class DistanceMultiplier
 {
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	private long multiplier;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public DistanceEventArgs distanceEventArgs;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 */
-	public DistanceMultiplier(){
-		super();
-	}
+	private double multiplier;
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public void adjustToCm(int multiplier) {
-		// TODO implement me	
+	public DistanceMultiplier(double multiplier)
+	{
+		this.multiplier = multiplier;
 	}
 	
+	public double adjustToCm(double distance)
+	{
+		return (distance * this.multiplier);
+	}
 }
-

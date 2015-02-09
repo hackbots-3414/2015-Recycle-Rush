@@ -1,10 +1,8 @@
 package org.usfirst.frc.team3414.actuators;
 
-import org.usfirst.frc.team3414.teleop.Display;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.Gyro;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SpeedController;
 
