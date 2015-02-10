@@ -2,7 +2,8 @@ package org.usfirst.frc.team3414.sensors;
 
 import java.util.Comparator;
 
-import main.java.model.autonomous.ObjectType;
+import org.usfirst.frc.team3414.autonomous.IDetectObjects;
+import org.usfirst.frc.team3414.autonomous.ObjectType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +15,8 @@ import com.ni.vision.NIVision.ImageType;
 
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import main.java.model.autonomous.IDetectObjects;
-import main.java.model.autonomous.Obstacle;
+
+import org.usfirst.frc.team3414.autonomous.Obstacle;
 
 public class Camera implements IDetectObjects 
 {	
@@ -225,7 +226,6 @@ public class Camera implements IDetectObjects
 		return targetWidth / (normalizedWidth * 12 * Math.tan(VIEW_ANGLE * Math.PI / (180 * 2)));
 	}
 
-	@Override
 	public List<Obstacle> getObjects() {
 		List<Obstacle> objectList = new ArrayList<>();
 		Obstacle obstacle = new Obstacle();
@@ -235,5 +235,11 @@ public class Camera implements IDetectObjects
 		objectList.add(obstacle);
 		
 		return objectList;
+	}
+	
+	public boolean areWeInAutoZone()
+	{
+		return false;
+		
 	}
 }

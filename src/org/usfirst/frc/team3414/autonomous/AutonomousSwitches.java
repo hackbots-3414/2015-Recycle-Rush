@@ -1,7 +1,8 @@
 package org.usfirst.frc.team3414.autonomous;
 
-import main.java.model.sensors.ISwitch;
-import main.java.model.sensors.LimitSwitch;
+import org.usfirst.frc.team3414.sensors.ISwitch;
+import org.usfirst.frc.team3414.sensors.LimitSwitch;
+
 
 /**
  * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -15,9 +16,9 @@ public class AutonomousSwitches implements ISwitch {
 	LimitSwitch four;
 
 	public AutonomousSwitches(int channelOnes, int channelTwos, int channelFours) {
-		one = new LimitSwitch(channelOnes);
-		two = new LimitSwitch(channelTwos);
-		four = new LimitSwitch(channelFours);
+		one = new LimitSwitch(channelOnes, false);
+		two = new LimitSwitch(channelTwos, false);
+		four = new LimitSwitch(channelFours, false);
 	}
 
 	/**
@@ -36,48 +37,48 @@ public class AutonomousSwitches implements ISwitch {
 	 * @ordered
 	 */
 
-	@Override
-	public SwitchPositions getPosition() 
+	public SwitchPositions get() 
 	{
-		if (one.getPosition() == SwitchPositions.OFF && two.getPosition() == SwitchPositions.OFF && four.getPosition() == SwitchPositions.OFF)
+		if (one.get() == SwitchPositions.ON && two.get() == SwitchPositions.OFF && four.get() == SwitchPositions.OFF)
 		{
 			return SwitchPositions.NOTHING;
 		}
 		
-		if(one.getPosition() == SwitchPositions.ON && two.getPosition() == SwitchPositions.OFF && four.getPosition() == SwitchPositions.OFF)
+		if(one.get() == SwitchPositions.ON && two.get() == SwitchPositions.OFF && four.get() == SwitchPositions.OFF)
 		{
 			return SwitchPositions.DRIVEFORWARD;
 		}
 		
-		if(one.getPosition() == SwitchPositions.OFF && two.getPosition() == SwitchPositions.ON && four.getPosition() == SwitchPositions.OFF)
+		if(one.get() == SwitchPositions.OFF && two.get() == SwitchPositions.ON && four.get() == SwitchPositions.OFF)
 		{
 			return SwitchPositions.YELLOWTOTE1;
 		}
 		
-		if(one.getPosition() == SwitchPositions.ON && two.getPosition() == SwitchPositions.ON && four.getPosition() == SwitchPositions.OFF)
+		if(one.get() == SwitchPositions.ON && two.get() == SwitchPositions.ON && four.get() == SwitchPositions.OFF)
 		{
 			return SwitchPositions.YELLOWTOTE2;
 		}
 		
-		if(one.getPosition() == SwitchPositions.OFF && two.getPosition() == SwitchPositions.OFF && four.getPosition() == SwitchPositions.ON)
+		if(one.get() == SwitchPositions.OFF && two.get() == SwitchPositions.OFF && four.get() == SwitchPositions.ON)
 		{
 			return SwitchPositions.YELLOWTOTE3;
 		}
 		
-		if(one.getPosition() == SwitchPositions.ON && two.getPosition() == SwitchPositions.OFF && four.getPosition() == SwitchPositions.ON)
+		if(one.get() == SwitchPositions.ON && two.get() == SwitchPositions.OFF && four.get() == SwitchPositions.ON)
 		{
 			return SwitchPositions.RECYCLECAN1;
 		}
 		
-		if(one.getPosition() == SwitchPositions.OFF && two.getPosition() == SwitchPositions.ON && four.getPosition() == SwitchPositions.ON)
+		if(one.get() == SwitchPositions.OFF && two.get() == SwitchPositions.ON && four.get() == SwitchPositions.ON)
 		{
 			return SwitchPositions.RECYCLECAN2;
 		}
 		
-		if(one.getPosition() == SwitchPositions.ON && two.getPosition() == SwitchPositions.ON && four.getPosition() == SwitchPositions.ON)
+		if(one.get() == SwitchPositions.ON && two.get() == SwitchPositions.ON && four.get() == SwitchPositions.ON)
 		{
 			return SwitchPositions.GREYTOTES;
 		}
 		return SwitchPositions.DRIVEFORWARD;
+	}
 	
-}}
+}

@@ -1,11 +1,13 @@
 package org.usfirst.frc.team3414.sensors;
 
+import org.usfirst.frc.team3414.autonomous.SwitchPositions;
+
 import edu.wpi.first.wpilibj.DigitalInput;
 
 /**
  * The class responsible for controlling limit switches on digital IO ports.
  */
-public class LimitSwitch
+public class LimitSwitch implements ISwitch
 {
 	DigitalInput limitSwitch;
 	boolean inverse;
@@ -16,14 +18,26 @@ public class LimitSwitch
 		this.inverse = inverse;
 	}
 
-	public boolean get()
+	public SwitchPositions get()
 	{
 		if (inverse)
 		{
-			return !limitSwitch.get();
+			if(limitSwitch.get())
+			{
+				return SwitchPositions.OFF;
+			} else
+			{
+				return SwitchPositions.ON;
+			}
 		} else
 		{
-			return limitSwitch.get();
+			if(limitSwitch.get())
+			{
+				return SwitchPositions.ON;
+			}else
+			{
+				return SwitchPositions.OFF;
+			}
 		}
 	}
 }

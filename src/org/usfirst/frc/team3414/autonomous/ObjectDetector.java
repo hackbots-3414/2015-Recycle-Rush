@@ -1,9 +1,5 @@
 package org.usfirst.frc.team3414.autonomous;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
-import model.teleop.Display;
-import java.util.HashSet;
 
 
 /**
@@ -14,33 +10,6 @@ import java.util.HashSet;
 
 public class ObjectDetector implements IDetectObjects
 {
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public Display display;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public AutonomousControl autonomousControl;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public Set<ObjectDetector> objectDetector;
-	
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!--  end-user-doc  -->

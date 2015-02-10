@@ -1,6 +1,5 @@
 package org.usfirst.frc.team3414.autonomous;
 
-import java.util.LinkedList;
 import java.util.List;
 
 
@@ -18,7 +17,7 @@ public  interface IDetectObjects
 	 * @ordered
 	 */
 	
-	public getObjects() ;
+	public List<Obstacle> getObjects();
 	
 	
 }

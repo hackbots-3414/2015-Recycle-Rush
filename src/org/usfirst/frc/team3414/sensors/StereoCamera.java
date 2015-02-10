@@ -2,13 +2,10 @@ package org.usfirst.frc.team3414.sensors;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.List;
-import model.teleop.Display;
-import model.autonomous.IDetectObjects;
 import java.util.HashSet;
-import model.autonomous.ObjectDetector;
-import model.autonomous.Obstacle;
-import model.autonomous.AutonomousControl;
 
+import org.usfirst.frc.team3414.autonomous.IDetectObjects;
+import org.usfirst.frc.team3414.autonomous.Obstacle;
 
 /**
  * <!-- begin-user-doc -->
@@ -18,56 +15,9 @@ import model.autonomous.AutonomousControl;
 
 public class StereoCamera implements IDetectObjects
 {
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
+	public Camera cameraOne;
+	public Camera cameraTwo;
 	
-	public Camera camera;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public Camera camera;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public AutonomousControl autonomousControl;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public Set<ObjectDetector> objectDetector;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public Display display;
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 */
 	public StereoCamera(){
 		super();
 	}
