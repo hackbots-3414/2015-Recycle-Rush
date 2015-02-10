@@ -38,7 +38,7 @@ public class TeleopControl
 			lifter.stop();
 		}
 		if(driverControl.getJoy().getButtonTwelve()) {
-			lifter.zeroEncoder();
+			//lifter.zeroEncoder();
 		}
 	}
 }

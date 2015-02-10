@@ -37,9 +37,7 @@ public class Infrared implements IMeasureDistance
 	 * @ordered
 	 */
 	
-	public long addListener(IMeasureDistanceListener listener, long distance) {
-		// TODO implement me
-		return 0L;	
+	public void addListener(IMeasureDistanceListener listener, long distance) {	
 	}
 	
 	/**
@@ -75,6 +73,24 @@ public class Infrared implements IMeasureDistance
 	public long getInches() {
 		// TODO implement me
 		return 0L;	
+	}
+
+	@Override
+	public double getDistanceCm() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getDistanceFt() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getDistanceIn() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 }

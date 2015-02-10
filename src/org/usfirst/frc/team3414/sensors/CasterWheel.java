@@ -55,7 +55,7 @@ public class CasterWheel implements IMeasureDirection
 	 * @ordered
 	 */
 	
-	public long getRadians() {
+	public double getRadians() {
 		// TODO implement me
 		return 0L;	
 	}
@@ -67,7 +67,7 @@ public class CasterWheel implements IMeasureDirection
 	 * @ordered
 	 */
 	
-	public long getChangeInDirection() {
+	public double getChangeInDirection() {
 		// TODO implement me
 		return 0L;	
 	}
@@ -79,7 +79,7 @@ public class CasterWheel implements IMeasureDirection
 	 * @ordered
 	 */
 	
-	public long getDegrees() {
+	public double getDegrees() {
 		// TODO implement me
 		return 0L;	
 	}

@@ -47,9 +47,8 @@ public class Ultrasonic implements IMeasureDistance {
 	 * @ordered
 	 */
 
-	public long addListener(IMeasureDistanceListener listener, long distance) {
+	public void addListener(IMeasureDistanceListener listener, long distance) {
 		// TODO implement me
-		return 0L;
 	}
 
 	/**
@@ -61,6 +60,27 @@ public class Ultrasonic implements IMeasureDistance {
 
 	public double getInches() {
 		return getFeet() * 12;
+	}
+
+
+	@Override
+	public double getDistanceCm() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	@Override
+	public double getDistanceFt() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	@Override
+	public double getDistanceIn() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }
