@@ -10,9 +10,10 @@ public class VirtualClock
 	public void addEvents()
 	{
 
-		TimerThread timer = new TimerThread();
+		TimerThread timer = TimerThread.createInstance();
 		//timer.addEvent(new JustAnotherWorker(), 150);
 		//timer.addEvent(event Extension, time arg);
+		timer.addEventMS(new ExampleClassUsingTimerListener(), 30, false);
 		timer.start();		// Start the thread
 	}
 

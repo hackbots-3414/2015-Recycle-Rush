@@ -4,18 +4,42 @@ import java.util.ArrayList;
 
 public class TimerThread extends Thread
 {
-	protected ArrayList<TimerListener> listeners = null;// new
-														// ArrayList<TimerListener>();
+	private static TimerThread singleton = null;
 
-	public TimerThread()
-	{
-	}
+    private TimerThread()
+    {
+    }
+
+    public static TimerThread createInstance()
+    {
+        if (singleton == null)
+        {
+            singleton = new TimerThread();
+        }
+
+        return singleton;
+    }
+
+    public static TimerThread getInstance()
+    {
+        if (singleton == null)
+        {
+            throw new NullPointerException("TimerThread hasn't been created yet");
+        }
+
+        return singleton;
+    }
+	
+	
+	
+	protected ArrayList<TimerListener> listeners = null;
 
 	/**
-	 * Add listener events
+	 * Add listener event in Milliseconds
 	 * 
 	 * @param listener
 	 * @param milliseconds
+	 * @param repeat
 	 */
 	public void addEventMS(ITimeListener listener, long milliseconds, boolean repeat)
 	{
@@ -26,13 +50,20 @@ public class TimerThread extends Thread
 		this.listeners.add(new TimerListener(listener, new Timer(milliseconds), repeat));
 	}
 
-	public void addEventSec(ITimeListener listener, long milliseconds, boolean repeat)
+	/**
+	 * Add listener event in Seconds
+	 * 
+	 * @param listener
+	 * @param milliseconds
+	 * @param repeat
+	 */
+	public void addEventSec(ITimeListener listener, int seconds, boolean repeat)
 	{
 		if (this.listeners == null)
 		{
 			this.listeners = new ArrayList<TimerListener>();
 		}
-		this.listeners.add(new TimerListener(listener, new Timer(milliseconds), repeat));
+		this.listeners.add(new TimerListener(listener, new Timer(seconds), repeat));
 	}
 
 	/**
@@ -53,15 +84,12 @@ public class TimerThread extends Thread
 					{
 						this.listeners.add(new TimerListener(listener.getListener(), new Timer(listener.getTime()), listener.isRepeted()));
 					}
-					
-					this.listeners.remove(listener); // Remove this listener
-					// because it
-					// expired
+
+					this.listeners.remove(listener); // Remove this listener because it expired
 					break;
 				}
 			}
-			// Keep looping until we have no more listeners in the list or the
-			// thread is interrupted
+			// Keep looping until we have no more listeners in the list or the thread is interrupted
 		} while (!Thread.interrupted() && this.listeners.size() > 0);
 	}
 
@@ -91,7 +119,7 @@ public class TimerThread extends Thread
 		}
 
 		/**
-		 * Get the listener object
+		 * Run the Elapsed Response
 		 * 
 		 * @return
 		 */
@@ -103,23 +131,38 @@ public class TimerThread extends Thread
 		/**
 		 * Check for an expired timer
 		 * 
-		 * @return
+		 * @return 
 		 */
 		public boolean isExpired()
 		{
 			return this._timr.isExpired();
 		}
 
+		/**
+		 * Check if object is repeated
+		 * 
+		 * @return
+		 */
 		public boolean isRepeted()
 		{
 			return this._rept;
 		}
-		
+
+		/**
+		 * Get the listener object
+		 * 
+		 * @return
+		 */
 		public ITimeListener getListener()
 		{
 			return this._listener;
 		}
-		
+
+		/**
+		 * Check the object's additional time
+		 * 
+		 * @return
+		 */
 		public long getTime()
 		{
 			return this._timr.getTime();
