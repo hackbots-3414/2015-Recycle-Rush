@@ -1,4 +1,25 @@
-package org.usfirst.frc.team3414.sensors;
+package org.usfirst.frc.team3414.sensors.timerListener;
+
+public class VirtualClock
+{
+	
+	public VirtualClock()
+	{
+	}
+	
+	public void addEvents()
+	{
+
+		TimerThread timer = new TimerThread();
+		//timer.addEvent(new JustAnotherWorker(), 150);
+		//timer.addEvent(event Extension, time arg);
+		timer.start();		// Start the thread
+	}
+
+}
+
+/*
+package org.usfirst.frc.team3414.sensors.timerListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,6 +55,7 @@ public class VirtualClock extends Thread implements ITimer
 			{
 				ITimeListener listen = tempClash.getITimeListener();
 				listen.doWhenTimeElapsed();
+				//TODO: Finish Continuous operation
 				if (tempClash.getContinuous())
 				{
 					tempClash.setStartTime((long)time.get());
@@ -49,7 +71,7 @@ public class VirtualClock extends Thread implements ITimer
 	 * @param boolean- whether or not timer should continue to repeat
 	 * @param timeToExtendSec- the number of seconds the timer should extend before executing
 	 * @return long- returns the ID of the Timer; useful for removing the Timer
-	 */
+	 *
 	public long addListenerSec(ITimeListener listener, boolean continuous, long timeToExtendSec)
 	{
 		long startTime = (long) (time.get() * 1000);
@@ -85,4 +107,6 @@ public class VirtualClock extends Thread implements ITimer
 		return time.get();
 	}
 
+	
 }
+*/
