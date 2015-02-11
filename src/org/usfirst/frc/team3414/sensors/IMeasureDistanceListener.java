@@ -1,7 +1,5 @@
 package org.usfirst.frc.team3414.sensors;
 
-
-
 /**
  * <!-- begin-user-doc -->
  * <!--  end-user-doc  -->
@@ -15,8 +13,7 @@ public  interface IMeasureDistanceListener
 	 * @generated
 	 * @ordered
 	 */
-	
-	public void distanceEvent(DistanceEventArgs distanceEvent) ;
+	public void distanceEvent(DistanceEventArgs distanceEvent);
 	
 	
 }

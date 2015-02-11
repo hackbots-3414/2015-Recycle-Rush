@@ -1,21 +1,24 @@
 package org.usfirst.frc.team3414.sensors;
 
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.PWM;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class Ultrasonic implements IMeasureDistance {
 
 
-	private final AnalogInput ultrasonic;
-
-	public Ultrasonic(AnalogInput ultrasonic) {
-		this.ultrasonic = ultrasonic;
-		ultrasonic.setAverageBits(30);
+	private final AnalogInput analogInput;
+	private final PWM pwmInput;
+	
+	public Ultrasonic(AnalogInput input) {
+		this.analogInput = input;
+		this.pwmInput = null;
 	}
-
-
-	public void removeListener(long distanceEventID) {
-		// TODO implement me
+	
+	public Ultrasonic(PWM input) {
+		this.analogInput = null;
+		this.pwmInput = input;
 	}
 
 	/**
@@ -26,7 +29,22 @@ public class Ultrasonic implements IMeasureDistance {
 	 */
 
 	public double getCm() {
-		return ultrasonic.getAverageVoltage() / .1024;
+		double cm = 0;
+		if(analogInput != null)
+		{
+			SmartDashboard.putNumber("Vcc: ",  analogInput.getValue());
+			
+			cm = analogInput.getAverageVoltage() / .00245; // 4.9mV per 2 cm
+		}
+		else if(pwmInput != null)
+		{
+			//pwmInput.setPeriodMultiplier(mult);
+			SmartDashboard.putNumber("PMW Value: ", pwmInput.getRaw());
+			//PWM Value
+			
+		}
+		//else if(serialInput != null)
+		return cm;
 	}
 
 	/**
@@ -37,19 +55,7 @@ public class Ultrasonic implements IMeasureDistance {
 	 */
 
 	public double getFeet() {
-		return getCm() * .0328084;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-
-	public long addListener(IMeasureDistanceListener listener, long distance) {
-		// TODO implement me
-		return 0L;
+		return DistanceConversion.cmToInches(getCm());
 	}
 
 	/**
@@ -60,7 +66,7 @@ public class Ultrasonic implements IMeasureDistance {
 	 */
 
 	public double getInches() {
-		return getFeet() * 12;
+		return DistanceConversion.inToFeet(getFeet());
 	}
 
 }
