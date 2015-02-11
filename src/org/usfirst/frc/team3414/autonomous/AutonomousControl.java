@@ -4,13 +4,12 @@ import org.usfirst.frc.team3414.sensors.Camera;
 import org.usfirst.frc.team3414.sensors.IDetectLines;
 import org.usfirst.frc.team3414.sensors.ISwitch;
 
-
 /**
- * <!-- begin-user-doc -->
- * <!--  end-user-doc  -->
- * @generated
+ * Controls which autonomous procedure will run based on the autonomous switches at the time of running
+ * 
+ * @author Ray
+ *
  */
-
 public class AutonomousControl
 {	
 	public ISwitch iAutonomousSwitches;

@@ -10,6 +10,13 @@ import org.usfirst.frc.team3414.sensors.Camera;
 import org.usfirst.frc.team3414.sensors.VirtualClock;
 import org.usfirst.frc.team3414.autonomous.Obstacle;
 
+/**
+ * 
+ * Picks up two totes and drops the stack in the autonomous zone
+ * 
+ * @author Ray
+ *
+ */
 public class TwoYellowToteAuto implements AutonomousProcedure {
 	public IDriverAssist iDriverAssist;
 

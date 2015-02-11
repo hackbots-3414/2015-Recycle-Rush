@@ -4,20 +4,19 @@ import java.util.List;
 
 
 /**
- * <!-- begin-user-doc -->
- * <!--  end-user-doc  -->
- * @generated
+ * Implemented by classes which detect objects on the field
+ * 
+ * @author Ray
+ *
  */
 public  interface IDetectObjects 
 {
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
+	 * Returns a list of objects detected by the object detecting sensor
+	 * 
+	 * @return
 	 */
-	
-	public List<Obstacle> getObjects();
+	public List<Obstacle> getObjects() ;
 	
 	
 }

@@ -1,5 +1,11 @@
 package org.usfirst.frc.team3414.autonomous;
 
-public interface AutonomousProcedure {
+/**
+ * The base interface for all autonomous procedures
+ * 
+ * @author Ray
+ *
+ */
+interface AutonomousProcedure {
 	public void doAuto();
 }

@@ -3,6 +3,13 @@ package org.usfirst.frc.team3414.autonomous;
 import org.usfirst.frc.team3414.actuators.ForkLift;
 import org.usfirst.frc.team3414.actuators.ILiftAssist;
 
+/**
+ * 
+ * Picks up one tote and then brings it into the autonomous zone
+ * 
+ * @author Ray
+ *
+ */
 public class OneYellowToteAuto implements AutonomousProcedure
 {
 	public IDriverAssist iDriverAssist;

@@ -7,6 +7,12 @@ import org.usfirst.frc.team3414.sensors.ITimeListener;
 import org.usfirst.frc.team3414.sensors.TimeElapsedEventArgs;
 import org.usfirst.frc.team3414.sensors.VirtualClock;
 
+/**
+ * An autonomous routine that drives backward into the autonomous zone and does nothing else, used in other autonomous methods.
+ * 
+ * @author Ray
+ *
+ */
 public class DriveBackwardIntoAuto implements AutonomousProcedure, ITimeListener
 {
 	Camera cameraAssist = new Camera(); // Should be singleton

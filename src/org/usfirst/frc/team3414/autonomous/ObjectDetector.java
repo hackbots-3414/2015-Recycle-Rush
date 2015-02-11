@@ -1,13 +1,13 @@
 package org.usfirst.frc.team3414.autonomous;
 import java.util.List;
 
-
 /**
- * <!-- begin-user-doc -->
- * <!--  end-user-doc  -->
- * @generated
+ * 
+ * Detects objects using vision?
+ * 
+ * @author ???
+ *
  */
-
 public class ObjectDetector implements IDetectObjects
 {
 	/**

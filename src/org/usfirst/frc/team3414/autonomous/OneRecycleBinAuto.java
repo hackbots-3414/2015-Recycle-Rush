@@ -3,6 +3,13 @@ package org.usfirst.frc.team3414.autonomous;
 import org.usfirst.frc.team3414.actuators.ForkLift;
 import org.usfirst.frc.team3414.actuators.ILiftAssist;
 
+/**
+ * 
+ * Picks up one recycle bin and drops it in the autonomous zone
+ * 
+ * @author Ray
+ *
+ */
 public class OneRecycleBinAuto implements AutonomousProcedure
 {
 	public IDriverAssist iDriverAssist;

@@ -3,13 +3,13 @@ package org.usfirst.frc.team3414.autonomous;
 import org.usfirst.frc.team3414.sensors.ISwitch;
 import org.usfirst.frc.team3414.sensors.LimitSwitch;
 
-
 /**
- * <!-- begin-user-doc --> <!-- end-user-doc -->
  * 
- * @generated
+ * Implements the autonomous switches which determine what autonomous mode we will start the robot in. The switch can be toggled from one to eight.
+ * 
+ * @author Ray
+ *
  */
-
 public class AutonomousSwitches implements ISwitch {
 	LimitSwitch one;
 	LimitSwitch two;
