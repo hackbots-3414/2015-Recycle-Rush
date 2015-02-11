@@ -2,16 +2,21 @@ package org.usfirst.frc.team3414.actuators;
 
 import org.usfirst.frc.team3414.sensors.MyEncoder;
 import org.usfirst.frc.team3414.sensors.LimitSwitch;
+import org.usfirst.frc.team3414.sensors.MySolenoid;
+
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedController;
 
 public class ForkLift implements ILiftAssist
 {
 	private IEncodedMotor encodedMotor;
 	private MyEncoder encoder;
+	private Encoder encode;
+	private MySolenoid solenoid;
 	LimitSwitch topSwitch;
 	LimitSwitch botSwitch;
+	
 	private SpeedController speedCont;
-
 	private double topEncPo;
 	private double bottomEncPo;
 	private double binEncPo;
@@ -23,10 +28,14 @@ public class ForkLift implements ILiftAssist
 
 	private ForkLift()
 	{
+	    	encode = new Encoder(4,5);
+	    	encoder = new MyEncoder(encode);
 		encodedMotor = new EncodedMotor(speedCont, encoder, false);
 		topSwitch = new LimitSwitch(1, false);
 		botSwitch = new LimitSwitch(2, false);
+		solenoid = new MySolenoid(3);
 		isEncZeroed = false;
+		solenoid.set(false);
 	}
 
 	public static ForkLift createInstance()
@@ -49,25 +58,15 @@ public class ForkLift implements ILiftAssist
 		return singleton;
 	}
 
-	/*
-	 * public ForkLift(ICanMotor pCanMotor, int forkLiftPort) { this.canMotor =
-	 * pCanMotor; // tempTopSwitch = topSwitch; // tempBottomSwitch =
-	 * bottomSwitch;
-	 * 
-	 * }
-	 * 
-	 * public ForkLift(ICanMotor tempCanMotor, int forkLiftPort) { tempCanMotor
-	 * = canMotor;
-	 * 
-	 * // Speed setpoint for the closed loop system. speedSetpoint = 1.0; }
-	 */
 	public void goToTop()
 	{
 		while ((encodedMotor.getEncoderPosition() < topEncPo) && !joystickOverride && !topSwitch.get() && !botSwitch.get())
 		{
-			encodedMotor.forward(1, 10);
+		    solenoid.set(false);
+		    encodedMotor.forward(1, 10);
 		}
 		this.stop();
+		solenoid.set(true);
 	}
 
 	public void goToBottom()
@@ -76,15 +75,17 @@ public class ForkLift implements ILiftAssist
 		{
 			if ((encodedMotor.getEncoderPosition() > bottomEncPo))
 			{
-				encodedMotor.backward(1, 10);
+			    solenoid.set(false);
+			    encodedMotor.backward(1, 10);
 			}
 			if ((encodedMotor.getEncoderPosition() < bottomEncPo))
 			{
-				encodedMotor.forward(1, 10);
+			    solenoid.set(false);
+			    encodedMotor.forward(1, 10);
 			}
 		}
 		this.stop();
-
+		solenoid.set(true);
 	}
 
 	public void nextToteLength()
@@ -92,9 +93,11 @@ public class ForkLift implements ILiftAssist
 		double current = encodedMotor.getEncoderPosition();
 		while ((encodedMotor.getEncoderPosition() < current + toteEncPo) && !joystickOverride && !topSwitch.get() && !botSwitch.get())
 		{
-			encodedMotor.forward(1, 10);
+		    solenoid.set(false);
+		    encodedMotor.forward(1, 10);
 		}
 		this.stop();
+		solenoid.set(true);
 	}
 
 	public void previousToteLength()
@@ -102,9 +105,11 @@ public class ForkLift implements ILiftAssist
 		double current = encodedMotor.getEncoderPosition();
 		while ((encodedMotor.getEncoderPosition() > current - toteEncPo) && !joystickOverride && !topSwitch.get() && !botSwitch.get())
 		{
+		    	solenoid.set(false);
 			encodedMotor.backward(1, 10);
 		}
 		this.stop();
+		solenoid.set(true);
 	}
 
 	public void nextBinLength()
@@ -112,9 +117,11 @@ public class ForkLift implements ILiftAssist
 		double current = encodedMotor.getEncoderPosition();
 		while ((encodedMotor.getEncoderPosition() < current + binEncPo) && !joystickOverride && !topSwitch.get() && !botSwitch.get())
 		{
+		    	solenoid.set(false);
 			encodedMotor.forward(1, 10);
 		}
 		this.stop();
+		solenoid.set(true);
 	}
 
 	public void previousBinLength()
@@ -122,9 +129,11 @@ public class ForkLift implements ILiftAssist
 		double current = encodedMotor.getEncoderPosition();
 		while ((encodedMotor.getEncoderPosition() > current - binEncPo) && !joystickOverride && !topSwitch.get() && !botSwitch.get())
 		{
+		    	solenoid.set(false);
 			encodedMotor.backward(1, 10);
 		}
 		this.stop();
+		solenoid.set(true);
 	}
 
 	public void stop()
@@ -152,6 +161,7 @@ public class ForkLift implements ILiftAssist
 	{
 		while (!joystickOverride && !isEncZeroed)
 		{
+		    	solenoid.set(false);
 			encodedMotor.backward(.5, 20);
 			if (botSwitch.get())
 			{
