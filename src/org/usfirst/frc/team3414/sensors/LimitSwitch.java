@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 /**
  * The class responsible for controlling limit switches on digital IO ports.
  */
+
 public class LimitSwitch
 {
 	DigitalInput limitSwitch;
