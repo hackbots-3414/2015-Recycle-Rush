@@ -1,9 +1,6 @@
 package org.usfirst.frc.team3414.autonomous;
 import org.usfirst.frc.team3414.actuators.IDriveTrain;
 import org.usfirst.frc.team3414.sensors.IMeasureDistance;
-import org.usfirst.frc.team3414.teleop.Display;
-import org.usfirst.frc.team3414.teleop.Log;
-import org.usfirst.frc.team3414.teleop.TeleopControl;
 
 
 /**

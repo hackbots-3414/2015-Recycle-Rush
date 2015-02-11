@@ -21,6 +21,8 @@ public class TwoRecycleBinAuto implements AutonomousProcedure
 	ILiftAssist forkLift = ForkLift.getInstance();
 	IDriveTrain mecanumDrive = MecanumDrive.getInstance();
 	
+	boolean detected = false;
+	
 	@Override
 	public void doAuto() 
 	{
@@ -42,6 +44,7 @@ public class TwoRecycleBinAuto implements AutonomousProcedure
 		// Move sideways until the next bin is in sight
 		mecanumDrive.move(90, 1.0, 0);
 		
+		while (!detected) {
 		List<Obstacle> obstacleList = cameraAssist.getObjects();
 		for(int i=0; i <= obstacleList.size(); i++)
 		{
@@ -49,6 +52,7 @@ public class TwoRecycleBinAuto implements AutonomousProcedure
 			{
 				mecanumDrive.stop(); // If the next tote is in vision stop
 			}
+		}
 		}
 		
 		// Approach the bin

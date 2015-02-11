@@ -1,8 +1,5 @@
 package org.usfirst.frc.team3414.sensors;
-import java.util.LinkedList;
-import java.util.Set;
 import java.util.List;
-import java.util.HashSet;
 
 import org.usfirst.frc.team3414.autonomous.IDetectObjects;
 import org.usfirst.frc.team3414.autonomous.Obstacle;

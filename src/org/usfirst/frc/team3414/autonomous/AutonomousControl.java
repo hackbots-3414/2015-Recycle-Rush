@@ -1,12 +1,7 @@
 package org.usfirst.frc.team3414.autonomous;
+import org.usfirst.frc.team3414.actuators.ILiftAssist;
 import org.usfirst.frc.team3414.sensors.Camera;
 import org.usfirst.frc.team3414.sensors.IDetectLines;
-import org.usfirst.frc.team3414.sensors.ITimeListener;
-import org.usfirst.frc.team3414.sensors.TimeElapsedEventArgs;
-import org.usfirst.frc.team3414.sensors.VirtualClock;
-import org.usfirst.frc.team3414.actuators.ForkLift;
-import org.usfirst.frc.team3414.actuators.ILiftAssist;
-import org.usfirst.frc.team3414.actuators.MecanumDrive;
 import org.usfirst.frc.team3414.sensors.ISwitch;
 
 
