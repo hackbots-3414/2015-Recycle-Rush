@@ -11,12 +11,18 @@ public class DistanceEventHandler extends Thread implements IDistanceEventHandle
 {
 	
 	private long nextEventID = 0;
-
+	private int sleepTime; 
+	
 	private Map<Long, EventSubscription> subscriptions;
 	
 	public DistanceEventHandler() {
+		this(1000);
+	}
+	
+	public DistanceEventHandler(int sleepTime) {
 		super();
 		this.subscriptions = new Hashtable<Long, EventSubscription>();
+		this.sleepTime = sleepTime;
 	}
 
 	@Override
@@ -74,6 +80,11 @@ public class DistanceEventHandler extends Thread implements IDistanceEventHandle
 						eventTask.start();
 					}
 				}
+			}
+			try {
+				Thread.sleep(sleepTime);
+			} catch (InterruptedException e) {
+				
 			}
 		}
 	}

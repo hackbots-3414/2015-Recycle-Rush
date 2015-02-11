@@ -37,14 +37,6 @@ public class DistanceEventArgs
 	
 	/**
 	 */
-	public double getDistanceFt() 
-	{
-	
-		return DistanceConversion.inToFeet(getDistanceIn());
-	}
-	
-	/**
-	 */
 	public double getDistanceIn() 
 	{
 		return DistanceConversion.cmToInches(distance);

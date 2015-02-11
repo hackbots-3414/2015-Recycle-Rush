@@ -34,7 +34,7 @@ public class Infrared implements IMeasureDistance
 	@Override
 	public double getCm() {
 		double voltage = channel.getVoltage();
-		return 61.573 * Math.pow(voltage/1000, -1.1068);
+		return 61.573 * Math.pow(voltage, -1.1068);
 	}
 
 	/**
