@@ -1,5 +1,7 @@
 package org.usfirst.frc.team3414.sensors;
 
+import edu.wpi.first.wpilibj.AnalogInput;
+
 
 /**
  * <!-- begin-user-doc -->
@@ -9,73 +11,52 @@ package org.usfirst.frc.team3414.sensors;
 
 public class Infrared implements IMeasureDistance
 {
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 */
-	public Infrared(){
+	private AnalogInput channel;
+
+	public Infrared(AnalogInput channel) {
 		super();
+		if(channel != null)
+		{
+			this.channel = channel;	
+		}
+		else
+		{
+			throw new RuntimeException("The Channel should nopt be null");
+		}
+		
+	}
+	
+	public Infrared(int channelNumber) {
+		super();
+		channel = new AnalogInput(channelNumber);
+	}
+
+	@Override
+	public double getCm() {
+		double voltage = channel.getVoltage();
+		return 61.573 * Math.pow(voltage/1000, -1.1068);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
+	 * Use average voltage to get distance in feet
+	 * 
 	 * @generated
 	 * @ordered
 	 */
-	
-	public long getCm() {
-		// TODO implement me
-		return 0L;	
+
+	public double getFeet() {
+		return DistanceConversion.cmToInches(getCm());
 	}
-	
+
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
+	 * Gets distance in feet and converts to inches
+	 * 
 	 * @generated
 	 * @ordered
 	 */
-	
-	public long addListener(IMeasureDistanceListener listener, long distance) {
-		// TODO implement me
-		return 0L;	
+
+	public double getInches() {
+		return DistanceConversion.inToFeet(getFeet());
 	}
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public void removeListener(long distanceEventID) {
-		// TODO implement me	
-	}
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public long getFeet() {
-		// TODO implement me
-		return 0L;	
-	}
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public long getInches() {
-		// TODO implement me
-		return 0L;	
-	}
-	
 }
 
