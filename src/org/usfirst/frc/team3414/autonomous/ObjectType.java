@@ -1,9 +1,11 @@
 package org.usfirst.frc.team3414.autonomous;
 
 /**
- * <!-- begin-user-doc -->
- * <!--  end-user-doc  -->
- * @generated
+ * 
+ * Describes the type of object detected
+ * 
+ * @author Ray
+ *
  */
 public enum ObjectType
 {

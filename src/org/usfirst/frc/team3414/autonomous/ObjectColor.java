@@ -1,9 +1,12 @@
 package org.usfirst.frc.team3414.autonomous;
 
+
 /**
- * <!-- begin-user-doc -->
- * <!--  end-user-doc  -->
- * @generated
+ * 
+ * Describes what color a detected object is
+ * 
+ * @author Ray
+ *
  */
 public enum ObjectColor
 {

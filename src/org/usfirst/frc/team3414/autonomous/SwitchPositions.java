@@ -1,9 +1,11 @@
 package org.usfirst.frc.team3414.autonomous;
 
 /**
- * <!-- begin-user-doc -->
- * <!--  end-user-doc  -->
- * @generated
+ * 
+ * Describes what switch position a limit switch or autonomous switch is in.
+ * 
+ * @author Ray
+ *
  */
 public enum SwitchPositions
 {

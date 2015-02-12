@@ -2,53 +2,44 @@ package org.usfirst.frc.team3414.autonomous;
 
 
 /**
- * <!-- begin-user-doc -->
- * <!--  end-user-doc  -->
- * @generated
+ * 
+ * Describes an obstacle that is picked up during vision processing
+ * 
+ * @author Ray
+ *
  */
-
 public class Obstacle
 {
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
+	 * The side the detected object is on, if the object is a tote.
 	 */
-	
+	public ToteSide side;
+
+	/**
+	 * The color of the detected object
+	 */
 	public ObjectColor color;
 	
+
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
+	 * The type of object detected by vision
 	 */
-	
 	public ObjectType type;
 	
+
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
+	 * The distance away the object is in, expressed in feet
 	 */
-	
 	public long distanceInFt;
 	
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
+	 * The distance away the object is in, expressed in centimeters
 	 */
-	
 	public long distanceInCm;
 	
+
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
+	 * Constructs the obstacle object
 	 */
 	public Obstacle(){
 		super();

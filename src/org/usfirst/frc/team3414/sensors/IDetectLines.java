@@ -16,7 +16,7 @@ public  interface IDetectLines
 	 * @ordered
 	 */
 	
-	public areWeInAutoZone() ;
+	public boolean areWeInAutoZone() ;
 	
 	
 }

@@ -1,12 +1,6 @@
 package org.usfirst.frc.team3414.autonomous;
 
 
-
-/**
- * <!-- begin-user-doc -->
- * <!--  end-user-doc  -->
- * @generated
- */
 public  interface IDriverAssist 
 {
 	/**
@@ -16,7 +10,7 @@ public  interface IDriverAssist
 	 * @ordered
 	 */
 	
-	public avoidDebris() ;
+	public void avoidDebris() ;
 	
 	/**
 	 * <!-- begin-user-doc -->
@@ -25,7 +19,7 @@ public  interface IDriverAssist
 	 * @ordered
 	 */
 	
-	public binSweetSpot() ;
+	public void binSweetSpot() ;
 	
 	/**
 	 * <!-- begin-user-doc -->
@@ -34,7 +28,7 @@ public  interface IDriverAssist
 	 * @ordered
 	 */
 	
-	public correctRotation() ;
+	public void correctRotation() ;
 	
 	/**
 	 * <!-- begin-user-doc -->
@@ -43,7 +37,7 @@ public  interface IDriverAssist
 	 * @ordered
 	 */
 	
-	public toteSweetSpot() ;
+	public void toteSweetSpot() ;
 	
 	
 }

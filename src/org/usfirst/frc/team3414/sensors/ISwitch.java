@@ -18,8 +18,6 @@ public  interface ISwitch
 	 * @ordered
 	 */
 	
-	public SwitchPositions getMode() ;
-	
-	
+	public SwitchPositions get();
 }
 

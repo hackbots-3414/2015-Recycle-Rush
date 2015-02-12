@@ -4,8 +4,8 @@ import org.usfirst.frc.team3414.actuators.*;
 public class TeleopControl
 {
 	private Controller driverControl;
-	private MecanumDrive robot;
-	private ForkLift lifter;
+	MecanumDrive robot;
+	ForkLift lifter;
 	
 	public TeleopControl(){
 		driverControl = new Controller();	
@@ -36,6 +36,9 @@ public class TeleopControl
 		}
 		if(driverControl.getJoy().getButtonEleven()) {
 			lifter.stop();
+		}
+		if(driverControl.getJoy().getButtonTwelve()) {
+			//lifter.zeroEncoder();
 		}
 	}
 }

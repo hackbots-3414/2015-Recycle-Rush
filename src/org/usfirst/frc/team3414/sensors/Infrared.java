@@ -1,7 +1,5 @@
 package org.usfirst.frc.team3414.sensors;
 
-import edu.wpi.first.wpilibj.AnalogInput;
-
 
 /**
  * <!-- begin-user-doc -->
@@ -11,52 +9,89 @@ import edu.wpi.first.wpilibj.AnalogInput;
 
 public class Infrared implements IMeasureDistance
 {
-	private AnalogInput channel;
-
-	public Infrared(AnalogInput channel) {
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!--  end-user-doc  -->
+	 * @generated
+	 */
+	public Infrared(){
 		super();
-		if(channel != null)
-		{
-			this.channel = channel;	
-		}
-		else
-		{
-			throw new RuntimeException("The Channel should nopt be null");
-		}
-		
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!--  end-user-doc  -->
+	 * @generated
+	 * @ordered
+	 */
+	
+	public long getCm() {
+		// TODO implement me
+		return 0L;	
 	}
 	
-	public Infrared(int channelNumber) {
-		super();
-		channel = new AnalogInput(channelNumber);
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!--  end-user-doc  -->
+	 * @generated
+	 * @ordered
+	 */
+	
+	public void addListener(IMeasureDistanceListener listener, long distance) {	
+	}
+	
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!--  end-user-doc  -->
+	 * @generated
+	 * @ordered
+	 */
+	
+	public void removeListener(long distanceEventID) {
+		// TODO implement me	
+	}
+	
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!--  end-user-doc  -->
+	 * @generated
+	 * @ordered
+	 */
+	
+	public long getFeet() {
+		// TODO implement me
+		return 0L;	
+	}
+	
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!--  end-user-doc  -->
+	 * @generated
+	 * @ordered
+	 */
+	
+	public long getInches() {
+		// TODO implement me
+		return 0L;	
 	}
 
 	@Override
-	public double getCm() {
-		double voltage = channel.getVoltage();
-		return 61.573 * Math.pow(voltage, -1.1068);
+	public double getDistanceCm() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
-	/**
-	 * Use average voltage to get distance in feet
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-
-	public double getFeet() {
-		return DistanceConversion.cmToInches(getCm());
+	@Override
+	public double getDistanceFt() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
-	/**
-	 * Gets distance in feet and converts to inches
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-
-	public double getInches() {
-		return DistanceConversion.inToFeet(getFeet());
+	@Override
+	public double getDistanceIn() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
+	
 }
 
