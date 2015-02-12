@@ -4,7 +4,8 @@ import edu.wpi.first.wpilibj.CANTalon;
 
 import org.usfirst.frc.team3414.sensors.Accelerometer;
 import org.usfirst.frc.team3414.sensors.Gyroscope;
-import org.usfirst.frc.team3414.sensors.ITimeListener;
+import org.usfirst.frc.team3414.sensors.timerListener.ITimeListener;
+import org.usfirst.frc.team3414.sensors.timerListener.TimerThread;
 
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -17,22 +18,24 @@ import edu.wpi.first.wpilibj.SpeedController;
 
 public class MecanumDrive implements IDriveTrain, ITimeListener
 {
+    double currentVelocity, currentAngle, currentRotation;
     RobotDrive drive;
     Gyroscope gyro;
     Accelerometer accel;
     final double Kp = .03;
     double devAngle;
     SpeedController[] talons = new SpeedController[4];
+    
 
     private static MecanumDrive singleton = null;
 
     private MecanumDrive()
     {
-
+	TimerThread k = TimerThread.getInstance();
+	k.addEventMS(this, 2000, false);
 	gyro = new Gyroscope(1); // COME BACK AND CHANGE CHANNEL NUMBER TO MAKE
 				 // THIS WORK!!!!!!!!!!!!!!!!!!!!!!!!!
 	accel = new Accelerometer();
-	devAngle = (Math.toDegrees(Math.atan(accel.getAccelY() / accel.getAccelX())));
 	for (int i = 0; i < talons.length; i++)
 	{
 	    talons[i] = new CANTalon(i + 1, 10);
@@ -72,15 +75,12 @@ public class MecanumDrive implements IDriveTrain, ITimeListener
 
     public void move(double velocity, double angle, double rotation)
     {
+	this.currentVelocity = velocity;
+	this.currentAngle = angle;
+	this.currentRotation = rotation;
+	
 	drive.mecanumDrive_Polar(velocity, angle, rotation);
-	while (devAngle > 5)
-	{
-	    drive.mecanumDrive_Polar(velocity, angle - devAngle, rotation);
-	}
-	while (devAngle < -5)
-	{
-	    drive.mecanumDrive_Polar(velocity, angle + devAngle, rotation);
-	}
+	
     }
 
     /**
@@ -136,6 +136,15 @@ public class MecanumDrive implements IDriveTrain, ITimeListener
 
     public void doWhenTimeElapsed()
     {
+	devAngle = (Math.toDegrees(Math.atan(accel.getAccelY() / accel.getAccelX())));
+	if (devAngle > 5)
+	{
+	    drive.mecanumDrive_Polar(currentVelocity, currentAngle - devAngle, currentRotation);
+	}
+	if (devAngle < -5)
+	{
+	    drive.mecanumDrive_Polar(currentVelocity, currentAngle + devAngle, currentRotation);
+	}
 	
     }
 }

@@ -1,5 +1,6 @@
 package org.usfirst.frc.team3414.actuators;
 
+import org.usfirst.frc.team3414.autonomous.SwitchPositions;
 import org.usfirst.frc.team3414.sensors.MyEncoder;
 import org.usfirst.frc.team3414.sensors.LimitSwitch;
 import org.usfirst.frc.team3414.sensors.MySolenoid;
@@ -60,7 +61,7 @@ public class ForkLift implements ILiftAssist
 
 	public void goToTop()
 	{
-		while ((encodedMotor.getEncoderPosition() < topEncPo) && !joystickOverride && !topSwitch.get() && !botSwitch.get())
+		while ((encodedMotor.getEncoderPosition() < topEncPo) && !joystickOverride && topSwitch.get() == SwitchPositions.OFF && botSwitch.get() == SwitchPositions.OFF)
 		{
 		    solenoid.set(false);
 		    encodedMotor.forward(1, 10);
@@ -71,7 +72,7 @@ public class ForkLift implements ILiftAssist
 
 	public void goToBottom()
 	{
-		while (!joystickOverride && !topSwitch.get() && !botSwitch.get())
+		while (!joystickOverride && topSwitch.get() == SwitchPositions.OFF && botSwitch.get() == SwitchPositions.OFF)
 		{
 			if ((encodedMotor.getEncoderPosition() > bottomEncPo))
 			{
@@ -91,7 +92,7 @@ public class ForkLift implements ILiftAssist
 	public void nextToteLength()
 	{
 		double current = encodedMotor.getEncoderPosition();
-		while ((encodedMotor.getEncoderPosition() < current + toteEncPo) && !joystickOverride && !topSwitch.get() && !botSwitch.get())
+		while ((encodedMotor.getEncoderPosition() < current + toteEncPo) && !joystickOverride && topSwitch.get() == SwitchPositions.OFF && botSwitch.get() == SwitchPositions.OFF)
 		{
 		    solenoid.set(false);
 		    encodedMotor.forward(1, 10);
@@ -103,7 +104,7 @@ public class ForkLift implements ILiftAssist
 	public void previousToteLength()
 	{
 		double current = encodedMotor.getEncoderPosition();
-		while ((encodedMotor.getEncoderPosition() > current - toteEncPo) && !joystickOverride && !topSwitch.get() && !botSwitch.get())
+		while ((encodedMotor.getEncoderPosition() > current - toteEncPo) && !joystickOverride && topSwitch.get() == SwitchPositions.OFF && botSwitch.get() == SwitchPositions.OFF)
 		{
 		    	solenoid.set(false);
 			encodedMotor.backward(1, 10);
@@ -115,7 +116,7 @@ public class ForkLift implements ILiftAssist
 	public void nextBinLength()
 	{
 		double current = encodedMotor.getEncoderPosition();
-		while ((encodedMotor.getEncoderPosition() < current + binEncPo) && !joystickOverride && !topSwitch.get() && !botSwitch.get())
+		while ((encodedMotor.getEncoderPosition() < current + binEncPo) && !joystickOverride && topSwitch.get() == SwitchPositions.OFF && botSwitch.get() == SwitchPositions.OFF)
 		{
 		    	solenoid.set(false);
 			encodedMotor.forward(1, 10);
@@ -127,7 +128,7 @@ public class ForkLift implements ILiftAssist
 	public void previousBinLength()
 	{
 		double current = encodedMotor.getEncoderPosition();
-		while ((encodedMotor.getEncoderPosition() > current - binEncPo) && !joystickOverride && !topSwitch.get() && !botSwitch.get())
+		while ((encodedMotor.getEncoderPosition() > current - binEncPo) && !joystickOverride && topSwitch.get() == SwitchPositions.OFF && botSwitch.get() == SwitchPositions.OFF)
 		{
 		    	solenoid.set(false);
 			encodedMotor.backward(1, 10);
@@ -163,7 +164,7 @@ public class ForkLift implements ILiftAssist
 		{
 		    	solenoid.set(false);
 			encodedMotor.backward(.5, 20);
-			if (botSwitch.get())
+			if (botSwitch.get()  == SwitchPositions.ON)
 			{
 				encoder.reset();
 				isEncZeroed = true;
