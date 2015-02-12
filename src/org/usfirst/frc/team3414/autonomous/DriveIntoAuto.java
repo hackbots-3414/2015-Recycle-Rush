@@ -3,10 +3,7 @@ package org.usfirst.frc.team3414.autonomous;
 import org.usfirst.frc.team3414.actuators.IDriveTrain;
 import org.usfirst.frc.team3414.actuators.MecanumDrive;
 import org.usfirst.frc.team3414.sensors.Camera;
-import org.usfirst.frc.team3414.sensors.ITimeListener;
-import org.usfirst.frc.team3414.sensors.TimeElapsedEventArgs;
-import org.usfirst.frc.team3414.sensors.VirtualClock;
-
+import org.usfirst.frc.team3414.sensors.timerListener.ITimeListener;
 /**
  * An autonomous routine that drives into the autonomous zone and does nothing else
  * 
@@ -16,15 +13,16 @@ import org.usfirst.frc.team3414.sensors.VirtualClock;
 public class DriveIntoAuto implements AutonomousProcedure, ITimeListener
 {
 	Camera cameraAssist = new Camera(); // Should be singleton
-	TimeElapsedEventArgs args = new TimeElapsedEventArgs(0, 0, 0);
-	VirtualClock clock = new VirtualClock(args); // Fix instantiation later
+	//TimeElapsedEventArgs args = new TimeElapsedEventArgs(0, 0, 0);
+	//VirtualClock clock = new VirtualClock(args); // Fix instantiation later
 	
 	IDriveTrain mecanumDrive = MecanumDrive.getInstance();
 	
 	public void doAuto()
 	{
 		mecanumDrive.move(0, 1.0, 0.0); // Move forward into the autonomous zone
-		clock.addListenerSec(this, false, 3); //Change for timeout value (this sets the value where the robot gives up on finding the line and just stops by timebase)
+		// TODO: add listener
+		//clock.addListenerSec(this, false, 3); //Change for timeout value (this sets the value where the robot gives up on finding the line and just stops by timebase)
 		
 		while(cameraAssist.areWeInAutoZone() == false)
 		{
