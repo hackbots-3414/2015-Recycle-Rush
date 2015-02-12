@@ -21,7 +21,7 @@ public class ThreeYellowToteAuto implements AutonomousProcedure {
 	public IDriverAssist iDriverAssist;
 
 	DriveIntoAuto driveIntoZone;
-	VirtualClock clock = new VirtualClock(null); // TODO: CHANGE WHEN SINGLETON
+	//VirtualClock clock = new VirtualClock(null); // TODO: CHANGE WHEN SINGLETON
 	Camera cameraAssist = new Camera();
 
 	ILiftAssist forkLift = ForkLift.getInstance();
@@ -51,7 +51,7 @@ public class ThreeYellowToteAuto implements AutonomousProcedure {
 		// reach the second yellow tote
 		mecanumDrive.move(0, -1.0, 0);
 		try {
-			VirtualClock.sleep(100);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -63,7 +63,7 @@ public class ThreeYellowToteAuto implements AutonomousProcedure {
 
 		// Wait until the previous tote gets out of vision
 		try {
-			VirtualClock.sleep(100);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

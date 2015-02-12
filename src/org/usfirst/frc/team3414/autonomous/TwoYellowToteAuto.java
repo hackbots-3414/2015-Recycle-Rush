@@ -7,7 +7,6 @@ import org.usfirst.frc.team3414.actuators.IDriveTrain;
 import org.usfirst.frc.team3414.actuators.ILiftAssist;
 import org.usfirst.frc.team3414.actuators.MecanumDrive;
 import org.usfirst.frc.team3414.sensors.Camera;
-import org.usfirst.frc.team3414.sensors.VirtualClock;
 import org.usfirst.frc.team3414.autonomous.Obstacle;
 
 /**
@@ -21,7 +20,7 @@ public class TwoYellowToteAuto implements AutonomousProcedure {
 	public IDriverAssist iDriverAssist;
 
 	AutonomousProcedure driveIntoZone;
-	VirtualClock clock = new VirtualClock(null); // TODO: CHANGE WHEN SINGLETON
+	//VirtualClock clock = new VirtualClock(null); // TODO: CHANGE WHEN SINGLETON
 	Camera cameraAssist = new Camera();
 
 	ILiftAssist forkLift = ForkLift.getInstance();
@@ -51,7 +50,7 @@ public class TwoYellowToteAuto implements AutonomousProcedure {
 		// reach the second yellow tote
 		mecanumDrive.move(0, -1.0, 0);
 		try {
-			VirtualClock.sleep(100); // TODO: Replace with a closed loop system
+			Thread.sleep(100); // TODO: Replace with a closed loop system
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -65,7 +64,7 @@ public class TwoYellowToteAuto implements AutonomousProcedure {
 		// TODO: replace with a closed loop system (detect when one tote leaves
 		// and when the other enters)
 		try {
-			VirtualClock.sleep(100);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

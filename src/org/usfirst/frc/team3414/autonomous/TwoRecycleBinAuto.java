@@ -7,7 +7,6 @@ import org.usfirst.frc.team3414.actuators.IDriveTrain;
 import org.usfirst.frc.team3414.actuators.ILiftAssist;
 import org.usfirst.frc.team3414.actuators.MecanumDrive;
 import org.usfirst.frc.team3414.sensors.Camera;
-import org.usfirst.frc.team3414.sensors.VirtualClock;
 import org.usfirst.frc.team3414.autonomous.Obstacle;
 
 /**
@@ -22,7 +21,7 @@ public class TwoRecycleBinAuto implements AutonomousProcedure
 	public IDriverAssist iDriverAssist;
 	
 	AutonomousProcedure driveIntoZone;
-	VirtualClock clock = new VirtualClock(null); // TODO: CHANGE WHEN SINGLETON
+	//VirtualClock clock = new VirtualClock(null); // TODO: CHANGE WHEN SINGLETON
 	Camera cameraAssist = new Camera();
 	
 	ILiftAssist forkLift = ForkLift.getInstance();
