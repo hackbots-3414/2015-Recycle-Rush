@@ -25,9 +25,9 @@ public class LIDAR implements IMeasureDistance
 	 * @ordered
 	 */
 	
-	public long getInches() {
+	public double getInches() {
 		// TODO implement me
-		return 0L;	
+		return 0;	
 	}
 	
 	/**
@@ -48,9 +48,9 @@ public class LIDAR implements IMeasureDistance
 	 * @ordered
 	 */
 	
-	public long getCm() {
+	public double getCm() {
 		// TODO implement me
-		return 0L;	
+		return 0;	
 	}
 	
 	/**
@@ -63,33 +63,9 @@ public class LIDAR implements IMeasureDistance
 	public void removeListener(long distanceEventID) {
 		// TODO implement me	
 	}
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public long getFeet() {
-		// TODO implement me
-		return 0L;	
-	}
 
 	@Override
-	public double getDistanceCm() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public double getDistanceFt() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public double getDistanceIn() {
+	public double getFeet() {
 		// TODO Auto-generated method stub
 		return 0;
 	}

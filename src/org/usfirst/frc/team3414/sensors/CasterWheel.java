@@ -1,5 +1,4 @@
 package org.usfirst.frc.team3414.sensors;
-import org.usfirst.frc.team3414.actuators.MyEncoder;
 import org.usfirst.frc.team3414.teleop.Log;
 import org.usfirst.frc.team3414.teleop.Display;
 

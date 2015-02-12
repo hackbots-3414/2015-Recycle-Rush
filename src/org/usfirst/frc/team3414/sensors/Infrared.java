@@ -1,5 +1,8 @@
 package org.usfirst.frc.team3414.sensors;
 
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 /**
  * <!-- begin-user-doc -->
@@ -9,89 +12,54 @@ package org.usfirst.frc.team3414.sensors;
 
 public class Infrared implements IMeasureDistance
 {
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 */
-	public Infrared(){
+	private AnalogInput channel;
+
+	public Infrared(AnalogInput channel) {
 		super();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public long getCm() {
-		// TODO implement me
-		return 0L;	
+		if(channel != null)
+		{
+			this.channel = channel;	
+		}
+		else
+		{
+			throw new RuntimeException("The Channel should nopt be null");
+		}
+		
 	}
 	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public void addListener(IMeasureDistanceListener listener, long distance) {	
-	}
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public void removeListener(long distanceEventID) {
-		// TODO implement me	
-	}
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public long getFeet() {
-		// TODO implement me
-		return 0L;	
-	}
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public long getInches() {
-		// TODO implement me
-		return 0L;	
+	public Infrared(int channelNumber) {
+		super();
+		channel = new AnalogInput(channelNumber);
 	}
 
 	@Override
-	public double getDistanceCm() {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getCm() {
+		double voltage = channel.getVoltage();
+		SmartDashboard.putNumber("Voltage", voltage);
+		SmartDashboard.putNumber("CM", 61.573 * Math.pow(voltage, -1.1068));
+		return 61.573 * Math.pow(voltage, -1.1068);
 	}
 
-	@Override
-	public double getDistanceFt() {
-		// TODO Auto-generated method stub
-		return 0;
+	/**
+	 * Use average voltage to get distance in feet
+	 * 
+	 * @generated
+	 * @ordered
+	 */
+
+	public double getFeet() {
+		return DistanceConversion.cmToInches(getCm());
 	}
 
-	@Override
-	public double getDistanceIn() {
-		// TODO Auto-generated method stub
-		return 0;
+	/**
+	 * Gets distance in feet and converts to inches
+	 * 
+	 * @generated
+	 * @ordered
+	 */
+
+	public double getInches() {
+		return DistanceConversion.inToFeet(getFeet());
 	}
-	
 }
 

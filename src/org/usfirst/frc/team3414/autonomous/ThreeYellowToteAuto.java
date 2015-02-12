@@ -98,7 +98,7 @@ public class ThreeYellowToteAuto implements AutonomousProcedure {
 
 		// Wait until the previous tote gets out of vision
 		try {
-			VirtualClock.sleep(100);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
