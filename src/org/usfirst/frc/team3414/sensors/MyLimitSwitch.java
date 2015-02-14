@@ -8,14 +8,14 @@ import edu.wpi.first.wpilibj.DigitalInput;
  * The class responsible for controlling limit switches on digital IO ports.
  */
 
-public class LimitSwitch
+public class MyLimitSwitch
 {
-    DigitalInput limitSwitch;
+    private DigitalInput limitSwitch;
     ISwitch iSwitch;
     boolean inverse;
     SwitchPositions position;
 
-    public LimitSwitch(int channel, boolean inverse)
+    public MyLimitSwitch(int channel, boolean inverse)
     {
 	limitSwitch = new DigitalInput(channel);
 	this.inverse = inverse;

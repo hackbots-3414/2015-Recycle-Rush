@@ -4,21 +4,26 @@ import edu.wpi.first.wpilibj.Solenoid;
 
 public class MySolenoid implements ISolenoid
 {
-    Solenoid solenoid;
-    
-    public MySolenoid(int channel)
-    {
-	solenoid = new Solenoid(channel);
-    }
+	Solenoid solenoid;
 
-    public void set(boolean on)
-    {
-	solenoid.set(on);
-    }
+	public MySolenoid(int channel)
+	{
+		solenoid = new Solenoid(channel);
+	}
 
-    public boolean get()
-    {
-	return solenoid.get();
-    }
+	public void enable()
+	{
+		solenoid.set(true);
+	}
+
+	public void disable()
+	{
+		solenoid.set(false);
+	}
+
+	public boolean getEnable()
+	{
+		return solenoid.get();
+	}
 
 }

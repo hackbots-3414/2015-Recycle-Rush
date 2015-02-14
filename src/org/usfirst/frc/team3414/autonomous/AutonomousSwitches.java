@@ -1,7 +1,7 @@
 package org.usfirst.frc.team3414.autonomous;
 
 import org.usfirst.frc.team3414.sensors.ISwitch;
-import org.usfirst.frc.team3414.sensors.LimitSwitch;
+import org.usfirst.frc.team3414.sensors.MyLimitSwitch;
 
 /**
  * 
@@ -11,14 +11,14 @@ import org.usfirst.frc.team3414.sensors.LimitSwitch;
  *
  */
 public class AutonomousSwitches implements ISwitch {
-	LimitSwitch one;
-	LimitSwitch two;
-	LimitSwitch four;
+	MyLimitSwitch one;
+	MyLimitSwitch two;
+	MyLimitSwitch four;
 
 	public AutonomousSwitches(int channelOnes, int channelTwos, int channelFours) {
-		one = new LimitSwitch(channelOnes, false);
-		two = new LimitSwitch(channelTwos, false);
-		four = new LimitSwitch(channelFours, false);
+		one = new MyLimitSwitch(channelOnes, false);
+		two = new MyLimitSwitch(channelTwos, false);
+		four = new MyLimitSwitch(channelFours, false);
 	}
 
 	/**

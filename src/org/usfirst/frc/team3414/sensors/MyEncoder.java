@@ -6,9 +6,9 @@ public class MyEncoder
 {
 	private Encoder encode;
 
-	public MyEncoder(Encoder _FiveEncoders)
+	public MyEncoder(int channelPortA, int channelPortB)
 	{
-		this.encode = _FiveEncoders;
+		encode = new Encoder(channelPortA, channelPortB);
 	}
 
 	public int getPosition()

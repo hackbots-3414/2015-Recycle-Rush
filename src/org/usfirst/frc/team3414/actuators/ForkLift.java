@@ -1,23 +1,26 @@
 package org.usfirst.frc.team3414.actuators;
 
 import org.usfirst.frc.team3414.autonomous.SwitchPositions;
+import org.usfirst.frc.team3414.sensors.Constants;
+import org.usfirst.frc.team3414.sensors.HardwarePorts;
 import org.usfirst.frc.team3414.sensors.MyEncoder;
-import org.usfirst.frc.team3414.sensors.LimitSwitch;
+import org.usfirst.frc.team3414.sensors.MyLimitSwitch;
 import org.usfirst.frc.team3414.sensors.MySolenoid;
 
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.Talon;
 
-public class ForkLift implements ILiftAssist
+public class ForkLift implements ILiftAssist, HardwarePorts, Constants
 {
+	
 	private IEncodedMotor encodedMotor;
-	private MyEncoder encoder;
-	private Encoder encode;
-	private MySolenoid solenoid;
-	LimitSwitch topSwitch;
-	LimitSwitch botSwitch;
+	private MyEncoder liftEncoder;
+	private MySolenoid gripSolenoid;
+	private MyLimitSwitch topSwitch;
+	private MyLimitSwitch botSwitch;
 	
 	private SpeedController speedCont;
+	
 	private double topEncPo;
 	private double bottomEncPo;
 	private double binEncPo;
@@ -29,14 +32,14 @@ public class ForkLift implements ILiftAssist
 
 	private ForkLift()
 	{
-	    	encode = new Encoder(4,5);
-	    	encoder = new MyEncoder(encode);
-		encodedMotor = new EncodedMotor(speedCont, encoder, false);
-		topSwitch = new LimitSwitch(1, false);
-		botSwitch = new LimitSwitch(2, false);
-		solenoid = new MySolenoid(3);
+		speedCont = new Talon(1);
+	    liftEncoder = new MyEncoder(LIFT_ENCODER_A, LIFT_ENCODER_B);
+		encodedMotor = new EncodedMotor(speedCont, liftEncoder, NOT_INVERSE);
+		topSwitch = new MyLimitSwitch(LIMIT_SWITCH_TOP, NOT_INVERSE);
+		botSwitch = new MyLimitSwitch(LIMIT_SWITCH_BOTTOM, NOT_INVERSE);
+		gripSolenoid = new MySolenoid(LIFTER_GRIP);
 		isEncZeroed = false;
-		solenoid.set(false);
+		gripSolenoid.disable();
 	}
 
 	public static ForkLift createInstance()
@@ -63,11 +66,11 @@ public class ForkLift implements ILiftAssist
 	{
 		while ((encodedMotor.getEncoderPosition() < topEncPo) && !joystickOverride && topSwitch.get() == SwitchPositions.OFF && botSwitch.get() == SwitchPositions.OFF)
 		{
-		    solenoid.set(false);
+		    gripSolenoid.disable();
 		    encodedMotor.forward(1, 10);
 		}
 		this.stop();
-		solenoid.set(true);
+		gripSolenoid.enable();
 	}
 
 	public void goToBottom()
@@ -76,17 +79,17 @@ public class ForkLift implements ILiftAssist
 		{
 			if ((encodedMotor.getEncoderPosition() > bottomEncPo))
 			{
-			    solenoid.set(false);
+				gripSolenoid.disable();
 			    encodedMotor.backward(1, 10);
 			}
 			if ((encodedMotor.getEncoderPosition() < bottomEncPo))
 			{
-			    solenoid.set(false);
+				gripSolenoid.enable();
 			    encodedMotor.forward(1, 10);
 			}
 		}
 		this.stop();
-		solenoid.set(true);
+		gripSolenoid.enable();
 	}
 
 	public void nextToteLength()
@@ -94,11 +97,11 @@ public class ForkLift implements ILiftAssist
 		double current = encodedMotor.getEncoderPosition();
 		while ((encodedMotor.getEncoderPosition() < current + toteEncPo) && !joystickOverride && topSwitch.get() == SwitchPositions.OFF && botSwitch.get() == SwitchPositions.OFF)
 		{
-		    solenoid.set(false);
+		    gripSolenoid.disable();
 		    encodedMotor.forward(1, 10);
 		}
 		this.stop();
-		solenoid.set(true);
+		gripSolenoid.enable();
 	}
 
 	public void previousToteLength()
@@ -106,11 +109,11 @@ public class ForkLift implements ILiftAssist
 		double current = encodedMotor.getEncoderPosition();
 		while ((encodedMotor.getEncoderPosition() > current - toteEncPo) && !joystickOverride && topSwitch.get() == SwitchPositions.OFF && botSwitch.get() == SwitchPositions.OFF)
 		{
-		    	solenoid.set(false);
+		    	gripSolenoid.disable();
 			encodedMotor.backward(1, 10);
 		}
 		this.stop();
-		solenoid.set(true);
+		gripSolenoid.enable();
 	}
 
 	public void nextBinLength()
@@ -118,11 +121,11 @@ public class ForkLift implements ILiftAssist
 		double current = encodedMotor.getEncoderPosition();
 		while ((encodedMotor.getEncoderPosition() < current + binEncPo) && !joystickOverride && topSwitch.get() == SwitchPositions.OFF && botSwitch.get() == SwitchPositions.OFF)
 		{
-		    	solenoid.set(false);
+		    	gripSolenoid.disable();
 			encodedMotor.forward(1, 10);
 		}
 		this.stop();
-		solenoid.set(true);
+		gripSolenoid.enable();
 	}
 
 	public void previousBinLength()
@@ -130,11 +133,11 @@ public class ForkLift implements ILiftAssist
 		double current = encodedMotor.getEncoderPosition();
 		while ((encodedMotor.getEncoderPosition() > current - binEncPo) && !joystickOverride && topSwitch.get() == SwitchPositions.OFF && botSwitch.get() == SwitchPositions.OFF)
 		{
-		    	solenoid.set(false);
+		    	gripSolenoid.disable();
 			encodedMotor.backward(1, 10);
 		}
 		this.stop();
-		solenoid.set(true);
+		gripSolenoid.enable();
 	}
 
 	public void stop()
@@ -162,11 +165,11 @@ public class ForkLift implements ILiftAssist
 	{
 		while (!joystickOverride && !isEncZeroed)
 		{
-		    	solenoid.set(false);
+		    	gripSolenoid.disable();
 			encodedMotor.backward(.5, 20);
 			if (botSwitch.get()  == SwitchPositions.ON)
 			{
-				encoder.reset();
+				liftEncoder.reset();
 				isEncZeroed = true;
 			}
 		}
