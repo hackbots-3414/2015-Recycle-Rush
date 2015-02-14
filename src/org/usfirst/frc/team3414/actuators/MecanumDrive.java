@@ -36,6 +36,7 @@ public class MecanumDrive implements IDriveTrain, ITimeListener
 	gyro = new Gyroscope(1); // COME BACK AND CHANGE CHANNEL NUMBER TO MAKE
 				 // THIS WORK!!!!!!!!!!!!!!!!!!!!!!!!!
 	accel = new Accelerometer();
+	
 	for (int i = 0; i < talons.length; i++)
 	{
 	    talons[i] = new CANTalon(i + 1, 10);
@@ -143,8 +144,7 @@ public class MecanumDrive implements IDriveTrain, ITimeListener
 	}
 	if (devAngle < -5)
 	{
-	    drive.mecanumDrive_Polar(currentVelocity, currentAngle + devAngle, currentRotation);
+	    drive.mecanumDrive_Polar(currentVelocity, currentAngle - devAngle, currentRotation);
 	}
-	
     }
 }
