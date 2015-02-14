@@ -1,95 +1,50 @@
 package org.usfirst.frc.team3414.sensors;
 
+import java.nio.ByteBuffer;
 
-/**
- * <!-- begin-user-doc -->
- * <!--  end-user-doc  -->
- * @generated
- */
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.SPI.Port;
 
 public class SensorBar implements IMeasureDistance
 {
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 */
-	public SensorBar(){
-		super();
-	}
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
+	SPI spi;
 	
-	public void addListener(IMeasureDistanceListener listener, long distance) {
-		// TODO implement me
+	byte[] currentByte;
+	byte[] distanceSensorNumber;
+	
+	public SensorBar(Port port, int sensorBarSize)
+	{
+		spi  = new SPI(port);
+		spi.setClockRate(1000000);
+		spi.setMSBFirst();
+		spi.setChipSelectActiveLow();
+	
+		distanceSensorNumber = new byte[sensorBarSize];
+		currentByte = new byte[sensorBarSize*4];
+		
+		for(int i = 0; i < sensorBarSize; i++)
+		{
+			distanceSensorNumber[i] = (byte) i;
+		}
 	}
 	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public void removeListener(long distanceEventID) {
-		// TODO implement me	
-	}
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public long getInches() {
-		// TODO implement me
-		return 0L;	
-	}
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public long getFeet() {
-		// TODO implement me
-		return 0L;	
-	}
-	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
-	
-	public long getCm() {
-		// TODO implement me
-		return 0L;	
+	@Override
+	public double getCm() 
+	{
+		//spi.transaction(distanceSensorNumber, currentByte, 4);
+		return 0.0;
+		
 	}
 
 	@Override
-	public double getDistanceCm() {
+	public double getFeet() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public double getDistanceFt() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public double getDistanceIn() {
+	public double getInches() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
