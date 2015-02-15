@@ -8,7 +8,7 @@ import org.usfirst.frc.team3414.actuators.IMotor;
  * @generated
  */
 
-public class DoubleMotor implements IMotor
+public class DoubleMotor
 {
 	
 	private final IMotor motorOne;
@@ -28,26 +28,26 @@ public class DoubleMotor implements IMotor
 
     public void backward(double speed)
     {
-        motorOne.backward(speed);
-        motorTwo.backward(speed);
+        motorOne.down(speed);
+        motorTwo.down(speed);
     }
 
     public void forward(double speed, int motorStep)
     {
-        motorOne.forward(speed, motorStep);
-        motorTwo.forward(speed, motorStep);
+        motorOne.upGradual(speed, motorStep);
+        motorTwo.upGradual(speed, motorStep);
     }
 
     public void forward(double speed)
     {
-        motorOne.forward(speed);
-        motorTwo.forward(speed);
+        motorOne.up(speed);
+        motorTwo.up(speed);
     }
 
     public void backward(double speed, int motorStep)
     {
-        motorOne.forward(speed, motorStep);
-        motorTwo.forward(speed, motorStep);
+        motorOne.downGradual(speed, motorStep);
+        motorTwo.downGradual(speed, motorStep);
     }
 
     public double getSpeed()

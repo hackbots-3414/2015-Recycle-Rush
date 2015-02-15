@@ -1,4 +1,5 @@
 package org.usfirst.frc.team3414.actuators;
+
 import edu.wpi.first.wpilibj.SpeedController;
 
 /**
@@ -7,7 +8,8 @@ import edu.wpi.first.wpilibj.SpeedController;
  * @generated
  */
 
-public class Motor implements IMotor {
+public class Motor implements IMotor
+{
 	/**
 	 * The CAN Talon base object.
 	 * 
@@ -19,51 +21,61 @@ public class Motor implements IMotor {
 
 	private final boolean inverseDirection;
 
-	public Motor(SpeedController motor, boolean inverseDirection) {
+	public Motor(SpeedController motor, boolean inverseDirection)
+	{
 		this.motorController = motor;
 		this.inverseDirection = inverseDirection;
 	}
 
-	public void stop() {
+	public void stop()
+	{
 		motorController.set(0.0);
 	}
 
-	public void backward(double speed) {
+	public void down(double speed)
+	{
 		double actualSpeed = inverseDirection ? -Math.abs(speed) : Math.abs(speed);
 		motorController.set(-actualSpeed);
 	}
 
-	public void forward(double speed, int motorStep) {
+	public void upGradual(double speed, int motorStep)
+	{
 		double increaseIncrement = speed / motorStep;
 
-		for (int currentStep = 1; currentStep <= motorStep + 1; currentStep++) {
+		for (int currentStep = 1; currentStep <= motorStep + 1; currentStep++)
+		{
 			double nextSpeed = increaseIncrement * currentStep;
 
-			if (inverseDirection) {
+			if (inverseDirection)
+			{
 				motorController.set(-nextSpeed);
-			} else {
+			} else
+			{
 				motorController.set(nextSpeed);
 			}
 		}
 	}
 
-	public void forward(double speed) {
+	public void up(double speed)
+	{
 		double actualSpeed = inverseDirection ? -Math.abs(speed) : Math.abs(speed);
 		motorController.set(actualSpeed);
 	}
 
-	public void backward(double speed, int motorStep) {
+	public void downGradual(double speed, int motorStep)
+	{
 		double increment = Math.abs(speed) / motorStep;
 
-		for (int currentStep = 1; currentStep <= motorStep + 1; currentStep++) {
+		for (int currentStep = 1; currentStep <= motorStep + 1; currentStep++)
+		{
 			double nextSpeed = increment * currentStep;
 
-			forward(nextSpeed);
+			up(nextSpeed);
 		}
 	}
 
-	public double getSpeed() {
-		return inverseDirection ? -motorController.get() : motorController
-				.get();
+	public double getSpeed()
+	{
+		return inverseDirection ? -motorController.get() : motorController.get();
 	}
 }

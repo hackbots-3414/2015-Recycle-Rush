@@ -2,9 +2,8 @@ package org.usfirst.frc.team3414.autonomous;
 
 import java.util.List;
 
-import org.usfirst.frc.team3414.actuators.ForkLift;
+import org.usfirst.frc.team3414.actuators.Forklift;
 import org.usfirst.frc.team3414.actuators.IDriveTrain;
-import org.usfirst.frc.team3414.actuators.ILiftAssist;
 import org.usfirst.frc.team3414.actuators.MecanumDrive;
 import org.usfirst.frc.team3414.sensors.Camera;
 import org.usfirst.frc.team3414.autonomous.Obstacle;
@@ -23,7 +22,7 @@ public class TwoYellowToteAuto implements AutonomousProcedure {
 	//VirtualClock clock = new VirtualClock(null); // TODO: CHANGE WHEN SINGLETON
 	Camera cameraAssist = new Camera();
 
-	ILiftAssist forkLift = ForkLift.getInstance();
+	Forklift forkLift = Forklift.getInstance();
 	IDriveTrain mecanumDrive = MecanumDrive.getInstance();
 
 	List<Obstacle> obstacleList;
@@ -34,7 +33,7 @@ public class TwoYellowToteAuto implements AutonomousProcedure {
 	public void doAuto() {
 		driveIntoZone = new DriveBackwardIntoAuto();
 
-		forkLift.goToBottom(); // Moves to bottom level of lifting positions
+		forkLift.goToGround(); // Moves to bottom level of lifting positions
 
 		iDriverAssist.toteSweetSpot(); // Moves toward tote that is placed in
 										// front of the robot at the beginning
@@ -83,7 +82,7 @@ public class TwoYellowToteAuto implements AutonomousProcedure {
 		iDriverAssist.toteSweetSpot(); // get square with the tote and drive up
 										// to it correctly
 
-		forkLift.goToBottom(); // Put tote back on the other tote and go back
+		forkLift.goToGround(); // Put tote back on the other tote and go back
 								// down to the bottom position so we can lift
 								// the whole stack up
 
@@ -94,7 +93,7 @@ public class TwoYellowToteAuto implements AutonomousProcedure {
 		driveIntoZone.doAuto();
 
 		// Drop totes
-		forkLift.goToBottom();
+		forkLift.goToGround();
 
 	}
 

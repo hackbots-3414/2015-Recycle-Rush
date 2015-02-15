@@ -1,10 +1,8 @@
-
 package org.usfirst.frc.team3414.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 
 import org.usfirst.frc.team3414.sensors.*;
-import org.usfirst.frc.team3414.sensors.timerListener.TimerThread;
 import org.usfirst.frc.team3414.autonomous.*;
 import org.usfirst.frc.team3414.teleop.*;
 import org.usfirst.frc.team3414.actuators.*;
@@ -16,36 +14,57 @@ import org.usfirst.frc.team3414.actuators.*;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-public class Robot extends IterativeRobot {
-    /**
-     * This function is run when the robot is first started up and should be
-     * used for any initialization code.
-     */
-	TimerThread timerThread = new TimerThread();
-	
-    public void robotInit() {
+public class Robot extends IterativeRobot
+{
+	/**
+	 * This function is run when the robot is first started up and should be
+	 * used for any initialization code.
+	 */
+	public void robotInit()
+	{
 
-    }
+	}
 
-    /**
-     * This function is called periodically during autonomous
-     */
-    public void autonomousPeriodic() {
+	public void autonomousInit()
+	{
 
-    }
+	}
 
-    /**
-     * This function is called periodically during operator control
-     */
-    public void teleopPeriodic() {
-        
-    }
-    
-    /**
-     * This function is called periodically during test mode
-     */
-    public void testPeriodic() {
-    
-    }
-    
+	/**
+	 * This function is called periodically during autonomous
+	 */
+	public void autonomousPeriodic()
+	{
+
+	}
+
+	public void teleopInit()
+	{
+
+	}
+
+	/**
+	 * This function is called periodically during operator control
+	 */
+	public void teleopPeriodic()
+	{
+		while (isEnabled() && isOperatorControl()) {
+			
+		}
+		//CLOSE THREADS, etc.
+	}
+
+	public void testInit()
+	{
+
+	}
+
+	/**
+	 * This function is called periodically during test mode
+	 */
+	public void testPeriodic()
+	{
+
+	}
+
 }

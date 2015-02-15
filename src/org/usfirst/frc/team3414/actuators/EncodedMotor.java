@@ -1,24 +1,27 @@
 package org.usfirst.frc.team3414.actuators;
 
+import org.usfirst.frc.team3414.sensors.Constants;
+import org.usfirst.frc.team3414.sensors.HardwarePorts;
 import org.usfirst.frc.team3414.sensors.MyEncoder;
 
 import edu.wpi.first.wpilibj.CANTalon;
-import edu.wpi.first.wpilibj.SpeedController;
 
-public class EncodedMotor extends Motor implements IEncodedMotor {
+public class EncodedMotor extends Motor implements IEncodedMotor, Constants, HardwarePorts {
 
 	private MyEncoder encoder;
 	
-	public EncodedMotor(SpeedController controller, MyEncoder encoder, boolean reverse) {
-		super(controller, reverse);
-		this.encoder= encoder;
-		encoder.setDistancePerPulse(.5);
+	public EncodedMotor() {
+		super(new CANTalon(LIFT_MOTOR), NOT_INVERSE);
+		this.encoder = new MyEncoder(LIFT_ENCODER_A, LIFT_ENCODER_B);
+		encoder.setDistancePerPulse(DISTANCE_PER_PULSE);
 	}
 	
+	/*
 	public EncodedMotor(CANTalon controller, boolean reverse) {
 		super(controller, reverse);
-
 	}
+	*/
+	
 	
 	/**
 	 * Regardless of the current feedback device (if any), this receives the encoder velocity.
@@ -26,6 +29,8 @@ public class EncodedMotor extends Motor implements IEncodedMotor {
 	 */
 	public double getEncoderVelocity()
 	{
+		return encoder.getRate();
+		/*
 		double velocity = Double.NaN;
 		if(encoder != null)
 		{
@@ -36,6 +41,7 @@ public class EncodedMotor extends Motor implements IEncodedMotor {
 			velocity = ((CANTalon)motorController).getEncVelocity();
 		}
 		return velocity;
+		*/
 	}
 	
 	/**
@@ -44,6 +50,8 @@ public class EncodedMotor extends Motor implements IEncodedMotor {
 	 */
 	public int getEncoderPosition()
 	{
+		return encoder.getPosition();
+		/*
 		int position = 0;
 		if(encoder != null)
 		{
@@ -54,5 +62,10 @@ public class EncodedMotor extends Motor implements IEncodedMotor {
 			position = ((CANTalon)motorController).getEncPosition();
 		}
 		return position;
+		*/
+	}
+	
+	public void resetEncoder() {
+		encoder.reset();
 	}
 }

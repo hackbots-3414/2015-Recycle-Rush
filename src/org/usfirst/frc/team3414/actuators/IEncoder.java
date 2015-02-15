@@ -5,5 +5,7 @@ public interface IEncoder {
 	public double getEncoderVelocity();
 	
 	public int getEncoderPosition();
+	
+	public void resetEncoder();
 
 }

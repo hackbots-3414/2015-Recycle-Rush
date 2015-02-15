@@ -1,7 +1,6 @@
 package org.usfirst.frc.team3414.autonomous;
 
-import org.usfirst.frc.team3414.actuators.ForkLift;
-import org.usfirst.frc.team3414.actuators.ILiftAssist;
+import org.usfirst.frc.team3414.actuators.Forklift;
 
 /**
  * 
@@ -16,14 +15,14 @@ public class OneRecycleBinAuto implements AutonomousProcedure
 	
 	AutonomousProcedure driveIntoZone;
 	
-	ILiftAssist forkLift = ForkLift.getInstance();
+	Forklift forkLift = Forklift.getInstance();
 
 	@Override
 	public void doAuto() 
 	{
 		driveIntoZone = new DriveBackwardIntoAuto();
 		
-		forkLift.goToBottom(); // Moves to bottom level of lifting positions
+		forkLift.goToGround(); // Moves to bottom level of lifting positions
 		
 		iDriverAssist.binSweetSpot(); // Moves toward recycle bin that is placed in front of the robot at the beginning of a match
 		iDriverAssist.correctRotation(); // Correct rotation in front of the recycle bin
@@ -34,7 +33,7 @@ public class OneRecycleBinAuto implements AutonomousProcedure
 		driveIntoZone.doAuto();
 		
 		// Drop recycle bin
-		forkLift.goToBottom();
+		forkLift.goToGround();
 		
 	}
 

@@ -11,13 +11,13 @@ public interface IMotor
 {
 	public void stop();
 
-    public void backward(double speed);
+    public void down(double speed);
 
-    public void forward(double speed, int motorStep);
+    public void upGradual(double speed, int motorStep);
 
-    public void forward(double speed);
+    public void up(double speed);
 
-    public void backward(double speed, int motorStep);
+    public void downGradual(double speed, int motorStep);
 
     public double getSpeed();
 	

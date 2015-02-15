@@ -4,73 +4,93 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Display
 {
-	
-    private static Display singleton = null;
 
-    private Display()
-    {
-    }
+	private static Display singleton = null;
 
-    public static Display createInstance()
-    {
-        if (singleton == null)
-        {
-            singleton = new Display();
-        }
+	private Display()
+	{
+	}
 
-        return singleton;
-    }
+	public static Display createInstance()
+	{
+		if (singleton == null)
+		{
+			singleton = new Display();
+		}
 
-    public static Display getInstance()
-    {
-        if (singleton == null)
-        {
-            throw new NullPointerException("Display hasn't been created yet");
-        }
+		return singleton;
+	}
 
-        return singleton;
-    }
-	
-	
-	
-	
-	
-	
+	public static Display getInstance()
+	{
+		if (singleton == null)
+		{
+			throw new NullPointerException("Display hasn't been created yet");
+		}
+
+		return singleton;
+	}
+
 	private int time;
-	
+
 	boolean lo = false;
-	
-	public void putGameData() {
-		SmartDashboard.putBoolean("Bool: " , lo);
+
+	public void putGameData()
+	{
+		SmartDashboard.putBoolean("Bool: ", lo);
 		SmartDashboard.putNumber("Time: ", time);
 	}
-	public void putDiagnosticsData() {
-		SmartDashboard.putBoolean("Bool: " , lo);
+
+	public void putDiagnosticsData()
+	{
+		SmartDashboard.putBoolean("Bool: ", lo);
 	}
-	
-	public void setTimerLog(int time) {
+
+	public void setTimerLog(int time)
+	{
 		this.time = time;
 	}
-	
-	public void setDriveData(double getGyroRate, double getJoyMagnitude, double getJoyDirection, double getJoyDirectionAdjustWithGyro, double getJoyTwist){
-		/*
-    	SmartDashboard.putNumber("Gyro Value (rate)", gyro.getRate());
-        SmartDashboard.putNumber("Joystick Value Magnitude", joystick.getMagnitude());
-        SmartDashboard.putNumber("Joystick Value Direction", joystick.getDirectionDegrees());
-        SmartDashboard.putNumber("Joystick Direction - gyro rate", angle-(gyro.getRate()*Kp));
-        SmartDashboard.putNumber("Joystick Value Twist", joystick.getTwist());
-        */
-	}
-	
-	public void setGyroData(double gyroAngle, double gyroRate) {
-		/*
-    	SmartDashboard.putNumber("Gyro Value (rate)", gyro.getRate());
-        SmartDashboard.putNumber("Joystick Value Magnitude", joystick.getMagnitude());
-        SmartDashboard.putNumber("Joystick Value Direction", joystick.getDirectionDegrees());
-        SmartDashboard.putNumber("Joystick Direction - gyro rate", angle-(gyro.getRate()*Kp));
-        SmartDashboard.putNumber("Joystick Value Twist", joystick.getTwist());
-        */
-	}
-	
-}
 
+	public void setDriveData(double getGyroRate, double getJoyMagnitude, double getJoyDirection, double getJoyDirectionAdjustWithGyro,
+			double getJoyTwist)
+	{
+		/*
+		 * SmartDashboard.putNumber("Gyro Value (rate)", gyro.getRate());
+		 * SmartDashboard.putNumber("Joystick Value Magnitude",
+		 * joystick.getMagnitude());
+		 * SmartDashboard.putNumber("Joystick Value Direction",
+		 * joystick.getDirectionDegrees());
+		 * SmartDashboard.putNumber("Joystick Direction - gyro rate",
+		 * angle-(gyro.getRate()*Kp));
+		 * SmartDashboard.putNumber("Joystick Value Twist",
+		 * joystick.getTwist());
+		 */
+	}
+
+	public void setGyroData(double gyroAngle, double gyroRate)
+	{
+		/*
+		 * SmartDashboard.putNumber("Gyro Value (rate)", gyro.getRate());
+		 * SmartDashboard.putNumber("Joystick Value Magnitude",
+		 * joystick.getMagnitude());
+		 * SmartDashboard.putNumber("Joystick Value Direction",
+		 * joystick.getDirectionDegrees());
+		 * SmartDashboard.putNumber("Joystick Direction - gyro rate",
+		 * angle-(gyro.getRate()*Kp));
+		 * SmartDashboard.putNumber("Joystick Value Twist",
+		 * joystick.getTwist());
+		 */
+	}
+
+	public void setForkliftData(int expectedPosition, double currentPosition, double rate, boolean topLimitHit, boolean bottomLimitHit)
+	{
+
+		SmartDashboard.putNumber("Expected Forklift Position: ", expectedPosition);
+		SmartDashboard.putNumber("Current Forklift Position: ", currentPosition);
+		SmartDashboard.putNumber("Forklift Encoder Rate: ", rate);
+		SmartDashboard.putBoolean("Top Limit Switch Hit: ", topLimitHit);
+		SmartDashboard.putBoolean("Bottom Limit Switch Hit: ", bottomLimitHit);
+
+	}
+
+}

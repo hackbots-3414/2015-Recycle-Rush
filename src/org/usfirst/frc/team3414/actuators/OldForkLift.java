@@ -1,23 +1,24 @@
+/*
 package org.usfirst.frc.team3414.actuators;
 
 import org.usfirst.frc.team3414.autonomous.SwitchPositions;
 import org.usfirst.frc.team3414.sensors.Constants;
 import org.usfirst.frc.team3414.sensors.HardwarePorts;
 import org.usfirst.frc.team3414.sensors.MyEncoder;
-import org.usfirst.frc.team3414.sensors.MyLimitSwitch;
-import org.usfirst.frc.team3414.sensors.MySolenoid;
+import org.usfirst.frc.team3414.sensors.MyAutoLimitSwitch;
+import org.usfirst.frc.team3414.sensors.MyServo;
 
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
 
-public class ForkLift implements ILiftAssist, HardwarePorts, Constants
+public class OldForkLift implements ILiftAssist, HardwarePorts, Constants
 {
 	
 	private IEncodedMotor encodedMotor;
 	private MyEncoder liftEncoder;
-	private MySolenoid gripSolenoid;
-	private MyLimitSwitch topSwitch;
-	private MyLimitSwitch botSwitch;
+	private MyServo gripSolenoid;
+	private MyAutoLimitSwitch topSwitch;
+	private MyAutoLimitSwitch botSwitch;
 	
 	private SpeedController speedCont;
 	
@@ -28,31 +29,31 @@ public class ForkLift implements ILiftAssist, HardwarePorts, Constants
 	private boolean joystickOverride;
 	private boolean isEncZeroed;
 
-	private static ForkLift singleton = null;
+	private static OldForkLift singleton = null;
 
-	private ForkLift()
+	private OldForkLift()
 	{
 		speedCont = new Talon(1);
 	    liftEncoder = new MyEncoder(LIFT_ENCODER_A, LIFT_ENCODER_B);
 		encodedMotor = new EncodedMotor(speedCont, liftEncoder, NOT_INVERSE);
-		topSwitch = new MyLimitSwitch(LIMIT_SWITCH_TOP, NOT_INVERSE);
-		botSwitch = new MyLimitSwitch(LIMIT_SWITCH_BOTTOM, NOT_INVERSE);
-		gripSolenoid = new MySolenoid(LIFTER_GRIP);
+		topSwitch = new MyAutoLimitSwitch(LIMIT_SWITCH_TOP, NOT_INVERSE);
+		botSwitch = new MyAutoLimitSwitch(LIMIT_SWITCH_BOTTOM, NOT_INVERSE);
+		gripSolenoid = new MyServo(LIFTER_GRIP);
 		isEncZeroed = false;
 		gripSolenoid.disable();
 	}
 
-	public static ForkLift createInstance()
+	public static OldForkLift createInstance()
 	{
 		if (singleton == null)
 		{
-			singleton = new ForkLift();
+			singleton = new OldForkLift();
 		}
 
 		return singleton;
 	}
 
-	public static ForkLift getInstance()
+	public static OldForkLift getInstance()
 	{
 		if (singleton == null)
 		{
@@ -176,3 +177,4 @@ public class ForkLift implements ILiftAssist, HardwarePorts, Constants
 		this.goToBottom();
 	}
 }
+*/

@@ -11,6 +11,10 @@ public class MyEncoder
 		encode = new Encoder(channelPortA, channelPortB);
 	}
 
+	/**
+	 * Uses Encoder.getRaw()
+	 * @return
+	 */
 	public int getPosition()
 	{
 		return encode.getRaw();
@@ -21,6 +25,10 @@ public class MyEncoder
 		return encode.getDirection();
 	}
 
+	/**
+	 * Difference between getDistance() and getPosition(): getDistance() is multiplied by setDistancePerPulse()
+	 * @return
+	 */
 	public double getDistance()
 	{
 		return encode.getDistance();
@@ -31,6 +39,10 @@ public class MyEncoder
 		encode.setDistancePerPulse(distancePerPulse);
 	}
 
+	/**
+	 * Per Second
+	 * @return
+	 */
 	public double getRate()
 	{
 		return encode.getRate();
