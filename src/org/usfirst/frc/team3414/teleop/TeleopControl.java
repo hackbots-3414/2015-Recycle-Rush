@@ -1,6 +1,9 @@
 package org.usfirst.frc.team3414.teleop;
 
 import org.usfirst.frc.team3414.actuators.*;
+import org.usfirst.frc.team3414.sensors.IClock;
+import org.usfirst.frc.team3414.sensors.ITimeEventHandler;
+import org.usfirst.frc.team3414.sensors.VirtualClock;
 
 public class TeleopControl
 {
@@ -14,7 +17,6 @@ public class TeleopControl
 	private boolean restrictButtonEight = false;
 	private boolean restrictButtonNine = false;
 	private boolean restrictButtonTen = false;
-
 	
 	public TeleopControl()
 	{
@@ -22,7 +24,7 @@ public class TeleopControl
 		lifter = Forklift.createInstance();
 		lifter.start();
 		lifter.goToBottomLimit();
-		robot = MecanumDrive.createInstance();
+		robot = MecanumDrive.createInstance(new VirtualClock());
 	}
 
 	//private double setFork = 0;
