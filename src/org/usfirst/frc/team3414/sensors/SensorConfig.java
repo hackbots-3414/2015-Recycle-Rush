@@ -50,7 +50,6 @@ public class SensorConfig {
 	
 	public SensorConfig getInstance()
 	{
-
 		if(singleton == null)
 		{
 			singleton = new SensorConfig();

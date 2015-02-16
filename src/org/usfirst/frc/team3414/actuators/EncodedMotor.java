@@ -1,19 +1,16 @@
 package org.usfirst.frc.team3414.actuators;
-
-import org.usfirst.frc.team3414.sensors.Constants;
-import org.usfirst.frc.team3414.sensors.HardwarePorts;
-import org.usfirst.frc.team3414.sensors.Encoder;
 import org.usfirst.frc.team3414.sensors.IEncoder;
 
 import edu.wpi.first.wpilibj.CANTalon;
+import edu.wpi.first.wpilibj.SpeedController;
 
-public class EncodedMotor extends Motor implements IEncodedMotor, Constants, HardwarePorts {
+public class EncodedMotor extends Motor implements IEncodedMotor {
 
 	private IEncoder encoder;
+	private static final double DISTANCE_PER_PULSE = 1;
 	
-	
-	public EncodedMotor(IEncoder encoder) {
-		super(new CANTalon(LIFT_MOTOR), NOT_INVERSE);
+	public EncodedMotor(SpeedController motor, IEncoder encoder) {
+		super(motor, false);
 		this.encoder = encoder;
 		encoder.setDistancePerPulse(DISTANCE_PER_PULSE);
 	}

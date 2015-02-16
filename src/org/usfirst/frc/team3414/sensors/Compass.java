@@ -1,6 +1,4 @@
 package org.usfirst.frc.team3414.sensors;
-import org.usfirst.frc.team3414.teleop.Display;
-import org.usfirst.frc.team3414.teleop.Log;
 
 
 /**

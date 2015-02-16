@@ -5,9 +5,11 @@ import org.usfirst.frc.team3414.teleop.Display;
 
 import edu.wpi.first.wpilibj.Timer;
 
-public class Forklift extends Thread implements ILiftAssist, HardwarePorts, Constants
+public class Forklift extends Thread implements ILiftAssist
 {
-
+	private static final double ALLOWANCE = 5.0;
+	private static final double LIFTER_UP_SPEED = 0.75;
+	private static final double LIFTER_DOWN_SPEED = 0.50;
 	private IEncodedMotor encodedMotor;
 	private IServo latch;
 	private ILimitSwitch topSwitch;
@@ -18,8 +20,6 @@ public class Forklift extends Thread implements ILiftAssist, HardwarePorts, Cons
 	
 	private int goToPosition = 0;
 	//private double gravityTestMotorSpeed = 0;
-
-	private static Forklift singleton = null;
 
 	protected Forklift(IEncodedMotor motor, ILimitSwitch topSwitch, ILimitSwitch bottomSwitch, IServo servo)
 	{

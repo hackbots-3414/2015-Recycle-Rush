@@ -1,5 +1,7 @@
 package org.usfirst.frc.team3414.actuators;
 
+import edu.wpi.first.wpilibj.SpeedController;
+
 
 
 /**
@@ -7,7 +9,7 @@ package org.usfirst.frc.team3414.actuators;
  * <!--  end-user-doc  -->
  * @generated
  */
-public interface IMotor 
+public interface IMotor
 {
 	public void stop();
 

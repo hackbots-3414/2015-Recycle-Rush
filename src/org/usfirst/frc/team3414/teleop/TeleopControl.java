@@ -1,7 +1,9 @@
 package org.usfirst.frc.team3414.teleop;
 
 import org.usfirst.frc.team3414.actuators.*;
+import org.usfirst.frc.team3414.sensors.ITimeListener;
 import org.usfirst.frc.team3414.sensors.SensorConfig;
+import org.usfirst.frc.team3414.sensors.TimeEventArgs;
 import org.usfirst.frc.team3414.sensors.VirtualClock;
 
 public class TeleopControl
@@ -21,6 +23,16 @@ public class TeleopControl
 	public TeleopControl(SensorConfig sensors, ActuatorConfig actuators)
 	{
 		this.sensors = sensors;
+		this.sensors.getClock().addListener(new ITimeListener()
+		{
+			
+			@Override
+			public void timeEvent(TimeEventArgs timeEvent)
+			{
+				//do some code here
+				
+			}
+		}, 1000);
 		this.actuators = actuators;
 		lifter = actuators.getForklift();
 		driverControl = new Controller();

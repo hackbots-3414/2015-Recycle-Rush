@@ -107,14 +107,14 @@ public class VirtualClock extends Thread implements IClock {
 					if(currentTime >= event.getEndTime())
 					{	
 						// Lambda Runnable
-						Runnable eventRunnable = new Runnable() {
-							
-							@Override
-							public void run() {
-								event.listener.timeEvent(new TimeEventArgs(key, currentTime));
-							}
-						};
-						//Runnable eventRunnable = () -> { event.listener.distanceEvent(new DistanceEventArgs(key, distanceInCM)); };
+//						Runnable eventRunnable = new Runnable() {
+//							
+//							@Override
+//							public void run() {
+//								event.listener.timeEvent(new TimeEventArgs(key, currentTime));
+//							}
+//						};
+						Runnable eventRunnable = () -> { event.listener.timeEvent(new TimeEventArgs(key, currentTime)); };
 						Thread eventTask = new Thread(eventRunnable);
 						
 						if(!event.repeat)
@@ -136,6 +136,7 @@ public class VirtualClock extends Thread implements IClock {
 			}
 		}
 	}
+	
 	class TimeEventSubscription {
 		ITimeListener listener;
 		long startTime;
