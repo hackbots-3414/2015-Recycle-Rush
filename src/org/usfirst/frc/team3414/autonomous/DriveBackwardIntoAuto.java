@@ -3,7 +3,8 @@ package org.usfirst.frc.team3414.autonomous;
 import org.usfirst.frc.team3414.actuators.IDriveTrain;
 import org.usfirst.frc.team3414.actuators.MecanumDrive;
 import org.usfirst.frc.team3414.sensors.Camera;
-import org.usfirst.frc.team3414.sensors.timerListener.ITimeListener;
+import org.usfirst.frc.team3414.sensors.ITimeListener;
+import org.usfirst.frc.team3414.sensors.TimeEventArgs;
 
 /**
  * An autonomous routine that drives backward into the autonomous zone and does nothing else, used in other autonomous methods.
@@ -33,8 +34,7 @@ public class DriveBackwardIntoAuto implements AutonomousProcedure, ITimeListener
 	}
 
 	@Override
-	public void doWhenTimeElapsed() {
+	public void timeEvent(TimeEventArgs timeEvent) {
 		MecanumDrive.getInstance().stop();
-		
 	}
 }
