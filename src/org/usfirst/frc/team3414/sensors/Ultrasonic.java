@@ -38,6 +38,20 @@ public class Ultrasonic extends Thread implements IMeasureDistance {
 		this(input, null, 10, sampleSize);
 	}
 	
+	protected Ultrasonic(SerialPort input) {
+		this(input, null, 10, 10);
+	}
+	
+	protected Ultrasonic(AnalogInput input, int sampleSize) {
+		this(null, input, 10, sampleSize);
+
+	}
+	
+	protected Ultrasonic(AnalogInput input) {
+		this(null, input, 10, 10);
+
+	}
+	
 	@Override 
 	public void run() {
 
@@ -65,11 +79,6 @@ public class Ultrasonic extends Thread implements IMeasureDistance {
 			}
 		}
  
-	}
-	
-	protected Ultrasonic(AnalogInput input, int sampleSize) {
-		this(null, input, 10, sampleSize);
-
 	}
 
 

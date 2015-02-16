@@ -1,9 +1,5 @@
 package org.usfirst.frc.team3414.sensors;
 
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.List;
-
 public class SensorBar implements IDetectSweetSpot
 {
 	
