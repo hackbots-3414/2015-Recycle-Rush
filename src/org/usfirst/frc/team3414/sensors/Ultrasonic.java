@@ -1,25 +1,78 @@
 package org.usfirst.frc.team3414.sensors;
 
+import java.util.Collections;
+
+import org.usfirst.frc.team3414.robot.RobotStatus;
+
 import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.PWM;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
-public class Ultrasonic implements IMeasureDistance {
+public class Ultrasonic extends Thread implements IMeasureDistance {
 
-
+	public final double VOLTS_PER_CM = .00488281;
 	private final AnalogInput analogInput;
-	private final PWM pwmInput;
+	private SerialPort serialPort;
+	private int sampleRate;
+	private double[] samples = new double[10];
+	int index = 0;
+	private double distance;
+	
+	private Ultrasonic(SerialPort serial, AnalogInput analog, int samplesPerSecond)
+	{
+		this.analogInput = analog;
+		this.serialPort = serial;
+		if(samplesPerSecond <=0 )
+		{
+			this.sampleRate = 100;
+		}
+		else
+		{
+			this.sampleRate = 1000/samplesPerSecond;
+		}
+		for(int i =0; i< samples.length; i++){samples[i] = 0;}
+		start();
+	}
+	
+	public Ultrasonic(SerialPort input) {
+		this(input, null, 10);
+	}
+	
+	@Override 
+	public void run() {
+
+		while(RobotStatus.isRunning()){
+			if (serialPort!= null){
+				//serialPort.readString();
+				//Run lOw pass filter
+			}
+			
+			else if (analogInput!= null){
+				double voltage = analogInput.getVoltage();
+				double cm = voltage / VOLTS_PER_CM;
+				//Run low pass filter
+				samples[index] = cm;
+				index = (index + 1) % 10;
+			}
+			else
+			{
+				distance = Double.NaN;
+			}
+			try {
+				Thread.sleep(sampleRate);
+			} catch (InterruptedException e) {
+				
+			}
+		}
+ 
+	}
 	
 	public Ultrasonic(AnalogInput input) {
-		this.analogInput = input;
-		this.pwmInput = null;
+		this(null, input, 10);
+
 	}
-	
-	public Ultrasonic(PWM input) {
-		this.analogInput = null;
-		this.pwmInput = input;
-	}
+
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -29,22 +82,9 @@ public class Ultrasonic implements IMeasureDistance {
 	 */
 
 	public double getCm() {
-		double cm = 0;
-		if(analogInput != null)
-		{
-			SmartDashboard.putNumber("Vcc: ",  analogInput.getValue());
-			
-			cm = analogInput.getAverageVoltage() / .00245; // 4.9mV per 2 cm
-		}
-		else if(pwmInput != null)
-		{
-			//pwmInput.setPeriodMultiplier(mult);
-			SmartDashboard.putNumber("PMW Value: ", pwmInput.getRaw());
-			//PWM Value
-			
-		}
-		//else if(serialInput != null)
-		return cm;
+		//return StdStats.mean(samples);
+		//return distance;
+		return 0;
 	}
 
 	/**
@@ -68,5 +108,5 @@ public class Ultrasonic implements IMeasureDistance {
 	public double getInches() {
 		return DistanceConversion.inToFeet(getFeet());
 	}
-
 }
+
