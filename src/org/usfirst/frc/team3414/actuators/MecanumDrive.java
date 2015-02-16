@@ -137,7 +137,7 @@ public class MecanumDrive implements IDriveTrain, ITimeListener
 
     public void doWhenTimeElapsed()
     {
-	devAngle = (Math.toDegrees(Math.atan(accel.getAccelY() / accel.getAccelX())));
+	devAngle = (Math.toDegrees(Math.atan(accel.getAccelY() / accel.getAccelZ())));
 	if (devAngle > 5)
 	{
 	    drive.mecanumDrive_Polar(currentVelocity, currentAngle - devAngle, currentRotation);

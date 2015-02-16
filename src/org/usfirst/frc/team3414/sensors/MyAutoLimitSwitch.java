@@ -27,13 +27,12 @@ public class MyAutoLimitSwitch
 		{
 			if (iSwitch.get() == SwitchPositions.ON)
 			{
-				return SwitchPositions.OFF;
+				position = SwitchPositions.OFF;
 			} else if (iSwitch.get() == SwitchPositions.OFF)
 			{
-				return SwitchPositions.ON;
-			} else {
-				return SwitchPositions.ON;	//Default
-			}
+				position = SwitchPositions.ON;
+			} 
+			return position;
 		} else
 		{
 			return iSwitch.get();

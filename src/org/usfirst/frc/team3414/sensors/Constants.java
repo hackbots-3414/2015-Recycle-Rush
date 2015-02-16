@@ -13,15 +13,15 @@ public interface Constants
 	double LIFTER_DOWN_SPEED = 0.50;
 		
 	//Servo
-	double SERVO_LATCHED = 1.0;
+	double SERVO_LATCHED = 0.0;
 	double SERVO_UNLATCHED = 0.5;
 	
-	//Forklift States
-	int LOWER_LIMIT;
+	//Forklift States(encoder counts)
+	/*int LOWER_LIMIT;
 	int GROUND;
 	int ONE;
 	int TWO;
 	int THREE;
 	int FOUR;
-	int UPPER_LIMIT;
+	int UPPER_LIMIT;*/
 }

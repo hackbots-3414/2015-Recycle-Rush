@@ -3,6 +3,8 @@ package org.usfirst.frc.team3414.actuators;
 import org.usfirst.frc.team3414.sensors.*;
 import org.usfirst.frc.team3414.teleop.Display;
 
+import edu.wpi.first.wpilibj.Timer;
+
 public class Forklift extends Thread implements ILiftAssist, HardwarePorts, Constants
 {
 
@@ -12,7 +14,9 @@ public class Forklift extends Thread implements ILiftAssist, HardwarePorts, Cons
 	private MyForkliftLimitSwitch botSwitch;
 	private boolean isEncZeroed;
 
-	private int[] lifterState = { LOWER_LIMIT, GROUND, ONE, TWO, THREE, FOUR, UPPER_LIMIT };
+	//private int[] lifterState = { LOWER_LIMIT, GROUND, ONE, TWO, THREE, FOUR, UPPER_LIMIT };
+	private int[] lifterState;
+	
 	private int goToPosition = 0;
 	//private double gravityTestMotorSpeed = 0;
 
@@ -63,7 +67,9 @@ public class Forklift extends Thread implements ILiftAssist, HardwarePorts, Cons
 			encodedMotor.up(LIFTER_UP_SPEED);
 		} else if ((encodedMotor.getEncoderPosition() > (lifterState[goToPosition] + ALLOWANCE)) && !botSwitch.isHit())
 		{
-			latch.engage();
+			latch.disengage();
+			encodedMotor.up(LIFTER_UP_SPEED);
+			Timer.delay(0.5);
 			encodedMotor.down(LIFTER_DOWN_SPEED);
 		} else if ((encodedMotor.getEncoderPosition() >= (lifterState[goToPosition] - ALLOWANCE))
 				&& (encodedMotor.getEncoderPosition() <= (lifterState[goToPosition] + ALLOWANCE)))

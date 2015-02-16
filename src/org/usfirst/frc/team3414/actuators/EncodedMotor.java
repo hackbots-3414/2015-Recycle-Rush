@@ -10,17 +10,19 @@ public class EncodedMotor extends Motor implements IEncodedMotor, Constants, Har
 
 	private MyEncoder encoder;
 	
+	
 	public EncodedMotor() {
 		super(new CANTalon(LIFT_MOTOR), NOT_INVERSE);
 		this.encoder = new MyEncoder(LIFT_ENCODER_A, LIFT_ENCODER_B);
 		encoder.setDistancePerPulse(DISTANCE_PER_PULSE);
 	}
 	
-	/*
+	
+	
 	public EncodedMotor(CANTalon controller, boolean reverse) {
 		super(controller, reverse);
 	}
-	*/
+	
 	
 	
 	/**
@@ -29,8 +31,6 @@ public class EncodedMotor extends Motor implements IEncodedMotor, Constants, Har
 	 */
 	public double getEncoderVelocity()
 	{
-		return encoder.getRate();
-		/*
 		double velocity = Double.NaN;
 		if(encoder != null)
 		{
@@ -41,7 +41,7 @@ public class EncodedMotor extends Motor implements IEncodedMotor, Constants, Har
 			velocity = ((CANTalon)motorController).getEncVelocity();
 		}
 		return velocity;
-		*/
+		
 	}
 	
 	/**
@@ -50,8 +50,6 @@ public class EncodedMotor extends Motor implements IEncodedMotor, Constants, Har
 	 */
 	public int getEncoderPosition()
 	{
-		return encoder.getPosition();
-		/*
 		int position = 0;
 		if(encoder != null)
 		{
@@ -62,7 +60,7 @@ public class EncodedMotor extends Motor implements IEncodedMotor, Constants, Har
 			position = ((CANTalon)motorController).getEncPosition();
 		}
 		return position;
-		*/
+		
 	}
 	
 	public void resetEncoder() {
