@@ -12,12 +12,14 @@ public class Ultrasonic extends Thread implements IMeasureDistance {
 	private final AnalogInput analogInput;
 	private SerialPort serialPort;
 	private int sampleRate;
-	private double[] samples = new double[10];
-	int index = 0;
+	private double[] samples; 
+	int sampleIndex = 0;
 	private double distance;
 	
-	private Ultrasonic(SerialPort serial, AnalogInput analog, int samplesPerSecond)
+	
+	private Ultrasonic(SerialPort serial, AnalogInput analog, int samplesPerSecond, int sampleSize)
 	{
+		samples = new double[sampleSize];
 		this.analogInput = analog;
 		this.serialPort = serial;
 		if(samplesPerSecond <=0 )
@@ -32,8 +34,8 @@ public class Ultrasonic extends Thread implements IMeasureDistance {
 		start();
 	}
 	
-	protected Ultrasonic(SerialPort input) {
-		this(input, null, 10);
+	protected Ultrasonic(SerialPort input, int sampleSize) {
+		this(input, null, 10, sampleSize);
 	}
 	
 	@Override 
@@ -48,9 +50,9 @@ public class Ultrasonic extends Thread implements IMeasureDistance {
 			else if (analogInput!= null){
 				double voltage = analogInput.getVoltage();
 				double cm = voltage / VOLTS_PER_CM;
-				//Run low pass filter
-				samples[index] = cm;
-				index = (index + 1) % 10;
+				samples[sampleIndex++] = cm;
+				distance = cm;
+				sampleIndex %= samples.length;
 			}
 			else
 			{
@@ -65,8 +67,8 @@ public class Ultrasonic extends Thread implements IMeasureDistance {
  
 	}
 	
-	protected Ultrasonic(AnalogInput input) {
-		this(null, input, 10);
+	protected Ultrasonic(AnalogInput input, int sampleSize) {
+		this(null, input, 10, sampleSize);
 
 	}
 
@@ -79,9 +81,25 @@ public class Ultrasonic extends Thread implements IMeasureDistance {
 	 */
 
 	public double getCm() {
-		//return StdStats.mean(samples);
-		//return distance;
-		return 0;
+		double maxValue = Double.MIN_VALUE;
+		double minValue = Double.MAX_VALUE;
+		double sum = 0;
+		for (int inx = 0; inx < samples.length; inx++)
+		{
+			double value = samples[inx];
+			if (value > maxValue)
+			{
+				maxValue = value;
+			}
+			if (value < minValue)
+			{
+				minValue = value;
+			}
+			sum += value;
+		}
+		sum -= maxValue + minValue;
+		distance = sum/(samples.length - 2);
+		return distance;
 	}
 
 	/**

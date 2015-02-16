@@ -1,7 +1,10 @@
 package org.usfirst.frc.team3414.sensors;
 
 public interface HardwarePorts
-{	
+{
+	// Servos
+	int LIFTER_GRIP = 0;
+	
     // Motors
     int RIGHT_FRONT_DRIVE = 2;
     int LEFT_FRONT_DRIVE = 4;
