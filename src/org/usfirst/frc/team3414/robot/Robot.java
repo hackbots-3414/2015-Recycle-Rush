@@ -52,7 +52,7 @@ public class Robot extends IterativeRobot
 		while (isEnabled() && isOperatorControl()) {
 			
 		}
-		//CLOSE THREADS, etc.
+		RobotStatus.setIsRunning(false);
 	}
 
 	public void testInit()
