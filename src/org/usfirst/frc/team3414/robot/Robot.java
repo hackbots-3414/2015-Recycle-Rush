@@ -22,7 +22,8 @@ public class Robot extends IterativeRobot
 	 */
 	public void robotInit()
 	{
-
+		//This must always get run at the start of init. Do not perform any init before this is called
+		RobotStatus.setIsRunning(true);
 	}
 
 	public void autonomousInit()

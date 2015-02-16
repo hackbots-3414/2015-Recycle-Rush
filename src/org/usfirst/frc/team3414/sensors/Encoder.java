@@ -1,14 +1,13 @@
 package org.usfirst.frc.team3414.sensors;
 
-import edu.wpi.first.wpilibj.Encoder;
 
-public class MyEncoder
+public class Encoder implements IEncoder
 {
-	private Encoder encode;
+	private edu.wpi.first.wpilibj.Encoder encoder;
 
-	public MyEncoder(int channelPortA, int channelPortB)
+	public Encoder(int channelPortA, int channelPortB)
 	{
-		encode = new Encoder(channelPortA, channelPortB);
+		encoder = new edu.wpi.first.wpilibj.Encoder(channelPortA, channelPortB);
 	}
 
 	/**
@@ -17,12 +16,12 @@ public class MyEncoder
 	 */
 	public int getPosition()
 	{
-		return encode.getRaw();
+		return encoder.getRaw();
 	}
 
 	public boolean getDirection()
 	{
-		return encode.getDirection();
+		return encoder.getDirection();
 	}
 
 	/**
@@ -31,12 +30,12 @@ public class MyEncoder
 	 */
 	public double getDistance()
 	{
-		return encode.getDistance();
+		return encoder.getDistance();
 	}
 
 	public void setDistancePerPulse(double distancePerPulse)
 	{
-		encode.setDistancePerPulse(distancePerPulse);
+		encoder.setDistancePerPulse(distancePerPulse);
 	}
 
 	/**
@@ -45,16 +44,16 @@ public class MyEncoder
 	 */
 	public double getRate()
 	{
-		return encode.getRate();
+		return encoder.getRate();
 	}
 
 	public boolean getStopped()
 	{
-		return encode.getStopped();
+		return encoder.getStopped();
 	}
 
 	public void reset()
 	{
-		encode.reset();
+		encoder.reset();
 	}
 }

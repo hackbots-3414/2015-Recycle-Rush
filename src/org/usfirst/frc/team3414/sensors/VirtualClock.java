@@ -24,7 +24,7 @@ public class VirtualClock extends Thread implements IClock {
 	
 	private Map<Long, TimeEventSubscription> subscriptions;
 	
-	public VirtualClock(int sleeptime) {
+	protected VirtualClock(int sleeptime) {
 		super();
 		this.sleepTime = sleeptime;
 		this.subscriptions = new Hashtable<Long, TimeEventSubscription>();
@@ -33,7 +33,7 @@ public class VirtualClock extends Thread implements IClock {
 		start();
 	}
 	
-	public VirtualClock() { 
+	protected VirtualClock() { 
 		this(50);
 		
 	}

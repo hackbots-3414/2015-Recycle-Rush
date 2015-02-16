@@ -24,7 +24,7 @@ public class Accelerometer implements IMeasureAcceleration
 	 * 
 	 * @generated
 	 */
-	public Accelerometer(){
+	protected Accelerometer(){
 		accel = new BuiltInAccelerometer();
 	}
 

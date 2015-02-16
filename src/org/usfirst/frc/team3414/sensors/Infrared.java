@@ -14,7 +14,7 @@ public class Infrared implements IMeasureDistance
 {
 	private AnalogInput channel;
 
-	public Infrared(AnalogInput channel) {
+	protected Infrared(AnalogInput channel) {
 		super();
 		if(channel != null)
 		{
@@ -27,9 +27,8 @@ public class Infrared implements IMeasureDistance
 		
 	}
 	
-	public Infrared(int channelNumber) {
-		super();
-		channel = new AnalogInput(channelNumber);
+	protected Infrared(int channelNumber) {
+		this(new AnalogInput(channelNumber));
 	}
 
 	@Override

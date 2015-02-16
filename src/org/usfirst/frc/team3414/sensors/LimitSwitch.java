@@ -2,12 +2,12 @@ package org.usfirst.frc.team3414.sensors;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 
-public class MyForkliftLimitSwitch
+public class LimitSwitch implements ILimitSwitch
 {
 	private DigitalInput limitSwitch;
 	private boolean inverse;
 
-	public MyForkliftLimitSwitch(int channel, boolean inverse)
+	protected LimitSwitch(int channel, boolean inverse)
 	{
 		limitSwitch = new DigitalInput(channel);
 		this.inverse = inverse;

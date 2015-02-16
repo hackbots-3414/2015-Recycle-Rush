@@ -1,12 +1,9 @@
 package org.usfirst.frc.team3414.sensors;
 
-import java.util.Collections;
-
 import org.usfirst.frc.team3414.robot.RobotStatus;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class Ultrasonic extends Thread implements IMeasureDistance {
@@ -35,7 +32,7 @@ public class Ultrasonic extends Thread implements IMeasureDistance {
 		start();
 	}
 	
-	public Ultrasonic(SerialPort input) {
+	protected Ultrasonic(SerialPort input) {
 		this(input, null, 10);
 	}
 	
@@ -68,7 +65,7 @@ public class Ultrasonic extends Thread implements IMeasureDistance {
  
 	}
 	
-	public Ultrasonic(AnalogInput input) {
+	protected Ultrasonic(AnalogInput input) {
 		this(null, input, 10);
 
 	}
