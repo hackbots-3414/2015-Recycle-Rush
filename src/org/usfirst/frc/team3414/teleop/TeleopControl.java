@@ -25,7 +25,7 @@ public class TeleopControl
 		robot = MecanumDrive.createInstance();
 	}
 
-	private double setFork = 0;
+	//private double setFork = 0;
 	
 	public void runTeleop()
 	{
@@ -53,13 +53,13 @@ public class TeleopControl
 		lifter.setSpeed(setFork);
 		*/
 		
-
-		/*
+		robot.move(driverControl.getJoy().getMagnitude(), driverControl.getJoy().getDirectionDegrees(), driverControl.getJoy().getTwist());
+		
 		//BUTTON FIVE
 		if (driverControl.getJoy().getButtonFive() && !restrictButtonFive)
 		{
 			restrictButtonFive = true;
-			//TODO: Lifter Action
+			lifter.goToGround();
 		}
 		if (!driverControl.getJoy().getButtonFive() && restrictButtonFive)
 		{
@@ -70,7 +70,7 @@ public class TeleopControl
 		if (driverControl.getJoy().getButtonSix() && !restrictButtonSix)
 		{
 			restrictButtonSix = true;
-			//TODO: Lifter Action
+			lifter.goToBottomLimit();
 		}
 		if (!driverControl.getJoy().getButtonSix() && restrictButtonSix)
 		{
@@ -81,7 +81,7 @@ public class TeleopControl
 		if (driverControl.getJoy().getButtonSeven() && !restrictButtonSeven)
 		{
 			restrictButtonSeven = true;
-			//TODO: Lifter Action
+			lifter.previousToteLength();
 		}
 		if (!driverControl.getJoy().getButtonSeven() && restrictButtonSeven)
 		{
@@ -92,7 +92,7 @@ public class TeleopControl
 		if (driverControl.getJoy().getButtonEight() && !restrictButtonEight)
 		{
 			restrictButtonEight = true;
-			//TODO: Lifter Action
+			lifter.nextToteLength();
 		}
 		if (!driverControl.getJoy().getButtonEight() && restrictButtonEight)
 		{
@@ -103,7 +103,7 @@ public class TeleopControl
 		if (driverControl.getJoy().getButtonNine() && !restrictButtonNine)
 		{
 			restrictButtonNine = true;
-			//TODO: Lifter Action
+			lifter.previousBinLength();
 		}
 		if (!driverControl.getJoy().getButtonNine() && restrictButtonNine)
 		{
@@ -114,13 +114,13 @@ public class TeleopControl
 		if (driverControl.getJoy().getButtonTen() && !restrictButtonTen)
 		{
 			restrictButtonTen = true;
-			//TODO: Lifter Action
+			lifter.nextBinLength();
 		}
 		if (!driverControl.getJoy().getButtonTen() && restrictButtonTen)
 		{
 			restrictButtonTen = false;
 		}
-		*/
+		
 	}
 
 }
