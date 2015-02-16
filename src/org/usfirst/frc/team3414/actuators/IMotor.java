@@ -1,9 +1,5 @@
 package org.usfirst.frc.team3414.actuators;
 
-import edu.wpi.first.wpilibj.SpeedController;
-
-
-
 /**
  * <!-- begin-user-doc -->
  * <!--  end-user-doc  -->

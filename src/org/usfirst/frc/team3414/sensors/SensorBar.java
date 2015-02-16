@@ -8,7 +8,6 @@ public class SensorBar implements IDetectSweetSpot
 	//byte[] currentByte;
 	//byte[] distanceSensorNumber;
 	private IMeasureDistance[] sensors;
-	private SweetSpotMode mode;
 	
 	protected SensorBar(IMeasureDistance sensor0, IMeasureDistance sensor1,IMeasureDistance sensor2, IMeasureDistance sensor3,IMeasureDistance sensor4)
 	{
@@ -21,7 +20,10 @@ public class SensorBar implements IDetectSweetSpot
 		sensors[4] = sensor4;
 		for(IMeasureDistance sensor: sensors)
 		{
-			
+			if(sensor == null)
+			{
+				throw new RuntimeException("It is not OK to have a null Distance Sensot");
+			}
 		}
 		
 	}
@@ -55,6 +57,7 @@ public class SensorBar implements IDetectSweetSpot
 			state = getSweetSpotStateWide();
 			break;
 		}
+		return state;
 	}
 
 	private SweetSpotState getSweetSpotStateWide()
