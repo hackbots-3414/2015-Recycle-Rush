@@ -1,15 +1,14 @@
 package org.usfirst.frc.team3414.teleop;
 
 import org.usfirst.frc.team3414.actuators.*;
-import org.usfirst.frc.team3414.sensors.IClock;
-import org.usfirst.frc.team3414.sensors.ITimeEventHandler;
+import org.usfirst.frc.team3414.sensors.SensorConfig;
 import org.usfirst.frc.team3414.sensors.VirtualClock;
 
 public class TeleopControl
 {
 	private Controller driverControl;
-	private MecanumDrive robot;
-	private Forklift lifter;
+	private IDriveTrain driveTrain;
+	private ILiftAssist lifter;
 
 	private boolean restrictButtonFive = false;
 	private boolean restrictButtonSix = false;
@@ -17,14 +16,16 @@ public class TeleopControl
 	private boolean restrictButtonEight = false;
 	private boolean restrictButtonNine = false;
 	private boolean restrictButtonTen = false;
-	
-	public TeleopControl()
+	private SensorConfig sensors;
+	private ActuatorConfig actuators; 
+	public TeleopControl(SensorConfig sensors, ActuatorConfig actuators)
 	{
+		this.sensors = sensors;
+		this.actuators = actuators;
+		lifter = actuators.getForklift();
 		driverControl = new Controller();
-		lifter = Forklift.createInstance();
-		lifter.start();
 		lifter.goToBottomLimit();
-		robot = MecanumDrive.createInstance(new VirtualClock());
+		driveTrain = actuators.getDriveTrain();
 	}
 
 	//private double setFork = 0;
@@ -55,7 +56,7 @@ public class TeleopControl
 		lifter.setSpeed(setFork);
 		*/
 		
-		robot.move(driverControl.getJoy().getMagnitude(), driverControl.getJoy().getDirectionDegrees(), driverControl.getJoy().getTwist());
+		driveTrain.move(driverControl.getJoy().getMagnitude(), driverControl.getJoy().getDirectionDegrees(), driverControl.getJoy().getTwist());
 		
 		//BUTTON FIVE
 		if (driverControl.getJoy().getButtonFive() && !restrictButtonFive)

@@ -23,7 +23,7 @@ public class PowerDistributionBoard implements IPowerEventHandler, Runnable
 
 	long eventID;
 	
-	public PowerDistributionBoard()
+	protected PowerDistributionBoard()
 	{
 
 	}

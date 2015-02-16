@@ -11,10 +11,6 @@ public interface Constants
 	double ALLOWANCE = 5.0;
 	double LIFTER_UP_SPEED = 0.75;
 	double LIFTER_DOWN_SPEED = 0.50;
-		
-	//Servo
-	double SERVO_LATCHED = 0.0;
-	double SERVO_UNLATCHED = 0.5;
 	
 	//Forklift States(encoder counts)
 	/*int LOWER_LIMIT;

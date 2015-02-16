@@ -2,18 +2,19 @@ package org.usfirst.frc.team3414.actuators;
 
 import org.usfirst.frc.team3414.sensors.Constants;
 import org.usfirst.frc.team3414.sensors.HardwarePorts;
-import org.usfirst.frc.team3414.sensors.MyEncoder;
+import org.usfirst.frc.team3414.sensors.Encoder;
+import org.usfirst.frc.team3414.sensors.IEncoder;
 
 import edu.wpi.first.wpilibj.CANTalon;
 
 public class EncodedMotor extends Motor implements IEncodedMotor, Constants, HardwarePorts {
 
-	private MyEncoder encoder;
+	private IEncoder encoder;
 	
 	
-	public EncodedMotor() {
+	public EncodedMotor(IEncoder encoder) {
 		super(new CANTalon(LIFT_MOTOR), NOT_INVERSE);
-		this.encoder = new MyEncoder(LIFT_ENCODER_A, LIFT_ENCODER_B);
+		this.encoder = encoder;
 		encoder.setDistancePerPulse(DISTANCE_PER_PULSE);
 	}
 	
@@ -22,33 +23,9 @@ public class EncodedMotor extends Motor implements IEncodedMotor, Constants, Har
 	public EncodedMotor(CANTalon controller, boolean reverse) {
 		super(controller, reverse);
 	}
-	
-	
-	
-	/**
-	 * Regardless of the current feedback device (if any), this receives the encoder velocity.
-	 * @return
-	 */
-	public double getEncoderVelocity()
-	{
-		double velocity = Double.NaN;
-		if(encoder != null)
-		{
-			velocity = encoder.getRate();
-		}
-		else if(motorController instanceof CANTalon)
-		{
-			velocity = ((CANTalon)motorController).getEncVelocity();
-		}
-		return velocity;
-		
-	}
-	
-	/**
-	 * Regardless of the current feedback device, if any, this receives the current encoder position.
-	 * @return
-	 */
-	public int getEncoderPosition()
+
+	@Override
+	public int getPosition()
 	{
 		int position = 0;
 		if(encoder != null)
@@ -60,10 +37,67 @@ public class EncodedMotor extends Motor implements IEncodedMotor, Constants, Har
 			position = ((CANTalon)motorController).getEncPosition();
 		}
 		return position;
+	}
+
+
+
+	@Override
+	public boolean getDirection()
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+
+	@Override
+	public double getDistance()
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+
+	@Override
+	public void setDistancePerPulse(double distancePerPulse)
+	{
+		// TODO Auto-generated method stub
 		
 	}
-	
-	public void resetEncoder() {
-		encoder.reset();
+
+
+
+	@Override
+	public double getRate()
+	{
+		double velocity = Double.NaN;
+		if(encoder != null)
+		{
+			velocity = encoder.getRate();
+		}
+		else if(motorController instanceof CANTalon)
+		{
+			velocity = ((CANTalon)motorController).getEncVelocity();
+		}
+		return velocity;
+	}
+
+
+
+	@Override
+	public boolean getStopped()
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+
+	@Override
+	public void reset()
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }

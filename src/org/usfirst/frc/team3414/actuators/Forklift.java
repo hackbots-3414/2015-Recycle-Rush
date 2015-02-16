@@ -9,11 +9,10 @@ public class Forklift extends Thread implements ILiftAssist, HardwarePorts, Cons
 {
 
 	private IEncodedMotor encodedMotor;
-	private MyServo latch;
-	private MyForkliftLimitSwitch topSwitch;
-	private MyForkliftLimitSwitch botSwitch;
+	private IServo latch;
+	private ILimitSwitch topSwitch;
+	private ILimitSwitch botSwitch;
 	private boolean isEncZeroed;
-
 	//private int[] lifterState = { LOWER_LIMIT, GROUND, ONE, TWO, THREE, FOUR, UPPER_LIMIT };
 	private int[] lifterState;
 	
@@ -22,34 +21,14 @@ public class Forklift extends Thread implements ILiftAssist, HardwarePorts, Cons
 
 	private static Forklift singleton = null;
 
-	private Forklift()
+	protected Forklift(IEncodedMotor motor, ILimitSwitch topSwitch, ILimitSwitch bottomSwitch, IServo servo)
 	{
-		encodedMotor = new EncodedMotor();
-		topSwitch = new MyForkliftLimitSwitch(LIMIT_SWITCH_TOP, NOT_INVERSE);
-		botSwitch = new MyForkliftLimitSwitch(LIMIT_SWITCH_BOTTOM, NOT_INVERSE);
-		latch = new MyServo(LIFTER_GRIP);
+		encodedMotor = motor;
+		this.topSwitch = topSwitch;
+		this.botSwitch = bottomSwitch;
+		latch = servo;
 		isEncZeroed = false;
 		latch.disengage();
-	}
-
-	public static Forklift createInstance()
-	{
-		if (singleton == null)
-		{
-			singleton = new Forklift();
-		}
-
-		return singleton;
-	}
-
-	public static Forklift getInstance()
-	{
-		if (singleton == null)
-		{
-			throw new NullPointerException("ForkLift hasn't been created yet");
-		}
-
-		return singleton;
 	}
 
 	public void run()
@@ -61,18 +40,18 @@ public class Forklift extends Thread implements ILiftAssist, HardwarePorts, Cons
 		
 		
 		// Main Lifter Function
-		if ((encodedMotor.getEncoderPosition() < (lifterState[goToPosition] - ALLOWANCE)) && !topSwitch.isHit())
+		if ((encodedMotor.getPosition() < (lifterState[goToPosition] - ALLOWANCE)) && !topSwitch.isHit())
 		{
 			latch.disengage();
 			encodedMotor.up(LIFTER_UP_SPEED);
-		} else if ((encodedMotor.getEncoderPosition() > (lifterState[goToPosition] + ALLOWANCE)) && !botSwitch.isHit())
+		} else if ((encodedMotor.getPosition() > (lifterState[goToPosition] + ALLOWANCE)) && !botSwitch.isHit())
 		{
 			latch.disengage();
 			encodedMotor.up(LIFTER_UP_SPEED);
 			Timer.delay(0.5);
 			encodedMotor.down(LIFTER_DOWN_SPEED);
-		} else if ((encodedMotor.getEncoderPosition() >= (lifterState[goToPosition] - ALLOWANCE))
-				&& (encodedMotor.getEncoderPosition() <= (lifterState[goToPosition] + ALLOWANCE)))
+		} else if ((encodedMotor.getPosition() >= (lifterState[goToPosition] - ALLOWANCE))
+				&& (encodedMotor.getPosition() <= (lifterState[goToPosition] + ALLOWANCE)))
 		{
 			latch.disengage();
 			encodedMotor.up(0.0); // TODO: Allowance for Gravity
@@ -85,7 +64,7 @@ public class Forklift extends Thread implements ILiftAssist, HardwarePorts, Cons
 		// Reset Encoder
 		if (!isEncZeroed && botSwitch.isHit())
 		{
-			encodedMotor.resetEncoder();
+			encodedMotor.reset();
 			isEncZeroed = true;
 		}
 	}
@@ -188,7 +167,7 @@ public class Forklift extends Thread implements ILiftAssist, HardwarePorts, Cons
 	
 	public void toDisplay()
 	{
-		Display.getInstance().setForkliftData(goToPosition, encodedMotor.getEncoderPosition(), encodedMotor.getEncoderVelocity(), topSwitch.isHit(), botSwitch.isHit());
+		Display.getInstance().setForkliftData(goToPosition, encodedMotor.getPosition(), encodedMotor.getRate(), topSwitch.isHit(), botSwitch.isHit());
 	}
 
 }

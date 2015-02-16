@@ -13,13 +13,7 @@ public interface HardwarePorts
     int LIFT_MOTOR = 5;
     
     // DigitalIOs
-    int LIFT_ENCODER_A = 3;
-    int LIFT_ENCODER_B = 4;
-    int ULTRASONIC_LEFT = 2;
-    int ULTRASONIC_RIGHT = 1;
-    int ULTRASONIC_BACK = 0;
-    int LIMIT_SWITCH_TOP = 5;
-    int LIMIT_SWITCH_BOTTOM = 6;
+    
     
     // Analogs
     //int ACCELEROMETER;
