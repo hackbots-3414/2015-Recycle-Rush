@@ -6,6 +6,7 @@ package org.usfirst.frc.team3414.autonomous;
  * @author Ray
  *
  */
-interface AutonomousProcedure {
+interface AutonomousProcedure 
+{
 	public void doAuto();
 }
