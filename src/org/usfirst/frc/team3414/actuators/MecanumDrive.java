@@ -2,8 +2,8 @@ package org.usfirst.frc.team3414.actuators;
 
 import edu.wpi.first.wpilibj.CANTalon;
 
-import org.usfirst.frc.team3414.sensors.Gyroscope;
 import org.usfirst.frc.team3414.sensors.IMeasureAcceleration;
+import org.usfirst.frc.team3414.sensors.IMeasureDirection;
 import org.usfirst.frc.team3414.sensors.ITimeEventHandler;
 import org.usfirst.frc.team3414.sensors.ITimeListener;
 import org.usfirst.frc.team3414.sensors.TimeEventArgs;
@@ -20,17 +20,17 @@ import edu.wpi.first.wpilibj.SpeedController;
 public class MecanumDrive implements IDriveTrain, ITimeListener {
 	double currentVelocity, currentAngle, currentRotation;
 	RobotDrive drive;
-	Gyroscope gyro;
+	IMeasureDirection gyro;
 	IMeasureAcceleration accel;
 	final double Kp = .03;
 	double devAngle;
 	SpeedController[] talons = new SpeedController[4];
 	private ITimeEventHandler clock;
 
-	protected MecanumDrive(ITimeEventHandler handler, IMeasureAcceleration accelerometer) {
+	protected MecanumDrive(ITimeEventHandler handler, IMeasureAcceleration accelerometer, IMeasureDirection gyro) {
 		this.clock = handler;
 		clock.addListener(this, 2000, true);
-		gyro = new Gyroscope(1); // COME BACK AND CHANGE CHANNEL NUMBER TO MAKE
+		this.gyro = gyro;
 		// THIS WORK!!!!!!!!!!!!!!!!!!!!!!!!!
 		accel = accelerometer;
 
@@ -39,7 +39,7 @@ public class MecanumDrive implements IDriveTrain, ITimeListener {
 		}
 
 		drive = new RobotDrive(talons[0], talons[1], talons[2], talons[3]);
-		gyro.reset();
+		//gyro.reset();
 	}
 
 	/**

@@ -31,7 +31,13 @@ public class SensorConfig {
 //	private IMeasureDistance sensorBarSensor5;
 	private IPowerEventHandler powerEventSystem;
 	private IEncoder forkLiftEncoder;
-	private SensorConfig singleton;
+	private IMeasureDirection gyro;
+	public IMeasureDirection getGyro()
+	{
+		return gyro;
+	}
+
+	private static SensorConfig singleton;
 	
 	private SensorConfig()
 	{
@@ -40,15 +46,16 @@ public class SensorConfig {
 		forkLiftEncoder = new Encoder(LIFT_ENCODER_A, LIFT_ENCODER_B);
 		powerEventSystem = new PowerDistributionBoard();
 		distanceSensorLeft = new Ultrasonic(new AnalogInput(ULTRASONIC_LEFT));
-		distanceSensorRear = new Ultrasonic(new AnalogInput(ULTRASONIC_REAR));
-		distanceSensorRight = new Ultrasonic(new AnalogInput(ULTRASONIC_RIGHT));
+		//distanceSensorRear = new Ultrasonic(new AnalogInput(ULTRASONIC_REAR));
+		//distanceSensorRight = new Ultrasonic(new AnalogInput(ULTRASONIC_RIGHT));
 		distanceEventSystem = new DistanceEventHandler();
 		accelerometer = new Accelerometer();
 		forkLiftBottom = new LimitSwitch(LIMIT_SWITCH_BOTTOM, true);
 		forkLiftTop = new LimitSwitch(LIMIT_SWITCH_TOP, true);
+		gyro = new Gyroscope(0);
 	}
 	
-	public SensorConfig getInstance()
+	public static SensorConfig getInstance()
 	{
 		if(singleton == null)
 		{

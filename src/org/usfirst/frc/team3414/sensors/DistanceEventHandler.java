@@ -4,19 +4,34 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import org.usfirst.frc.team3414.robot.RobotStatus;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DistanceEventHandler extends Thread implements IDistanceEventHandler 
 {
 	
 	private long nextEventID = 0;
-
+	private long updateInterval;
+	private ExecutorService executor; 
+	
 	private Map<Long, EventSubscription> subscriptions;
 	
-	public DistanceEventHandler() {
+	public DistanceEventHandler(int updateInterval) {
 		super();
 		this.subscriptions = new Hashtable<Long, EventSubscription>();
+		this.updateInterval = updateInterval;
+		executor = Executors.newFixedThreadPool(2);
+		start();
+	}
+	
+	public DistanceEventHandler() {
+		this(100);
 	}
 
 	@Override
@@ -44,6 +59,7 @@ public class DistanceEventHandler extends Thread implements IDistanceEventHandle
 		while(RobotStatus.isRunning())
 		{
 			List<Long> keys = new ArrayList<Long>(subscriptions.keySet());
+			List<Future<?>> futures = new ArrayList<Future<?>>();
 			
 			for(final long key : keys)
 			{
@@ -56,25 +72,49 @@ public class DistanceEventHandler extends Thread implements IDistanceEventHandle
 					if(distanceInCM >= event.distance.getMinimum() && distanceInCM <= event.distance.getMaximum())
 					{	
 						// Lambda Runnable
-						Runnable eventRunnable = new Runnable() {
-							
-							@Override
-							public void run() {
-								event.listener.distanceEvent(new DistanceEventArgs(key, distanceInCM));
-								
-							}
-						};
-						//Runnable eventRunnable = () -> { event.listener.distanceEvent(new DistanceEventArgs(key, distanceInCM)); };
-						Thread eventTask = new Thread(eventRunnable);
+//						Runnable eventRunnable = new Runnable() {
+//							
+//							@Override
+//							public void run() {
+//								event.listener.distanceEvent(new DistanceEventArgs(key, distanceInCM));
+//								
+//							}
+//						};
+						futures.add(
+								executor.submit(() -> { 
+									event.listener.distanceEvent(new DistanceEventArgs(key, distanceInCM));
+								})
+						);
 						
 						if(!event.repeat)
 						{
 							removeListener(key);
 						}
-						eventTask.start();
 					}
 				}
 			}
+			for(Future<?> f : futures)
+			{
+				while(!f.isDone())
+				{
+					try
+					{
+						Thread.sleep(10);
+					} catch (InterruptedException e)
+					{
+						// TODO Auto-generated catch block
+						SmartDashboard.putString("DEBUG: ", "Distance Event Handler Failed to sleep");
+					}
+				}
+			}
+		}
+		
+		try
+		{
+			Thread.sleep(updateInterval);
+		} catch (InterruptedException e)
+		{
+			SmartDashboard.putString("DEBUG: ", "Distance Event Handler Failed to sleep");
 		}
 	}
 	
