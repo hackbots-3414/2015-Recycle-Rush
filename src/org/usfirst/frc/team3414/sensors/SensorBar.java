@@ -1,58 +1,65 @@
 package org.usfirst.frc.team3414.sensors;
 
-public class SensorBar implements IDetectSweetSpot
+public class SensorBar implements IDetectSweetSpot, ITimeListener
 {
-
-	// SPI spi;
-
-	// byte[] currentByte;
-	// byte[] distanceSensorNumber;
-	private IMeasureDistance[] sensors;
+	ISPI spi;
+	
+	byte[] returnedBytes;
+	byte[] distanceSensorNumber;
+	float[] sensorValues;
+	int numberOfSensors;
+	long timeEventID;
 	
 
-	double slopeA = slope(sensors[0].getCm(), sensors[1].getCm(), 9.5);
-	double slopeB = slope(sensors[1].getCm(), sensors[2].getCm(), 17.9);
-	double slopeC = slope(sensors[2].getCm(), sensors[3].getCm(), 17.9);
-	double slopeD = slope(sensors[3].getCm(), sensors[4].getCm(), 9.5);
-
-	protected SensorBar(IMeasureDistance sensor0, IMeasureDistance sensor1, IMeasureDistance sensor2, IMeasureDistance sensor3,
-			IMeasureDistance sensor4)
-	{
-		sensors = new IMeasureDistance[5];
-		// Check if any sensor is null //throw exception
-		sensors[0] = sensor0;
-		sensors[1] = sensor1;
-		sensors[2] = sensor2;
-		sensors[3] = sensor3;
-		sensors[4] = sensor4;
-		for (IMeasureDistance sensor : sensors)
+	@Override
+	public void timeEvent(TimeEventArgs timeEvent) {
+		if(timeEvent.getTimeEventID() == timeEventID)
 		{
-			if (sensor == null)
+			int val = 0;
+		
+			spi.transaction(distanceSensorNumber, returnedBytes, numberOfSensors*4);
+		
+			for(int i = 0; i <= numberOfSensors; i++)
 			{
-				throw new RuntimeException("It is not OK to have a null Distance Sensot");
+				for(int j = i*4, k = 0; k < 4; k++, j++)
+				{
+					val += returnedBytes[j] << (k*8);
+				}
+			
+				sensorValues[i] = (float)val;
+				val = 0;
 			}
 		}
-		
-		
-
 	}
+	
+	double slopeA = slope(sensorValues[0], sensorValues[1], 9.5);
+	double slopeB = slope(sensorValues[1], sensorValues[2], 17.9);
+	double slopeC = slope(sensorValues[2], sensorValues[3], 17.9);
+	double slopeD = slope(sensorValues[3], sensorValues[4], 9.5);
 
-	// public SensorBar(Port port, int sensorBarSize)
-	// {
-	// spi = new SPI(port);
-	// spi.setClockRate(1000000);
-	// spi.setMSBFirst();
-	// spi.setChipSelectActiveLow();
-	//
-	// distanceSensorNumber = new byte[sensorBarSize];
-	// currentByte = new byte[sensorBarSize*4];
-	//
-	// for(int i = 0; i < sensorBarSize; i++)
-	// {
-	// distanceSensorNumber[i] = (byte) i;
-	// }
-	// }
-
+	protected SensorBar(edu.wpi.first.wpilibj.SPI.Port arduinoPort, int tempNumberOfSensors)
+	{
+		timeEventID = SensorConfig.getInstance().getClock().addListener(this, 1000); // Updates the values every second
+		
+		numberOfSensors = tempNumberOfSensors;
+		
+		spi = new SPI(arduinoPort);
+		
+	    spi.setClockRate(1000000);
+		spi.setMSBFirst();
+		spi.setChipSelectActiveLow();
+		
+		
+		distanceSensorNumber = new byte[numberOfSensors];
+	    returnedBytes = new byte[numberOfSensors*4];
+	    sensorValues = new float[numberOfSensors];
+	    
+		for(int i = 0; i < numberOfSensors; i++)
+		{
+			distanceSensorNumber[i] = (byte) i;
+	    }
+	}
+	
 	@Override
 	public SweetSpotState getSweetSpotState(SweetSpotMode mode)
 	{
