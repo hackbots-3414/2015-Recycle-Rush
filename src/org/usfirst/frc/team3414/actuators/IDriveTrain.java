@@ -16,11 +16,18 @@ public  interface IDriveTrain
 	 * @ordered
 	 */
 	
-	public void move(double angle, double velocity, double rotation) ;
+	public void move(double magnitude, double angle, double rotation) ;
 	
-	public void rotateToDegrees(double degrees);
+	public void rotate(double degrees, boolean clockWise);
+
 	
 	public void stop();
+	
+	public void moveConstantVelocity(double speed, double direction);
+	
+	public void rotateConstantVelocity(boolean clockWise);
+	
+	public void toLog();
 }
 	
 	

@@ -2,10 +2,12 @@ package org.usfirst.frc.team3414.actuators;
 
 import org.usfirst.frc.team3414.actuators.IServo;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class Servo implements IServo
 {
-	private static final double SERVO_LATCHED = 0.0;
-	private static final double SERVO_UNLATCHED = 0.5;
+	private static final double SERVO_LATCHED = 0.9;
+	private static final double SERVO_UNLATCHED = 0.0;
 	
 	private boolean isLatched;
 	
@@ -20,13 +22,13 @@ public class Servo implements IServo
 
 	public void engage()
 	{
-		servo.set(SERVO_LATCHED);
+		servo.set(SmartDashboard.getNumber("Latched", 1.0));
 		isLatched = true;
 	}
 
 	public void disengage()
 	{
-		servo.set(SERVO_UNLATCHED);
+		servo.set(SmartDashboard.getNumber("UN Latched", .7));
 		isLatched = false;
 	}
 

@@ -46,13 +46,13 @@ public class SensorConfig {
 		forkLiftEncoder = new Encoder(LIFT_ENCODER_A, LIFT_ENCODER_B);
 		powerEventSystem = new PowerDistributionBoard();
 		distanceSensorLeft = new Ultrasonic(new AnalogInput(ULTRASONIC_LEFT));
-		//distanceSensorRear = new Ultrasonic(new AnalogInput(ULTRASONIC_REAR));
-		//distanceSensorRight = new Ultrasonic(new AnalogInput(ULTRASONIC_RIGHT));
+		distanceSensorRear = new Ultrasonic(new AnalogInput(ULTRASONIC_REAR));
+		distanceSensorRight = new Ultrasonic(new AnalogInput(ULTRASONIC_RIGHT));
 		distanceEventSystem = new DistanceEventHandler();
-		accelerometer = new Accelerometer();
+		accelerometer = new OurBuiltInAccelerometer();
 		forkLiftBottom = new LimitSwitch(LIMIT_SWITCH_BOTTOM, true);
 		forkLiftTop = new LimitSwitch(LIMIT_SWITCH_TOP, true);
-		gyro = new Gyroscope(0);
+		//TODO: implemet Driver and initialize gyro = new Gyroscope(0);
 	}
 	
 	public static SensorConfig getInstance()

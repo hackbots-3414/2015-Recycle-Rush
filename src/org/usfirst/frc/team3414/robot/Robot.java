@@ -1,7 +1,7 @@
 package org.usfirst.frc.team3414.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
-
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team3414.sensors.*;
@@ -20,6 +20,10 @@ public class Robot extends IterativeRobot
 {
 	SensorConfig sensorConfig;
 	ActuatorConfig actuatorConfig;
+	Controller controller;
+	private boolean a = false;
+	private boolean b = false;
+	MyJoystick joy;
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -30,7 +34,8 @@ public class Robot extends IterativeRobot
 		RobotStatus.setIsRunning(true);
 		sensorConfig = SensorConfig.getInstance();
 		actuatorConfig = ActuatorConfig.getInstance();
-		sensorConfig.getClock().addListener((event) -> {SmartDashboard.putNumber("Current Time", event.time);} , 1000, true);
+		controller = new Controller();
+		joy = controller.getJoy();
 	}
 
 	public void autonomousInit()
@@ -48,8 +53,7 @@ public class Robot extends IterativeRobot
 
 	public void teleopInit()
 	{
-		sensorConfig.getClock().addListener((event) -> {SmartDashboard.putNumber("teleopCounter", event.time);} , 500, true);
-		sensorConfig.getDistanceEventSystem().addListener((event) -> {SmartDashboard.putNumber("Distance", event.getDistanceCm());}, sensorConfig.getDistanceSensorLeft(), new Range(20, 600), true);
+		
 	}
 
 	/**
@@ -57,7 +61,26 @@ public class Robot extends IterativeRobot
 	 */
 	public void teleopPeriodic()
 	{
-		actuatorConfig.getDriveTrain().move(0, 10, 0);
+		
+		if(joy.getButtonSeven())
+		{
+			((Forklift)actuatorConfig.getForklift()).up();
+		}
+		else if(joy.getButtonEight())
+		{
+			((Forklift)actuatorConfig.getForklift()).down();
+		}
+		else {
+			((Forklift)actuatorConfig.getForklift()).stopLift();
+		}
+		if(joy.getButtonNine())
+		{
+			actuatorConfig.getDriveTrain().move(0, 0, SmartDashboard.getNumber("Rotational Speed", 0.5));
+		}
+		else{
+			actuatorConfig.getDriveTrain().move(joy.getMagnitude(), joy.getDirectionDegrees(), joy.getTwist());
+		}
+		
 	}
 
 	public void testInit()

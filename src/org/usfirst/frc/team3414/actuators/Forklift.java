@@ -43,13 +43,13 @@ public class Forklift extends Thread implements ILiftAssist
 		if ((encodedMotor.getPosition() < (lifterState[goToPosition] - ALLOWANCE)) && !topSwitch.isHit())
 		{
 			latch.disengage();
-			encodedMotor.up(LIFTER_UP_SPEED);
+			up();
 		} else if ((encodedMotor.getPosition() > (lifterState[goToPosition] + ALLOWANCE)) && !botSwitch.isHit())
 		{
 			latch.disengage();
-			encodedMotor.up(LIFTER_UP_SPEED);
+			up();
 			Timer.delay(0.5);
-			encodedMotor.down(LIFTER_DOWN_SPEED);
+			down();
 		} else if ((encodedMotor.getPosition() >= (lifterState[goToPosition] - ALLOWANCE))
 				&& (encodedMotor.getPosition() <= (lifterState[goToPosition] + ALLOWANCE)))
 		{
@@ -58,7 +58,7 @@ public class Forklift extends Thread implements ILiftAssist
 		} else
 		{
 			latch.engage();
-			encodedMotor.stop();
+			stopLift();
 		}
 
 		// Reset Encoder
@@ -74,7 +74,32 @@ public class Forklift extends Thread implements ILiftAssist
 	{
 		goToPosition = 1;
 	}
-
+	
+	public void stopLift()
+	{
+		encodedMotor.stop();
+		latch.engage();
+	}
+	
+	public void up()
+	{
+		encodedMotor.up(LIFTER_UP_SPEED);
+		latch.disengage();
+	}
+	public void down()
+	{
+		latch.disengage();
+		up();
+		try
+		{
+			Thread.sleep(1000);
+		} catch (InterruptedException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		encodedMotor.down(LIFTER_DOWN_SPEED);
+	}
 	@Override
 	public void goToBottomLimit()
 	{

@@ -1,13 +1,15 @@
 package org.usfirst.frc.team3414.actuators;
 
-import edu.wpi.first.wpilibj.CANTalon;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import org.usfirst.frc.team3414.sensors.IClock;
 import org.usfirst.frc.team3414.sensors.IMeasureAcceleration;
 import org.usfirst.frc.team3414.sensors.IMeasureDirection;
-import org.usfirst.frc.team3414.sensors.ITimeEventHandler;
 import org.usfirst.frc.team3414.sensors.ITimeListener;
 import org.usfirst.frc.team3414.sensors.TimeEventArgs;
 
+import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SpeedController;
 
@@ -17,103 +19,139 @@ import edu.wpi.first.wpilibj.SpeedController;
  * @generated
  */
 
-public class MecanumDrive implements IDriveTrain, ITimeListener {
-	double currentVelocity, currentAngle, currentRotation;
-	RobotDrive drive;
-	IMeasureDirection gyro;
-	IMeasureAcceleration accel;
-	final double Kp = .03;
-	double devAngle;
-	SpeedController[] talons = new SpeedController[4];
-	private ITimeEventHandler clock;
-
-	protected MecanumDrive(ITimeEventHandler handler, IMeasureAcceleration accelerometer, IMeasureDirection gyro) {
+public class MecanumDrive implements IDriveTrain, ITimeListener
+{
+	//private double currentVelocity, currentAngle, currentRotation;
+	private RobotDrive drive;
+	private IMeasureDirection gyro;
+	private IMeasureAcceleration accel;
+	//private double devAngle;
+	private SpeedController[] talons = new SpeedController[4];
+	private IClock clock;
+	private static final double ROTATE_CONSTANT = 0.5;
+	private double ROTATE_SECONDS_PER_DEGREE;
+	private double ROTATE_POWER_INTO_MOTORS;
+	private ExecutorService threadpool;
+	
+	protected MecanumDrive(IClock handler, IMeasureAcceleration accelerometer,
+			IMeasureDirection gyro)
+	{
+		threadpool = Executors.newFixedThreadPool(1);
 		this.clock = handler;
 		clock.addListener(this, 2000, true);
 		this.gyro = gyro;
 		// THIS WORK!!!!!!!!!!!!!!!!!!!!!!!!!
 		accel = accelerometer;
 
-		for (int i = 0; i < talons.length; i++) {
+		for (int i = 0; i < talons.length; i++)
+		{
 			talons[i] = new CANTalon(i + 1, 10);
 		}
 
 		drive = new RobotDrive(talons[0], talons[1], talons[2], talons[3]);
-		//gyro.reset();
+		// gyro.reset();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-
-	public void move(double velocity, double angle, double rotation) {
-		this.currentVelocity = velocity;
-		this.currentAngle = angle;
-		this.currentRotation = rotation;
-
-		drive.mecanumDrive_Polar(velocity, angle, rotation);
-
+	private boolean isGyroAvailable()
+	{
+		return gyro != null && gyro.getDegrees() != Double.NaN;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	public void rotateSomeDegrees(double degrees) {
+	private void rotateDegreesGyroBased(double degrees, boolean clockWise)
+	{
 		double currentAngle = gyro.getDegrees();
-		while (gyro.getDegrees() < currentAngle + degrees) {
-			drive.mecanumDrive_Polar(0, 0, .75);
+		threadpool.submit(()-> {
+			while (gyro.getDegrees() < currentAngle + degrees)
+			{
+				drive.mecanumDrive_Polar(0, 0, ROTATE_POWER_INTO_MOTORS);
+			}
+			MecanumDrive.this.stop();
+		});
+	}
+
+	
+
+	private void rotateDegreesTimeBased(double degrees, boolean clockWise)
+	{
+		long timeToRotate = (long) (degrees * ROTATE_SECONDS_PER_DEGREE);
+		if (clockWise)
+		this.move(0.0, 0.0, ROTATE_POWER_INTO_MOTORS);
+		else
+			this.move(0.0, 0.0, -ROTATE_POWER_INTO_MOTORS);
+		clock.addListener((eventInfo) -> {
+			MecanumDrive.this.stop();
+		}, timeToRotate);
+	}
+
+	public void move(double magnitude, double angle, double rotation)
+	{
+//		this.currentVelocity = magnitude;
+//		this.currentAngle = angle;
+//		this.currentRotation = rotation;
+
+		drive.mecanumDrive_Polar(magnitude, angle, rotation);
+
+	}
+
+	public void rotate(double degrees, boolean clockWise)
+	{
+		if(isGyroAvailable())
+		{
+			rotateDegreesGyroBased(degrees, clockWise);
 		}
-		drive.stopMotor();
+		else
+		{
+			rotateDegreesTimeBased(degrees, clockWise);
+		}
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Relative to Face Forward
 	 * 
-	 * @generated
-	 * @ordered
+	 * @param speed
+	 * @param direction
 	 */
-	public void moveConstantVelocity(double speed, double direction) {
+	public void moveConstantVelocity(double speed, double direction)
+	{
 		this.move(speed, direction, 0);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 * @ordered
-	 */
-	public void stop() {
+	public void rotateConstantVelocity(boolean clockWise)
+	{
+		if (clockWise)
+		{
+			this.move(0.0, 0.0, ROTATE_CONSTANT);
+		} else
+		{
+			this.move(0.0, 0.0, -ROTATE_CONSTANT);
+		}
+
+	}
+
+	public void stop()
+	{
 		drive.mecanumDrive_Polar(0.0, 0, 0);
 	}
 
-	public void toLog() {
-	}
-
-	public void rotateToDegrees(double degrees) {
-		while (Math.abs(gyro.getDegrees() - degrees) > 0) {
-			drive.mecanumDrive_Polar(0, 0, .75);
-		}
-		drive.stopMotor();
+	public void toLog()
+	{
 	}
 
 	@Override
-	public void timeEvent(TimeEventArgs timeEvent) {
-		devAngle = (Math.toDegrees(Math.atan(accel.getAccelY()
-				/ accel.getAccelZ())));
-		if (devAngle > 5) {
-			drive.mecanumDrive_Polar(currentVelocity, currentAngle - devAngle,
-					currentRotation);
-		}
-		if (devAngle < -5) {
-			drive.mecanumDrive_Polar(currentVelocity, currentAngle - devAngle,
-					currentRotation);
-		}
+	public void timeEvent(TimeEventArgs timeEvent)
+	{
+//		devAngle = (Math.toDegrees(Math.atan(accel.getAccelY()
+//				/ accel.getAccelZ())));
+//		if (devAngle > 5)
+//		{
+//			drive.mecanumDrive_Polar(currentVelocity, currentAngle - devAngle,
+//					currentRotation);
+//		}
+//		if (devAngle < -5)
+//		{
+//			drive.mecanumDrive_Polar(currentVelocity, currentAngle - devAngle,
+//					currentRotation);
+//		}
 
 	}
 }

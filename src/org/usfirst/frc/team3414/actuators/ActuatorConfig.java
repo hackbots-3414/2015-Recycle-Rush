@@ -8,7 +8,7 @@ public class ActuatorConfig
 {
 	private static ActuatorConfig singleton; 
 	
-	private static final int LIFTER_GRIP = 0;
+	private static final int LIFTER_GRIP = 9;
 	private static final int LIFT_MOTOR = 5;
 	private IDriveTrain driveTrain;
 	private ILiftAssist forklift;
