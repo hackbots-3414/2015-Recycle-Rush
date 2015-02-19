@@ -1,6 +1,7 @@
 package org.usfirst.frc.team3414.sensors;
 
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.SPI.Port;
 
 
 public class SensorConfig {
@@ -14,6 +15,9 @@ public class SensorConfig {
 	private final int ULTRASONIC_REAR = 0;
 	private final int ULTRASONIC_RIGHT = 1;
     private final int ULTRASONIC_LEFT = 2;
+    /* Port for SPI */
+    private Port SPI_PORT = Port.kOnboardCS0;
+    private final int TEMP_NUMBER_OF_SENSORS = 5;
     
    	private IClock clock;
 	private ILimitSwitch forkLiftTop;
@@ -31,12 +35,9 @@ public class SensorConfig {
 //	private IMeasureDistance sensorBarSensor5;
 	private IPowerEventHandler powerEventSystem;
 	private IEncoder forkLiftEncoder;
+	private ISensorBar sensorBar;
 	private IMeasureDirection gyro;
-	public IMeasureDirection getGyro()
-	{
-		return gyro;
-	}
-
+	
 	private static SensorConfig singleton;
 	
 	private SensorConfig()
@@ -52,7 +53,8 @@ public class SensorConfig {
 		accelerometer = new OurBuiltInAccelerometer();
 		forkLiftBottom = new LimitSwitch(LIMIT_SWITCH_BOTTOM, true);
 		forkLiftTop = new LimitSwitch(LIMIT_SWITCH_TOP, true);
-		//TODO: implemet Driver and initialize gyro = new Gyroscope(0);
+		sensorBar = new SensorBar(SPI_PORT, TEMP_NUMBER_OF_SENSORS);
+		gyro = new Gyroscope(0);
 	}
 	
 	public static SensorConfig getInstance()
@@ -116,5 +118,14 @@ public class SensorConfig {
 	public IEncoder getForkLiftEncoder()
 	{
 		return forkLiftEncoder;
+	}
+
+	public ISensorBar getSensorBar()
+	{
+		return sensorBar;
+	}
+	public IMeasureDirection getGyro()
+	{
+		return gyro;
 	}
 }

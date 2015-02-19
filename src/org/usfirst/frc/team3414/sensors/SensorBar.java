@@ -1,6 +1,6 @@
 package org.usfirst.frc.team3414.sensors;
 
-public class SensorBar implements IDetectSweetSpot, ITimeListener
+public class SensorBar implements IDetectSweetSpot, ITimeListener, ISensorBar
 {
 	ISPI spi;
 	
@@ -60,7 +60,6 @@ public class SensorBar implements IDetectSweetSpot, ITimeListener
 	    }
 	}
 	
-	@Override
 	public SweetSpotState getSweetSpotState(SweetSpotMode mode)
 	{
 		SweetSpotState state = SweetSpotState.NONE;

@@ -21,24 +21,28 @@ import edu.wpi.first.wpilibj.SpeedController;
 
 public class MecanumDrive implements IDriveTrain, ITimeListener
 {
-	//private double currentVelocity, currentAngle, currentRotation;
+	private double currentVelocity, currentAngle, currentRotation;
 	private RobotDrive drive;
 	private IMeasureDirection gyro;
 	private IMeasureAcceleration accel;
-	//private double devAngle;
+	private double devAngle;
 	private SpeedController[] talons = new SpeedController[4];
 	private IClock clock;
 	private static final double ROTATE_CONSTANT = 0.5;
 	private double ROTATE_SECONDS_PER_DEGREE;
 	private double ROTATE_POWER_INTO_MOTORS;
 	private ExecutorService threadpool;
-	
+
+	long eventID;
+
+	double Kp = 1.0;
+
 	protected MecanumDrive(IClock handler, IMeasureAcceleration accelerometer,
 			IMeasureDirection gyro)
 	{
 		threadpool = Executors.newFixedThreadPool(1);
 		this.clock = handler;
-		clock.addListener(this, 2000, true);
+		eventID = clock.addListener(this, 2000, true);
 		this.gyro = gyro;
 		// THIS WORK!!!!!!!!!!!!!!!!!!!!!!!!!
 		accel = accelerometer;
@@ -60,7 +64,7 @@ public class MecanumDrive implements IDriveTrain, ITimeListener
 	private void rotateDegreesGyroBased(double degrees, boolean clockWise)
 	{
 		double currentAngle = gyro.getDegrees();
-		threadpool.submit(()-> {
+		threadpool.submit(() -> {
 			while (gyro.getDegrees() < currentAngle + degrees)
 			{
 				drive.mecanumDrive_Polar(0, 0, ROTATE_POWER_INTO_MOTORS);
@@ -69,13 +73,11 @@ public class MecanumDrive implements IDriveTrain, ITimeListener
 		});
 	}
 
-	
-
 	private void rotateDegreesTimeBased(double degrees, boolean clockWise)
 	{
 		long timeToRotate = (long) (degrees * ROTATE_SECONDS_PER_DEGREE);
 		if (clockWise)
-		this.move(0.0, 0.0, ROTATE_POWER_INTO_MOTORS);
+			this.move(0.0, 0.0, ROTATE_POWER_INTO_MOTORS);
 		else
 			this.move(0.0, 0.0, -ROTATE_POWER_INTO_MOTORS);
 		clock.addListener((eventInfo) -> {
@@ -85,9 +87,9 @@ public class MecanumDrive implements IDriveTrain, ITimeListener
 
 	public void move(double magnitude, double angle, double rotation)
 	{
-//		this.currentVelocity = magnitude;
-//		this.currentAngle = angle;
-//		this.currentRotation = rotation;
+		this.currentVelocity = magnitude;
+		this.currentAngle = angle;
+		this.currentRotation = rotation;
 
 		drive.mecanumDrive_Polar(magnitude, angle, rotation);
 
@@ -95,11 +97,10 @@ public class MecanumDrive implements IDriveTrain, ITimeListener
 
 	public void rotate(double degrees, boolean clockWise)
 	{
-		if(isGyroAvailable())
+		if (isGyroAvailable())
 		{
 			rotateDegreesGyroBased(degrees, clockWise);
-		}
-		else
+		} else
 		{
 			rotateDegreesTimeBased(degrees, clockWise);
 		}
@@ -137,21 +138,46 @@ public class MecanumDrive implements IDriveTrain, ITimeListener
 	{
 	}
 
+	int UPPER_BOUND_ACCEL = 5;
+	int LOWER_BOUND_ANGLE = 2;
+
+	double accelY;
+	double accelX;
+
 	@Override
 	public void timeEvent(TimeEventArgs timeEvent)
 	{
-//		devAngle = (Math.toDegrees(Math.atan(accel.getAccelY()
-//				/ accel.getAccelZ())));
-//		if (devAngle > 5)
-//		{
-//			drive.mecanumDrive_Polar(currentVelocity, currentAngle - devAngle,
-//					currentRotation);
-//		}
-//		if (devAngle < -5)
-//		{
-//			drive.mecanumDrive_Polar(currentVelocity, currentAngle - devAngle,
-//					currentRotation);
-//		}
+		if (timeEvent.getTimeEventID() == eventID)
+		{
+			if (gyro != null)
+			{
+				drive.mecanumDrive_Polar(currentVelocity,
+						currentAngle - gyro.getChangeInDirection() * Kp,
+						currentRotation);
+			}
+
+			if (accel != null)
+			{
+				accelY = accel.getAccelY();
+				accelX = accel.getAccelZ();
+
+				if ((accelY < UPPER_BOUND_ACCEL && accelY > -UPPER_BOUND_ACCEL)
+						&& (accelX < UPPER_BOUND_ACCEL && accelX > -UPPER_BOUND_ACCEL))
+				{
+					devAngle = (Math.toDegrees(Math.atan(accelY / accelX)));
+					if (devAngle > LOWER_BOUND_ANGLE)
+					{
+						drive.mecanumDrive_Polar(currentVelocity, currentAngle
+								- devAngle, currentRotation);
+					}
+					if (devAngle < -LOWER_BOUND_ANGLE)
+					{
+						drive.mecanumDrive_Polar(currentVelocity, currentAngle
+								- devAngle, currentRotation);
+					}
+				}
+			}
+		}
 
 	}
 }

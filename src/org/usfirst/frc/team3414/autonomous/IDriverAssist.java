@@ -1,5 +1,7 @@
 package org.usfirst.frc.team3414.autonomous;
 
+import org.usfirst.frc.team3414.sensors.SweetSpotMode;
+
 
 public  interface IDriverAssist 
 {
@@ -19,7 +21,7 @@ public  interface IDriverAssist
 	 * @ordered
 	 */
 	
-	public void binSweetSpot() ;
+	public void binSweetSpot(SweetSpotMode mode) ;
 	
 	/**
 	 * <!-- begin-user-doc -->
@@ -28,7 +30,7 @@ public  interface IDriverAssist
 	 * @ordered
 	 */
 	
-	public void correctRotation() ;
+	public void correctRotation(SweetSpotMode mode) ;
 	
 	/**
 	 * <!-- begin-user-doc -->
@@ -37,7 +39,7 @@ public  interface IDriverAssist
 	 * @ordered
 	 */
 	
-	public void toteSweetSpot() ;
+	public void toteSweetSpot(SweetSpotMode mode) ;
 	
 	
 }
