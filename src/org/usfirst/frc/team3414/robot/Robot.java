@@ -62,20 +62,33 @@ public class Robot extends IterativeRobot
 	public void teleopPeriodic()
 	{
 		
-		if(joy.getButtonSeven())
+		while(joy.getButtonSeven())
 		{
 			((Forklift)actuatorConfig.getForklift()).up();
 		}
-		else if(joy.getButtonEight())
+		if(joy.getButtonEight())
 		{
-			((Forklift)actuatorConfig.getForklift()).down();
+			while(!joy.getButtonEight())
+			{
+				((Forklift)actuatorConfig.getForklift()).down();
+			}
+			
+			// Currently the forklift does not engage when it goes down, only when going up.
+			// This is so because if we call this function it does not 'end' so to speak. It goes through the loop forever...
+			// Use the tote up and down functions
 		}
-		else {
-			((Forklift)actuatorConfig.getForklift()).stopLift();
-		}
+		
+		((Forklift)actuatorConfig.getForklift()).stopLift();
+		
 		if(joy.getButtonNine())
 		{
 			actuatorConfig.getDriveTrain().move(0, 0, SmartDashboard.getNumber("Rotational Speed", 0.5));
+		} if(joy.getButtonTwelve())
+		{
+			actuatorConfig.getServo().engage();
+		} if(joy.getButtonEleven())
+		{
+			actuatorConfig.getServo().disengage();
 		}
 		else{
 			actuatorConfig.getDriveTrain().move(joy.getMagnitude(), joy.getDirectionDegrees(), joy.getTwist());
