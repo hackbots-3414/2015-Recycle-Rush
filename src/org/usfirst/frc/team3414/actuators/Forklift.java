@@ -92,12 +92,13 @@ public class Forklift extends Thread implements ILiftAssist
 		up();
 		try
 		{
-			Thread.sleep(1000);
+			Thread.sleep(500);
 		} catch (InterruptedException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		encodedMotor.down(LIFTER_DOWN_SPEED);
 	}
 	@Override
