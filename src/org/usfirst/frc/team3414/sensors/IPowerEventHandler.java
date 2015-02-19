@@ -10,7 +10,8 @@ package org.usfirst.frc.team3414.sensors;
  */
 public  interface IPowerEventHandler 
 {
-	/**
+    
+    /**
 	 * 
 	 * Triggers an event when a voltage threshold is passed.
 	 * 
@@ -18,7 +19,7 @@ public  interface IPowerEventHandler
 	 * @ordered
 	 */
 	
-	public long addVoltageListener(IPowerBoardListener listener, PowerThreshold threshold, int channel) ;
+	public long addVoltageListener(IPowerEventListener listener, PowerThreshold threshold, int channel, boolean repeat) ;
 	
 	/**
 	 * 
@@ -28,7 +29,26 @@ public  interface IPowerEventHandler
 	 * @ordered
 	 */
 	
-	public long addCurrentListener(IPowerBoardListener listener, PowerThreshold highThreshold, int channel) ;
+	public long addCurrentListener(IPowerEventListener listener, PowerThreshold highThreshold, int channel, boolean repeat) ;
+	/**
+	 * 
+	 * Triggers an event when a voltage threshold is passed.
+	 * 
+	 * @generated
+	 * @ordered
+	 */
+	
+	public long addVoltageListener(IPowerEventListener listener, PowerThreshold threshold, int channel) ;
+	
+	/**
+	 * 
+	 * Triggers an event when a current threshold is passed.
+	 * 
+	 * @generated
+	 * @ordered
+	 */
+	
+	public long addCurrentListener(IPowerEventListener listener, PowerThreshold highThreshold, int channel) ;
 	
 	/**
 	 * 
