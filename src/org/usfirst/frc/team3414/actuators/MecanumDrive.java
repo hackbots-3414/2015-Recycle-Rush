@@ -36,7 +36,7 @@ public class MecanumDrive implements IDriveTrain, ITimeListener
 
 	protected MecanumDrive(IClock handler, IMeasureAcceleration accelerometer,
 			IMeasureDirection gyro, SpeedController leftFront,
-			SpeedController rightFront, SpeedController leftBack, SpeedController rightBack)
+			SpeedController rightFront, SpeedController leftRear, SpeedController rightRear)
 	{
 		threadpool = Executors.newFixedThreadPool(1);
 		this.clock = handler;
@@ -44,7 +44,7 @@ public class MecanumDrive implements IDriveTrain, ITimeListener
 		this.gyro = gyro;
 		// THIS WORK!!!!!!!!!!!!!!!!!!!!!!!!!
 		accel = accelerometer;
-		drive = new RobotDrive(leftFront, leftBack, rightFront, rightBack);
+		drive = new RobotDrive(leftFront, leftRear, rightFront, rightRear);
 		// gyro.reset();
 	}
 
