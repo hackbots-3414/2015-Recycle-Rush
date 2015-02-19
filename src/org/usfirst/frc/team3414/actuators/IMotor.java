@@ -7,7 +7,7 @@ package org.usfirst.frc.team3414.actuators;
  */
 public interface IMotor
 {
-	public void stop();
+    public void stop();
 
     public void down(double speed);
 
