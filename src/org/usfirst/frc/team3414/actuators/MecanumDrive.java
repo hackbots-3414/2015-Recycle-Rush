@@ -8,8 +8,6 @@ import org.usfirst.frc.team3414.sensors.IMeasureAcceleration;
 import org.usfirst.frc.team3414.sensors.IMeasureDirection;
 import org.usfirst.frc.team3414.sensors.ITimeListener;
 import org.usfirst.frc.team3414.sensors.TimeEventArgs;
-
-import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SpeedController;
 
@@ -26,7 +24,6 @@ public class MecanumDrive implements IDriveTrain, ITimeListener
 	private IMeasureDirection gyro;
 	private IMeasureAcceleration accel;
 	private double devAngle;
-	private SpeedController[] talons = new SpeedController[4];
 	private IClock clock;
 	private static final double ROTATE_CONSTANT = 0.5;
 	private double ROTATE_SECONDS_PER_DEGREE;
@@ -38,21 +35,16 @@ public class MecanumDrive implements IDriveTrain, ITimeListener
 	double Kp = 1.0;
 
 	protected MecanumDrive(IClock handler, IMeasureAcceleration accelerometer,
-			IMeasureDirection gyro)
+			IMeasureDirection gyro, SpeedController leftFront,
+			SpeedController rightFront, SpeedController leftRear, SpeedController rightRear)
 	{
 		threadpool = Executors.newFixedThreadPool(1);
 		this.clock = handler;
-		eventID = clock.addListener(this, 2000, true);
+		eventID = clock.addTimeListener(this, 2000, true);
 		this.gyro = gyro;
 		// THIS WORK!!!!!!!!!!!!!!!!!!!!!!!!!
 		accel = accelerometer;
-
-		for (int i = 0; i < talons.length; i++)
-		{
-			talons[i] = new CANTalon(i + 1, 10);
-		}
-
-		drive = new RobotDrive(talons[0], talons[1], talons[2], talons[3]);
+		drive = new RobotDrive(leftFront, leftRear, rightFront, rightRear);
 		// gyro.reset();
 	}
 
@@ -80,7 +72,7 @@ public class MecanumDrive implements IDriveTrain, ITimeListener
 			this.move(0.0, 0.0, ROTATE_POWER_INTO_MOTORS);
 		else
 			this.move(0.0, 0.0, -ROTATE_POWER_INTO_MOTORS);
-		clock.addListener((eventInfo) -> {
+		clock.addTimeListener((eventInfo) -> {
 			MecanumDrive.this.stop();
 		}, timeToRotate);
 	}

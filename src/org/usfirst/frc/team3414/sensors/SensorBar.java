@@ -39,7 +39,7 @@ public class SensorBar implements IDetectSweetSpot, ITimeListener, ISensorBar
 
 	protected SensorBar(edu.wpi.first.wpilibj.SPI.Port arduinoPort, int tempNumberOfSensors)
 	{
-		timeEventID = SensorConfig.getInstance().getClock().addListener(this, 1000); // Updates the values every second
+		timeEventID = SensorConfig.getInstance().getClock().addTimeListener(this, 1000); // Updates the values every second
 		
 		numberOfSensors = tempNumberOfSensors;
 		

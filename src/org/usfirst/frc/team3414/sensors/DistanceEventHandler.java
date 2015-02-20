@@ -4,7 +4,6 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -20,11 +19,11 @@ public class DistanceEventHandler extends Thread implements IDistanceEventHandle
 	private long updateInterval;
 	private ExecutorService executor; 
 	
-	private Map<Long, EventSubscription> subscriptions;
+	private Map<Long, DistanceEventSubscription> subscriptions;
 	
 	public DistanceEventHandler(int updateInterval) {
 		super();
-		this.subscriptions = new Hashtable<Long, EventSubscription>();
+		this.subscriptions = new Hashtable<Long, DistanceEventSubscription>();
 		this.updateInterval = updateInterval;
 		executor = Executors.newFixedThreadPool(2);
 		start();
@@ -43,7 +42,7 @@ public class DistanceEventHandler extends Thread implements IDistanceEventHandle
 	@Override
 	public long addListener(IMeasureDistanceListener listener, IMeasureDistance sensor, Range distance, boolean repeat) 
 	{
-		subscriptions.put(nextEventID, new EventSubscription(listener, sensor, distance, repeat));
+		subscriptions.put(nextEventID, new DistanceEventSubscription(listener, sensor, distance, repeat));
 		return nextEventID++;
 	}
 
@@ -63,7 +62,7 @@ public class DistanceEventHandler extends Thread implements IDistanceEventHandle
 			
 			for(final long key : keys)
 			{
-				final EventSubscription event = subscriptions.get(key);
+				final DistanceEventSubscription event = subscriptions.get(key);
 				
 				if(event != null)
 				{
@@ -107,18 +106,19 @@ public class DistanceEventHandler extends Thread implements IDistanceEventHandle
 					}
 				}
 			}
+			try
+			{
+				Thread.sleep(updateInterval);
+			} catch (InterruptedException e)
+			{
+				SmartDashboard.putString("DEBUG: ", "Distance Event Handler Failed to sleep");
+			}
 		}
 		
-		try
-		{
-			Thread.sleep(updateInterval);
-		} catch (InterruptedException e)
-		{
-			SmartDashboard.putString("DEBUG: ", "Distance Event Handler Failed to sleep");
-		}
+		
 	}
 	
-	private class EventSubscription
+	private class DistanceEventSubscription
 	{
 		IMeasureDistanceListener listener;
 		IMeasureDistance sensor;
@@ -126,7 +126,7 @@ public class DistanceEventHandler extends Thread implements IDistanceEventHandle
 		boolean repeat;
 		
 		
-		public EventSubscription(IMeasureDistanceListener listener, IMeasureDistance sensor, Range distance, boolean repeat) 
+		public DistanceEventSubscription(IMeasureDistanceListener listener, IMeasureDistance sensor, Range distance, boolean repeat) 
 		{
 			super();
 			this.listener = listener;

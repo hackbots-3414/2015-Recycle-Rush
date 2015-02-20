@@ -34,7 +34,7 @@ public class DriveIntoAuto implements AutonomousProcedure, ITimeListener
 	public void doAuto()
 	{
 		mecanumDrive.move(0, 1.0, 0.0); // Move forward into the autonomous zone
-		clock.addListener(this, 3000); //Change for timeout value (this sets the value where the robot gives up on finding the line and just stops by timebase)
+		clock.addTimeListener(this, 3000); //Change for timeout value (this sets the value where the robot gives up on finding the line and just stops by timebase)
 		
 		while(cameraAssist.isInAutoZone() == false)
 		{
