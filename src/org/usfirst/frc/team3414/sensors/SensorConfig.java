@@ -1,5 +1,8 @@
 package org.usfirst.frc.team3414.sensors;
 
+import org.usfirst.frc.team3414.autonomous.AutonomousSwitches;
+import org.usfirst.frc.team3414.autonomous.IVision;
+
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.SPI.Port;
 
@@ -10,7 +13,10 @@ public class SensorConfig {
 	private final int  LIFT_ENCODER_B = 4;
 	private final int LIMIT_SWITCH_TOP = 5;
 	private final int LIMIT_SWITCH_BOTTOM = 6;
-	
+	private final int AUTO_SWITCH_ONES = ;
+	private final int AUTO_SWITCH_TWOS = ;
+	private final int AUTO_SWITCH_FOURS = ;
+
 	/* ANALOG CHANNELS*/
 	private final int ULTRASONIC_REAR = 0;
 	private final int ULTRASONIC_RIGHT = 1;
@@ -37,6 +43,8 @@ public class SensorConfig {
 	private IEncoder forkLiftEncoder;
 	private ISensorBar sensorBar;
 	private IMeasureDirection gyro;
+	private ISwitch autoModeSelectSwitch;
+	private IVision visionAssist;
 	
 	private static SensorConfig singleton;
 	
@@ -55,6 +63,8 @@ public class SensorConfig {
 		forkLiftTop = new LimitSwitch(LIMIT_SWITCH_TOP, true);
 		sensorBar = new SensorBar(SPI_PORT, TEMP_NUMBER_OF_SENSORS);
 		gyro = new Gyroscope(0);
+		autoModeSelectSwitch = new AutonomousSwitches(AUTO_SWITCH_ONES, AUTO_SWITCH_TWOS, AUTO_SWITCH_FOURS);
+		visionAssist = new Camera();
 	}
 	
 	public static SensorConfig getInstance()
@@ -127,5 +137,15 @@ public class SensorConfig {
 	public IMeasureDirection getGyro()
 	{
 		return gyro;
+	}
+
+	public ISwitch getAutoModeSelectSwitch()
+	{
+		return autoModeSelectSwitch;
+	}
+
+	public IVision getVisionAssist()
+	{
+		return visionAssist;
 	}
 }

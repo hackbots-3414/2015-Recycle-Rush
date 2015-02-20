@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Vector;
 
 import org.usfirst.frc.team3414.autonomous.IDetectObjects;
+import org.usfirst.frc.team3414.autonomous.IVision;
 import org.usfirst.frc.team3414.autonomous.ObjectColor;
 import org.usfirst.frc.team3414.autonomous.ObjectType;
 import org.usfirst.frc.team3414.autonomous.Obstacle;
@@ -18,7 +19,7 @@ import com.ni.vision.NIVision.ImageType;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Camera implements IDetectObjects
+public class Camera implements IVision
 {
 
 	private boolean outputToDashboard = false;
@@ -625,7 +626,7 @@ public class Camera implements IDetectObjects
 		return obstacleList;
 	}
 
-	public boolean areWeInAutoZone()
+	public boolean isInAutoZone()
 	{
 		// TODO Auto-generated method stub
 		return false;

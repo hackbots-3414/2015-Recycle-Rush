@@ -1,11 +1,13 @@
 package org.usfirst.frc.team3414.autonomous;
+import org.usfirst.frc.team3414.actuators.ActuatorConfig;
 import org.usfirst.frc.team3414.actuators.Forklift;
 import org.usfirst.frc.team3414.actuators.IDriveTrain;
 import org.usfirst.frc.team3414.actuators.ILiftAssist;
 import org.usfirst.frc.team3414.sensors.Camera;
-import org.usfirst.frc.team3414.sensors.IDetectLines;
+import org.usfirst.frc.team3414.sensors.IDetectAutoZone;
 import org.usfirst.frc.team3414.sensors.ISwitch;
 import org.usfirst.frc.team3414.sensors.ITimeEventHandler;
+import org.usfirst.frc.team3414.sensors.SensorConfig;
 
 /**
  * Controls which autonomous procedure will run based on the autonomous switches at the time of running
@@ -15,24 +17,6 @@ import org.usfirst.frc.team3414.sensors.ITimeEventHandler;
  */
 public class AutonomousControl
 {	
-	public Camera cameraAssist = new Camera();
-
-	public ISwitch iAutonomousSwitches;
-	
-	public IDriverAssist iDriverAssist;
-	
-	public IDetectObjects iDetectObjects;
-	
-	public IDetectLines iDetectLines;
-	
-	public ILiftAssist iLiftAssist;
-	
-	public ITimeEventHandler timeEventHandler;
-	
-	public IDriveTrain mecanumDrive;
-	
-	private Forklift forklift;
-	
 	private AutonomousProcedure driveIntoAuto; // Creates all of the autonomouses that will be used.
 	private AutonomousProcedure oneYellowToteAuto;
 	private AutonomousProcedure twoYellowToteAuto;
@@ -41,24 +25,26 @@ public class AutonomousControl
 	private AutonomousProcedure twoRecycleBinAuto;
 	private AutonomousProcedure driveBackwardIntoAuto;
 	
-	public AutonomousControl(AutonnomousConfig config) 
+	ISwitch switches;
+	
+	public AutonomousControl() 
 	{
 		super();
-		iAutonomousSwitches = config.getiAutonomousSwitches();
-		iDriverAssist = config.getiDriverAssist();
-		iDetectObjects = config.getiDetectObjects();
-		iDetectLines = config.getiDetectLines();
-		iLiftAssist = config.getiLiftAssist();
-		mecanumDrive = config.getMecanumDrive();
-		forklift = config.getForklift();
 		
-		driveIntoAuto = new DriveIntoAuto(mecanumDrive, timeEventHandler); // Creates all of the autonomouses that will be used.
-		driveBackwardIntoAuto = new DriveBackwardIntoAuto(mecanumDrive, timeEventHandler);
-		oneYellowToteAuto = new OneYellowToteAuto(iDriverAssist, driveBackwardIntoAuto, forklift, mecanumDrive, timeEventHandler);
-		twoYellowToteAuto = new TwoYellowToteAuto(iDriverAssist, driveBackwardIntoAuto, cameraAssist, forklift, mecanumDrive, timeEventHandler);
-		threeYellowToteAuto = new ThreeYellowToteAuto(iDriverAssist, forklift, mecanumDrive, timeEventHandler);
-		oneRecycleBinAuto = new OneRecycleBinAuto(iDriverAssist, driveBackwardIntoAuto, forklift, mecanumDrive, timeEventHandler);
-		twoRecycleBinAuto = new TwoRecycleBinAuto(iDriverAssist, driveBackwardIntoAuto, forklift, mecanumDrive, timeEventHandler);
+		SensorConfig sensors = SensorConfig.getInstance();
+		ActuatorConfig actuators = ActuatorConfig.getInstance();
+		AutonomousConfig auton = AutonomousConfig.getInstance();
+		 
+		switches = sensors.getAutoModeSelectSwitch();
+		
+		
+		driveIntoAuto = new DriveIntoAuto(); // Creates all of the autonomouses that will be used.
+		driveBackwardIntoAuto = new DriveBackwardIntoAuto();
+		oneYellowToteAuto = new OneYellowToteAuto();
+		twoYellowToteAuto = new TwoYellowToteAuto();
+		threeYellowToteAuto = new ThreeYellowToteAuto();
+		oneRecycleBinAuto = new OneRecycleBinAuto();
+		twoRecycleBinAuto = new TwoRecycleBinAuto();
 	}
 
 	/**
@@ -66,8 +52,10 @@ public class AutonomousControl
 	 * 
 	 * @param AutonomousType
 	 */
-	public void doAuto(AutonomousMode AutonomousType) 
+	public void doAuto() 
 	{
+		SwitchPositions AutonomousType = switches.get();
+		
 		// If nothing is passed in then we will just not do anything
 		if(AutonomousType == null)
 		{
@@ -75,42 +63,42 @@ public class AutonomousControl
 		}
 		
 		// Each autonomous if loop calls it's respective autonomous procedure
-		if(AutonomousType == AutonomousMode.DRIVEINTOAUTO)
+		if(AutonomousType == SwitchPositions.DRIVEFORWARD)
 		{
 			driveIntoAuto.doAuto();
 		}
 		
-		if(AutonomousType == AutonomousMode.NOTHING)
+		if(AutonomousType == SwitchPositions.NOTHING)
 		{
 			return;
 		}
 		
-		if(AutonomousType == AutonomousMode.YELLOWTOTE1)
+		if(AutonomousType == SwitchPositions.YELLOWTOTE1)
 		{
 			oneYellowToteAuto.doAuto();
 		}
 		
-		if(AutonomousType == AutonomousMode.YELLOWTOTE2)
+		if(AutonomousType == SwitchPositions.YELLOWTOTE2)
 		{
 			twoYellowToteAuto.doAuto();
 		}
 		
-		if(AutonomousType == AutonomousMode.YELLOWTOTE3)
+		if(AutonomousType == SwitchPositions.YELLOWTOTE3)
 		{
 			threeYellowToteAuto.doAuto();
 		}
 		
-		if(AutonomousType == AutonomousMode.RECYCLECAN1)
+		if(AutonomousType == SwitchPositions.RECYCLECAN1)
 		{
 			oneRecycleBinAuto.doAuto();
 		}
 		
-		if(AutonomousType == AutonomousMode.RECYCLECAN2)
+		if(AutonomousType == SwitchPositions.RECYCLECAN2)
 		{
 			twoRecycleBinAuto.doAuto();
 		}
 		
-		if(AutonomousType == AutonomousMode.GREYTOTES)
+		if(AutonomousType == SwitchPositions.GREYTOTES)
 		{
 			// TODO: implement grey tote autonomous
 		}

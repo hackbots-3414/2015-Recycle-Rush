@@ -2,17 +2,17 @@ package org.usfirst.frc.team3414.teleop;
 
 public class Controller
 {	
-	MyJoystick joystick;
+	Logitech3DProJoystick joystick;
 	//MyJoystick gamepad;
 	
-	public Controller()
+	public Controller(int joystickChannel)
 	{
 		
-		joystick = new MyJoystick(1);
+		joystick = new Logitech3DProJoystick(joystickChannel);
 		//gamepad = new MyJoystick(2);
 	}
 	
-	public MyJoystick getJoy() {
+	public IJoystick getJoystick() {
 		return joystick;
 	}
 	/*

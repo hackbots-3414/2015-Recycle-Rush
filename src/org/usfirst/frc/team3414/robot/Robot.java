@@ -23,7 +23,7 @@ public class Robot extends IterativeRobot
 	Controller controller;
 	private boolean a = false;
 	private boolean b = false;
-	MyJoystick joy;
+	Logitech3DProJoystick joy;
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -35,7 +35,7 @@ public class Robot extends IterativeRobot
 		sensorConfig = SensorConfig.getInstance();
 		actuatorConfig = ActuatorConfig.getInstance();
 		controller = new Controller();
-		joy = controller.getJoy();
+		joy = controller.getJoystick();
 	}
 
 	public void autonomousInit()

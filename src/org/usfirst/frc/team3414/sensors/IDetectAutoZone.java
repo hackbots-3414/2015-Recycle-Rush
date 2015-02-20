@@ -7,7 +7,7 @@ package org.usfirst.frc.team3414.sensors;
  * <!--  end-user-doc  -->
  * @generated
  */
-public  interface IDetectLines 
+public  interface IDetectAutoZone 
 {
 	/**
 	 * <!-- begin-user-doc -->
@@ -16,7 +16,7 @@ public  interface IDetectLines
 	 * @ordered
 	 */
 	
-	public boolean areWeInAutoZone() ;
+	public boolean isInAutoZone() ;
 	
 	
 }
