@@ -23,7 +23,7 @@ public class TeleopControl
 	public TeleopControl(SensorConfig sensors, ActuatorConfig actuators)
 	{
 		this.sensors = sensors;
-		this.sensors.getClock().addListener(new ITimeListener()
+		this.sensors.getClock().addTimeListener(new ITimeListener()
 		{
 			
 			@Override

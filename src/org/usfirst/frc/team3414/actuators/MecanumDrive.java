@@ -40,7 +40,7 @@ public class MecanumDrive implements IDriveTrain, ITimeListener
 	{
 		threadpool = Executors.newFixedThreadPool(1);
 		this.clock = handler;
-		eventID = clock.addListener(this, 2000, true);
+		eventID = clock.addTimeListener(this, 2000, true);
 		this.gyro = gyro;
 		// THIS WORK!!!!!!!!!!!!!!!!!!!!!!!!!
 		accel = accelerometer;
@@ -72,7 +72,7 @@ public class MecanumDrive implements IDriveTrain, ITimeListener
 			this.move(0.0, 0.0, ROTATE_POWER_INTO_MOTORS);
 		else
 			this.move(0.0, 0.0, -ROTATE_POWER_INTO_MOTORS);
-		clock.addListener((eventInfo) -> {
+		clock.addTimeListener((eventInfo) -> {
 			MecanumDrive.this.stop();
 		}, timeToRotate);
 	}
