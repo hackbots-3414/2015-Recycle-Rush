@@ -1,10 +1,14 @@
 package org.usfirst.frc.team3414.teleop;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.usfirst.frc.team3414.actuators.ActuatorConfig;
 import org.usfirst.frc.team3414.actuators.IDriveTrain;
 import org.usfirst.frc.team3414.actuators.ILiftAssist;
 import org.usfirst.frc.team3414.autonomous.AutonomousConfig;
 import org.usfirst.frc.team3414.autonomous.IDriverAssist;
+import org.usfirst.frc.team3414.sensors.IClock;
 import org.usfirst.frc.team3414.sensors.ITimeListener;
 import org.usfirst.frc.team3414.sensors.SensorConfig;
 import org.usfirst.frc.team3414.sensors.SweetSpotMode;
@@ -15,6 +19,7 @@ public class TeleopControl
 	private IJoystick joystick;
 	private IDriveTrain driveTrain;
 	private ILiftAssist lifter;
+	private IClock clock;
 	
 	private IDriverAssist driverAssist;
 	
@@ -29,19 +34,27 @@ public class TeleopControl
 	final JoystickButtons STREIGHTEN_WITH_TOTE_WIDE = JoystickButtons.FIVE;
 	final JoystickButtons STREIGHTEN_WITH_TOTE_THIN = JoystickButtons.THREE;
 	
-	public TeleopControl(int joystickChannel)
+	final int JOYSTICK_PORT = 1;
+	
+	List<Long> eventID = new ArrayList<>();
+	
+	public TeleopControl()
 	{
 		SensorConfig sensors = SensorConfig.getInstance();
 		ActuatorConfig actuators = ActuatorConfig.getInstance();
 		
+		this.clock = sensors.getClock();
 		this.lifter = actuators.getForklift();
 		this.driveTrain = actuators.getDriveTrain();
 		this.driverAssist = AutonomousConfig.getInstance().getDriveAssist();
-		this.joystick = new Logitech3DProJoystick(joystickChannel);
+		this.joystick = new Logitech3DProJoystick(JOYSTICK_PORT);
 				
 		lifter.goToBottomLimit();
-		
-		sensors.getClock().addListener(new ITimeListener()
+	}
+	
+	public void enable()
+	{
+		eventID.add(clock.addTimeListener(new ITimeListener()
 		{
 
 			@Override
@@ -53,9 +66,9 @@ public class TeleopControl
 				}
 			}
 			
-		}, REFRESH_RATE_MS);
+		}, REFRESH_RATE_MS));
 		
-		sensors.getClock().addListener(new ITimeListener()
+		eventID.add(clock.addTimeListener(new ITimeListener()
 		{
 			@Override
 			public void timeEvent(TimeEventArgs timeEvent)
@@ -91,9 +104,9 @@ public class TeleopControl
 				}
 			}
 			
-		}, REFRESH_RATE_MS);
+		}, REFRESH_RATE_MS));
 		
-		sensors.getClock().addListener(new ITimeListener()
+		eventID.add(clock.addTimeListener(new ITimeListener()
 		{
 			@Override
 			public void timeEvent(TimeEventArgs timeEvent)
@@ -111,6 +124,15 @@ public class TeleopControl
 				}
 			}
 			
-		}, REFRESH_RATE_MS);
+		}, REFRESH_RATE_MS));
+	}
+	
+	public void disable()
+	{
+		for(int i = 0; i <= eventID.size(); i++)
+		{
+			clock.removeListener(eventID.get(i));
+			eventID.remove(i);
+		}
 	}
 }

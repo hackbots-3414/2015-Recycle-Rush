@@ -10,14 +10,12 @@ import edu.wpi.first.wpilibj.DigitalInput;
 
 public class MyLimitSwitch
 {
-    private DigitalInput limitSwitch;
     ISwitch iSwitch;
     boolean inverse;
     SwitchPositions position;
 
     public MyLimitSwitch(int channel, boolean inverse)
     {
-	limitSwitch = new DigitalInput(channel);
 	this.inverse = inverse;
     }
 

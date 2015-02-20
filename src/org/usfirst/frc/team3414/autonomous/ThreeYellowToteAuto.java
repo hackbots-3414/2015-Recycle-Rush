@@ -2,12 +2,11 @@ package org.usfirst.frc.team3414.autonomous;
 
 import java.util.List;
 
-import org.usfirst.frc.team3414.actuators.Forklift;
+import org.usfirst.frc.team3414.actuators.ActuatorConfig;
 import org.usfirst.frc.team3414.actuators.IDriveTrain;
-import org.usfirst.frc.team3414.actuators.MecanumDrive;
-import org.usfirst.frc.team3414.sensors.Camera;
-import org.usfirst.frc.team3414.sensors.ITimeEventHandler;
-import org.usfirst.frc.team3414.sensors.VirtualClock;
+import org.usfirst.frc.team3414.actuators.ILiftAssist;
+import org.usfirst.frc.team3414.sensors.SensorConfig;
+import org.usfirst.frc.team3414.sensors.SweetSpotMode;
 import org.usfirst.frc.team3414.autonomous.Obstacle;
 
 /**
@@ -19,43 +18,44 @@ import org.usfirst.frc.team3414.autonomous.Obstacle;
  */
 public class ThreeYellowToteAuto implements AutonomousProcedure {
 	
-	public IDriverAssist iDriverAssist;
+	private IDriverAssist driverAssist;
 
-	private DriveIntoAuto driveIntoZone;
+	private AutonomousProcedure driveIntoZone;
 	
-	private Camera cameraAssist = new Camera();
-
-	private Forklift forkLift;
+	private IVision cameraAssist;
+	
+	private ILiftAssist forkLift;
 	
 	private IDriveTrain mecanumDrive;
 	
 	private List<Obstacle> obstacleList;
 
 	private boolean detected = false;
-	
-	private ITimeEventHandler clock;
 
 
-	public ThreeYellowToteAuto(IDriverAssist iDriverAssist,Forklift forkLift, IDriveTrain mecanumDrive, ITimeEventHandler clock) 
+	public ThreeYellowToteAuto() 
 	{
 		super();
-		this.iDriverAssist = iDriverAssist;
-		this.forkLift = forkLift;
-		this.mecanumDrive = mecanumDrive;
-		this.clock = clock;
+		
+		ActuatorConfig actuators = ActuatorConfig.getInstance();
+		
+		this.driverAssist = AutonomousConfig.getInstance().getDriveAssist();
+		this.forkLift = actuators.getForklift();
+		this.mecanumDrive = actuators.getDriveTrain();
+		this.cameraAssist = SensorConfig.getInstance().getVisionAssist();
+		
+		driveIntoZone = new DriveIntoAuto();
 	}
 	
 	@Override
 	public void doAuto() 
 	{
-		driveIntoZone = new DriveIntoAuto(mecanumDrive, clock);
-
 		forkLift.goToGround(); // Moves to bottom level of lifting positions
 
-		iDriverAssist.toteSweetSpot(); // Moves toward tote that is placed in
+		driverAssist.toteSweetSpot(SweetSpotMode.TOTE_WIDE); // Moves toward tote that is placed in
 										// front of the robot at the beginning
 										// of a match
-		iDriverAssist.correctRotation(); // Correct rotation in front of the
+		driverAssist.correctRotation(SweetSpotMode.TOTE_WIDE); // Correct rotation in front of the
 											// tote
 
 		forkLift.nextToteLength(); // Pick up tote
@@ -102,7 +102,7 @@ public class ThreeYellowToteAuto implements AutonomousProcedure {
 			}
 		}
 
-		iDriverAssist.toteSweetSpot(); // get square with the tote and drive up
+		driverAssist.toteSweetSpot(SweetSpotMode.TOTE_WIDE); // get square with the tote and drive up
 										// to it correctly
 
 		forkLift.goToGround(); // Put tote back on the other tote and go back
@@ -141,7 +141,7 @@ public class ThreeYellowToteAuto implements AutonomousProcedure {
 			}
 		}
 
-		iDriverAssist.toteSweetSpot(); // get square with the tote and drive up
+		driverAssist.toteSweetSpot(SweetSpotMode.TOTE_WIDE); // get square with the tote and drive up
 										// to it correctly
 
 		forkLift.goToGround(); // Put tote back on the other tote and go back

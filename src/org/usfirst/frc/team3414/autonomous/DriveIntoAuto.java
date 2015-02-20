@@ -2,8 +2,6 @@ package org.usfirst.frc.team3414.autonomous;
 
 import org.usfirst.frc.team3414.actuators.ActuatorConfig;
 import org.usfirst.frc.team3414.actuators.IDriveTrain;
-import org.usfirst.frc.team3414.actuators.MecanumDrive;
-import org.usfirst.frc.team3414.sensors.Camera;
 import org.usfirst.frc.team3414.sensors.ITimeEventHandler;
 import org.usfirst.frc.team3414.sensors.ITimeListener;
 import org.usfirst.frc.team3414.sensors.SensorConfig;

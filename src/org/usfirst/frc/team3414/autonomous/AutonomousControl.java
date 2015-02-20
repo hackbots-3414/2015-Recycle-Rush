@@ -1,12 +1,5 @@
 package org.usfirst.frc.team3414.autonomous;
-import org.usfirst.frc.team3414.actuators.ActuatorConfig;
-import org.usfirst.frc.team3414.actuators.Forklift;
-import org.usfirst.frc.team3414.actuators.IDriveTrain;
-import org.usfirst.frc.team3414.actuators.ILiftAssist;
-import org.usfirst.frc.team3414.sensors.Camera;
-import org.usfirst.frc.team3414.sensors.IDetectAutoZone;
 import org.usfirst.frc.team3414.sensors.ISwitch;
-import org.usfirst.frc.team3414.sensors.ITimeEventHandler;
 import org.usfirst.frc.team3414.sensors.SensorConfig;
 
 /**
@@ -23,7 +16,6 @@ public class AutonomousControl
 	private AutonomousProcedure threeYellowToteAuto;
 	private AutonomousProcedure oneRecycleBinAuto;
 	private AutonomousProcedure twoRecycleBinAuto;
-	private AutonomousProcedure driveBackwardIntoAuto;
 	
 	ISwitch switches;
 	
@@ -31,15 +23,9 @@ public class AutonomousControl
 	{
 		super();
 		
-		SensorConfig sensors = SensorConfig.getInstance();
-		ActuatorConfig actuators = ActuatorConfig.getInstance();
-		AutonomousConfig auton = AutonomousConfig.getInstance();
-		 
-		switches = sensors.getAutoModeSelectSwitch();
-		
+		switches = SensorConfig.getInstance().getAutoModeSelectSwitch();
 		
 		driveIntoAuto = new DriveIntoAuto(); // Creates all of the autonomouses that will be used.
-		driveBackwardIntoAuto = new DriveBackwardIntoAuto();
 		oneYellowToteAuto = new OneYellowToteAuto();
 		twoYellowToteAuto = new TwoYellowToteAuto();
 		threeYellowToteAuto = new ThreeYellowToteAuto();
@@ -56,51 +42,40 @@ public class AutonomousControl
 	{
 		SwitchPositions AutonomousType = switches.get();
 		
-		// If nothing is passed in then we will just not do anything
-		if(AutonomousType == null)
-		{
-			return;
-		}
-		
 		// Each autonomous if loop calls it's respective autonomous procedure
-		if(AutonomousType == SwitchPositions.DRIVEFORWARD)
+		switch(AutonomousType)
 		{
+		case DRIVEFORWARD:
 			driveIntoAuto.doAuto();
-		}
-		
-		if(AutonomousType == SwitchPositions.NOTHING)
-		{
-			return;
-		}
-		
-		if(AutonomousType == SwitchPositions.YELLOWTOTE1)
-		{
+			break;
+		case NOTHING:
+			break;
+		case YELLOWTOTE1:
 			oneYellowToteAuto.doAuto();
-		}
-		
-		if(AutonomousType == SwitchPositions.YELLOWTOTE2)
-		{
+			break;
+		case YELLOWTOTE2:
 			twoYellowToteAuto.doAuto();
-		}
-		
-		if(AutonomousType == SwitchPositions.YELLOWTOTE3)
-		{
+			break;
+		case YELLOWTOTE3:
 			threeYellowToteAuto.doAuto();
-		}
-		
-		if(AutonomousType == SwitchPositions.RECYCLECAN1)
-		{
+			break;
+		case RECYCLECAN1:
 			oneRecycleBinAuto.doAuto();
-		}
-		
-		if(AutonomousType == SwitchPositions.RECYCLECAN2)
-		{
+			break;
+		case RECYCLECAN2:
 			twoRecycleBinAuto.doAuto();
-		}
-		
-		if(AutonomousType == SwitchPositions.GREYTOTES)
-		{
-			// TODO: implement grey tote autonomous
+			break;
+		case GREYTOTES:
+			//TODO: Implement grey tote auto
+			break;
+			
+			
+		case OFF:
+			break;
+		case ON:
+			break;
+		default:
+			break;
 		}
 	}
 }
