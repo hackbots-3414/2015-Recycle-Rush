@@ -1,9 +1,7 @@
 package org.usfirst.frc.team3414.actuators;
 
 /**
- * <!-- begin-user-doc -->
- * <!--  end-user-doc  -->
- * @generated
+ * implemented by Motor.java
  */
 public interface IMotor
 {

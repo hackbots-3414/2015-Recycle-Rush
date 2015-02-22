@@ -7,11 +7,27 @@ public class Display
 
 	private static Display singleton = null;
 
+	// FORKLIFT
+	private long expectedForkPosition;
+	private int currentForkPosition;
+	private double encoderRate;
+	private boolean topLimitHit;
+	private boolean bottomLimitHit;
+	// JOYSTICK
+	private double magnitude;
+	private double direction;
+	private double twist;
+	// MECANUM_DRIVE
+	private double accelX;
+	private double accelY;
+	private double gyroDegrees;
+	private double gyroRate;
+
 	private Display()
 	{
 	}
 
-	public static Display createInstance()
+	public static Display getInstance()
 	{
 		if (singleton == null)
 		{
@@ -21,76 +37,56 @@ public class Display
 		return singleton;
 	}
 
-	public static Display getInstance()
-	{
-		if (singleton == null)
-		{
-			throw new NullPointerException("Display hasn't been created yet");
-		}
-
-		return singleton;
-	}
-
-	private int time;
-
-	boolean lo = false;
-
 	public void putGameData()
 	{
-		SmartDashboard.putBoolean("Bool: ", lo);
-		SmartDashboard.putNumber("Time: ", time);
+		// FORKLIFT
+		SmartDashboard.putNumber("Expected Forklift Position: ", expectedForkPosition);
+		SmartDashboard.putNumber("Current Forklift Position: ", currentForkPosition);
+		SmartDashboard.putBoolean("Top Limit Switch Hit: ", topLimitHit);
+		SmartDashboard.putBoolean("Bottom Limit Switch Hit: ", bottomLimitHit);
 	}
 
 	public void putDiagnosticsData()
 	{
-		SmartDashboard.putBoolean("Bool: ", lo);
-	}
-
-	public void setTimerLog(int time)
-	{
-		this.time = time;
-	}
-
-	public void setDriveData(double getGyroRate, double getJoyMagnitude, double getJoyDirection, double getJoyDirectionAdjustWithGyro,
-			double getJoyTwist)
-	{
-		/*
-		 * SmartDashboard.putNumber("Gyro Value (rate)", gyro.getRate());
-		 * SmartDashboard.putNumber("Joystick Value Magnitude",
-		 * joystick.getMagnitude());
-		 * SmartDashboard.putNumber("Joystick Value Direction",
-		 * joystick.getDirectionDegrees());
-		 * SmartDashboard.putNumber("Joystick Direction - gyro rate",
-		 * angle-(gyro.getRate()*Kp));
-		 * SmartDashboard.putNumber("Joystick Value Twist",
-		 * joystick.getTwist());
-		 */
-	}
-
-	public void setGyroData(double gyroAngle, double gyroRate)
-	{
-		/*
-		 * SmartDashboard.putNumber("Gyro Value (rate)", gyro.getRate());
-		 * SmartDashboard.putNumber("Joystick Value Magnitude",
-		 * joystick.getMagnitude());
-		 * SmartDashboard.putNumber("Joystick Value Direction",
-		 * joystick.getDirectionDegrees());
-		 * SmartDashboard.putNumber("Joystick Direction - gyro rate",
-		 * angle-(gyro.getRate()*Kp));
-		 * SmartDashboard.putNumber("Joystick Value Twist",
-		 * joystick.getTwist());
-		 */
-	}
-
-	public void setForkliftData(int expectedPosition, double currentPosition, double rate, boolean topLimitHit, boolean bottomLimitHit)
-	{
-
-		SmartDashboard.putNumber("Expected Forklift Position: ", expectedPosition);
-		SmartDashboard.putNumber("Current Forklift Position: ", currentPosition);
-		SmartDashboard.putNumber("Forklift Encoder Rate: ", rate);
+		// FORKLIFT
+		SmartDashboard.putNumber("Expected Forklift Position: ", expectedForkPosition);
+		SmartDashboard.putNumber("Current Forklift Position: ", currentForkPosition);
+		SmartDashboard.putNumber("Forklift Encoder Rate: ", encoderRate);
 		SmartDashboard.putBoolean("Top Limit Switch Hit: ", topLimitHit);
 		SmartDashboard.putBoolean("Bottom Limit Switch Hit: ", bottomLimitHit);
+		// JOYSTICK
+		SmartDashboard.putNumber("Joystick Magnitude: ", magnitude);
+		SmartDashboard.putNumber("Joystick Direction: ", direction);
+		SmartDashboard.putNumber("Joystick Twist: ", twist);
+		// DRIVE_TRAIN
+		SmartDashboard.putNumber("Accelerometer X: ", accelX);
+		SmartDashboard.putNumber("Accelerometer Y: ", accelY);
+		SmartDashboard.putNumber("Gyro Degrees: ", gyroDegrees);
+		SmartDashboard.putNumber("Gyro Rate (Degrees Per Second): ", gyroRate);
+	}
 
+	public void setDriveData(double _accelX, double _accelY, double _gyroDegrees, double _gyroRate)
+	{
+		this.accelX = _accelX;
+		this.accelY = _accelY;
+		this.gyroDegrees = _gyroDegrees;
+		this.gyroRate = _gyroRate;
+	}
+
+	public void setForkliftData(int expectedPosition, int currentPosition, double rate, boolean _topLimitHit, boolean _bottomLimitHit)
+	{
+		this.expectedForkPosition = expectedPosition;
+		this.currentForkPosition = currentPosition;
+		this.encoderRate = rate;
+		this.topLimitHit = _topLimitHit;
+		this.bottomLimitHit = _bottomLimitHit;
+	}
+
+	public void setJoyData(double _magnitude, double _direction, double _twist)
+	{
+		this.magnitude = _magnitude;
+		this.direction = _direction;
+		this.twist = _twist;
 	}
 
 }

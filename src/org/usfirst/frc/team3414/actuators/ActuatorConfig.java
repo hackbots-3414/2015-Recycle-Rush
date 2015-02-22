@@ -18,22 +18,15 @@ public class ActuatorConfig
 	private ILiftAssist forklift;
 	private IEncodedMotor motor;
 	private IServo servo;
-	private CANTalon leftFront;
-	private CANTalon rightFront;
-	private CANTalon leftRear;
-	private CANTalon rightRear;
 	
 	private ActuatorConfig()
 	{
 		SensorConfig sensors = SensorConfig.getInstance();
-		leftFront = new CANTalon(MOTOR_LEFT_FRONT);
-		rightFront = new CANTalon(MOTOR_RIGHT_FRONT);
-		leftRear = new CANTalon(MOTOR_LEFT_REAR);
-		rightRear = new CANTalon(MOTOR_RIGHT_REAR);
-		driveTrain = new MecanumDrive(sensors.getClock(), sensors.getAccelerometer(), sensors.getGyro(), leftFront, rightFront, leftRear, rightRear);
+		driveTrain = new MecanumDrive(sensors.getClock(), sensors.getAccelerometer(), sensors.getGyro(), new CANTalon(MOTOR_LEFT_FRONT), new CANTalon(MOTOR_RIGHT_FRONT), new CANTalon(MOTOR_LEFT_REAR), new CANTalon(MOTOR_RIGHT_REAR));
 		motor = new EncodedMotor(new CANTalon(LIFT_MOTOR), sensors.getForkLiftEncoder());
 		servo = new Servo(LIFTER_GRIP);
 		forklift = new Forklift(motor, sensors.getForkLiftTop(), sensors.getForkLiftBottom(), servo);
+		forklift.start();
 	}
 	
 	public static ActuatorConfig getInstance()

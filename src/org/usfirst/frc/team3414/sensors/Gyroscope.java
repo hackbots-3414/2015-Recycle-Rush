@@ -1,7 +1,6 @@
  package org.usfirst.frc.team3414.sensors;
 
 import edu.wpi.first.wpilibj.Gyro;
-import org.usfirst.frc.team3414.teleop.Display;
 
 public class Gyroscope implements IMeasureDirection
 {
@@ -24,7 +23,7 @@ public class Gyroscope implements IMeasureDirection
 	/*
 	 * Rate of change of angle per second
 	 */
-	public double getChangeInDirection()
+	public double getChangeInDegreesPerSecond()
 	{
 		return (OnlyGyro.getRate() * rateOffset);
 	}
@@ -37,10 +36,6 @@ public class Gyroscope implements IMeasureDirection
 	public void reset()
 	{
 		OnlyGyro.reset();
-	}
-
-	public void display() {
-		Display.getInstance().setGyroData(this.getDegrees(), this.getChangeInDirection());
 	}
 
 	public double getRadians()

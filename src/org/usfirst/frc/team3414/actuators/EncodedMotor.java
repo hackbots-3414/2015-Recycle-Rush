@@ -4,6 +4,10 @@ import org.usfirst.frc.team3414.sensors.IEncoder;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.SpeedController;
 
+/**
+ * Used in Forklift.java
+ * (NOTE: Is there a problem that both EncodedMotor.java and Encoder.java implement IEncoder.java, such that they both use the same emthods but possible different operations?)
+ */
 public class EncodedMotor extends Motor implements IEncodedMotor {
 
 	private IEncoder encoder;
@@ -41,8 +45,7 @@ public class EncodedMotor extends Motor implements IEncodedMotor {
 	@Override
 	public boolean getDirection()
 	{
-		// TODO Auto-generated method stub
-		return false;
+		return encoder.getDirection();
 	}
 
 
@@ -50,8 +53,7 @@ public class EncodedMotor extends Motor implements IEncodedMotor {
 	@Override
 	public double getDistance()
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		return encoder.getDistance();
 	}
 
 
@@ -59,7 +61,7 @@ public class EncodedMotor extends Motor implements IEncodedMotor {
 	@Override
 	public void setDistancePerPulse(double distancePerPulse)
 	{
-		// TODO Auto-generated method stub
+		encoder.setDistancePerPulse(distancePerPulse);
 		
 	}
 
@@ -85,8 +87,7 @@ public class EncodedMotor extends Motor implements IEncodedMotor {
 	@Override
 	public boolean getStopped()
 	{
-		// TODO Auto-generated method stub
-		return false;
+		return encoder.getStopped();
 	}
 
 
@@ -94,7 +95,7 @@ public class EncodedMotor extends Motor implements IEncodedMotor {
 	@Override
 	public void reset()
 	{
-		// TODO Auto-generated method stub
+		encoder.reset();
 		
 	}
 }
