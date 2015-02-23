@@ -12,7 +12,7 @@ public  interface IDriverAssist
 	 * @ordered
 	 */
 	
-	public void avoidDebris() ;
+	public void avoidSideDebris() ;
 	
 	/**
 	 * <!-- begin-user-doc -->
