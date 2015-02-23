@@ -11,7 +11,9 @@ public class Forklift extends Thread implements ILiftAssist
 	private static final double ALLOWANCE = 5.0;
 	private static final double LIFTER_UP_SPEED = 0.75;
 	private static final double LIFTER_DOWN_SPEED = 0.50;
-
+	
+//These are raw encoder values. Fill these integers in corresponding to the robot in use (Alpha or Beta)
+	
 	private static final int LOWER_LIMIT;
 	private static final int GROUND;
 	private static final int ONE;
@@ -39,7 +41,7 @@ public class Forklift extends Thread implements ILiftAssist
 		latch.disengage();
 	}
 
-	publick void run() // TODO: ERROR- THREAD IS NEVER INITIATED VIA INTERFACE
+	public void run() // TODO: ERROR- THREAD IS NEVER INITIATED VIA INTERFACE
 	// public void run()
 	{
 		if (RobotStatus.isRunning())
