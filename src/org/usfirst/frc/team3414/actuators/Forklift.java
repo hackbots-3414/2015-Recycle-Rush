@@ -184,16 +184,4 @@ public class Forklift extends Thread implements ILiftAssist
 		}
 
 	}
-
-	/*
-	public void setSpeed(double speed) {
-		this.gravityTestMotorSpeed = speed;
-	}
-	*/
-	
-	public void toDisplay()
-	{
-		Display.getInstance().setForkliftData(goToPosition, encodedMotor.getPosition(), encodedMotor.getRate(), topSwitch.isHit(), botSwitch.isHit());
-	}
-
 }

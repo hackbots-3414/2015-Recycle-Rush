@@ -1,31 +1,36 @@
 package org.usfirst.frc.team3414.autonomous;
+
 import org.usfirst.frc.team3414.sensors.ISwitch;
 import org.usfirst.frc.team3414.sensors.SensorConfig;
 
 /**
- * Controls which autonomous procedure will run based on the autonomous switches at the time of running
+ * Controls which autonomous procedure will run based on the autonomous switches
+ * at the time of running
  * 
  * @author Ray
  *
  */
 public class AutonomousControl
-{	
-	private AutonomousProcedure driveIntoAuto; // Creates all of the autonomouses that will be used.
+{
+	private AutonomousProcedure driveIntoAuto; // Creates all of the
+												// autonomouses that will be
+												// used.
 	private AutonomousProcedure oneYellowToteAuto;
 	private AutonomousProcedure twoYellowToteAuto;
 	private AutonomousProcedure threeYellowToteAuto;
 	private AutonomousProcedure oneRecycleBinAuto;
 	private AutonomousProcedure twoRecycleBinAuto;
-	
+
 	ISwitch switches;
-	
-	public AutonomousControl() 
+
+	public AutonomousControl()
 	{
 		super();
-		
+
 		switches = SensorConfig.getInstance().getAutoModeSelectSwitch();
-		
-		driveIntoAuto = new DriveIntoAuto(); // Creates all of the autonomouses that will be used.
+
+		driveIntoAuto = new DriveIntoAuto(); // Creates all of the autonomouses
+												// that will be used.
 		oneYellowToteAuto = new OneYellowToteAuto();
 		twoYellowToteAuto = new TwoYellowToteAuto();
 		threeYellowToteAuto = new ThreeYellowToteAuto();
@@ -34,16 +39,17 @@ public class AutonomousControl
 	}
 
 	/**
-	 * Calls the autonomous selected by the inputed AutonomousType, usually from the counter switch on the robot.
+	 * Calls the autonomous selected by the inputed AutonomousType, usually from
+	 * the counter switch on the robot.
 	 * 
 	 * @param AutonomousType
 	 */
-	public void doAuto() 
+	public void doAuto()
 	{
 		SwitchPositions AutonomousType = switches.get();
-		
+
 		// Each autonomous if loop calls it's respective autonomous procedure
-		switch(AutonomousType)
+		switch (AutonomousType)
 		{
 		case DRIVEFORWARD:
 			driveIntoAuto.doAuto();
@@ -66,10 +72,9 @@ public class AutonomousControl
 			twoRecycleBinAuto.doAuto();
 			break;
 		case GREYTOTES:
-			//TODO: Implement grey tote auto
+			// TODO: Implement grey tote auto
 			break;
-			
-			
+
 		case OFF:
 			break;
 		case ON:
@@ -79,4 +84,3 @@ public class AutonomousControl
 		}
 	}
 }
-

@@ -1,96 +1,132 @@
 package org.usfirst.frc.team3414.teleop;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.usfirst.frc.team3414.actuators.ActuatorConfig;
+import org.usfirst.frc.team3414.sensors.IClock;
+import org.usfirst.frc.team3414.sensors.ITimeListener;
+import org.usfirst.frc.team3414.sensors.SensorConfig;
+import org.usfirst.frc.team3414.sensors.TimeEventArgs;
 
 public class Display
 {
 
+	long gameDataEventID;
+	long diagnosticsDataEventID;
+	long driveDataEventID;
+	long sensorDataEventID;
+	int refreshRateMillis;
+	
+	SensorConfig sensors = SensorConfig.getInstance();
+	ActuatorConfig actuators = ActuatorConfig.getInstance();
+	
+	IClock clock = sensors.getClock();
+	
 	private static Display singleton = null;
 
 	private Display()
 	{
-	}
-
-	public static Display createInstance()
-	{
-		if (singleton == null)
-		{
-			singleton = new Display();
-		}
-
-		return singleton;
+		
 	}
 
 	public static Display getInstance()
 	{
-		if (singleton == null)
+		if(singleton == null)
 		{
-			throw new NullPointerException("Display hasn't been created yet");
+			singleton = new Display();
 		}
-
 		return singleton;
 	}
-
-	private int time;
-
-	boolean lo = false;
-
-	public void putGameData()
+	
+	public void enableGameData()
 	{
-		SmartDashboard.putBoolean("Bool: ", lo);
-		SmartDashboard.putNumber("Time: ", time);
+		gameDataEventID = clock.addTimeListener(new ITimeListener()
+		{
+
+			@Override
+			public void timeEvent(TimeEventArgs timeEvent)
+			{
+				if(timeEvent.getTimeEventID() == gameDataEventID)
+				{
+					// Smart dashboard calls to put game data here
+				}
+			}
+			
+		}, refreshRateMillis);
+	}
+	
+	public void disableGameData()
+	{
+		clock.removeListener(gameDataEventID);
 	}
 
-	public void putDiagnosticsData()
+	public void enableDiagnosticsData()
 	{
-		SmartDashboard.putBoolean("Bool: ", lo);
+		diagnosticsDataEventID = clock.addTimeListener(new ITimeListener()
+		{
+
+			@Override
+			public void timeEvent(TimeEventArgs timeEvent)
+			{
+				if(timeEvent.getTimeEventID() == gameDataEventID)
+				{
+					// Smart dashboard calls to put diagnostics data here
+				}
+			}
+			
+		}, refreshRateMillis);
+	}
+	
+	public void disableDiagnosticsData()
+	{
+		clock.removeListener(gameDataEventID);
 	}
 
-	public void setTimerLog(int time)
+	public void enableDriveData()
 	{
-		this.time = time;
+		driveDataEventID = clock.addTimeListener(new ITimeListener()
+		{
+
+			@Override
+			public void timeEvent(TimeEventArgs timeEvent)
+			{
+				if(timeEvent.getTimeEventID() == gameDataEventID)
+				{
+					// Smart dashboard calls to put drive data here
+				}
+			}
+			
+		}, refreshRateMillis);
 	}
 
-	public void setDriveData(double getGyroRate, double getJoyMagnitude, double getJoyDirection, double getJoyDirectionAdjustWithGyro,
-			double getJoyTwist)
+	public void disableDriveData()
 	{
-		/*
-		 * SmartDashboard.putNumber("Gyro Value (rate)", gyro.getRate());
-		 * SmartDashboard.putNumber("Joystick Value Magnitude",
-		 * joystick.getMagnitude());
-		 * SmartDashboard.putNumber("Joystick Value Direction",
-		 * joystick.getDirectionDegrees());
-		 * SmartDashboard.putNumber("Joystick Direction - gyro rate",
-		 * angle-(gyro.getRate()*Kp));
-		 * SmartDashboard.putNumber("Joystick Value Twist",
-		 * joystick.getTwist());
-		 */
+		clock.removeListener(driveDataEventID);
 	}
-
-	public void setGyroData(double gyroAngle, double gyroRate)
+	
+	public void enableSensorData()
 	{
-		/*
-		 * SmartDashboard.putNumber("Gyro Value (rate)", gyro.getRate());
-		 * SmartDashboard.putNumber("Joystick Value Magnitude",
-		 * joystick.getMagnitude());
-		 * SmartDashboard.putNumber("Joystick Value Direction",
-		 * joystick.getDirectionDegrees());
-		 * SmartDashboard.putNumber("Joystick Direction - gyro rate",
-		 * angle-(gyro.getRate()*Kp));
-		 * SmartDashboard.putNumber("Joystick Value Twist",
-		 * joystick.getTwist());
-		 */
+		sensorDataEventID = clock.addTimeListener(new ITimeListener()
+		{
+
+			@Override
+			public void timeEvent(TimeEventArgs timeEvent)
+			{
+				if(timeEvent.getTimeEventID() == gameDataEventID)
+				{
+					// display sensor data here
+				}
+			}
+			
+		}, refreshRateMillis);
 	}
-
-	public void setForkliftData(int expectedPosition, double currentPosition, double rate, boolean topLimitHit, boolean bottomLimitHit)
+	
+	public void disableSensorData()
 	{
-
-		SmartDashboard.putNumber("Expected Forklift Position: ", expectedPosition);
-		SmartDashboard.putNumber("Current Forklift Position: ", currentPosition);
-		SmartDashboard.putNumber("Forklift Encoder Rate: ", rate);
-		SmartDashboard.putBoolean("Top Limit Switch Hit: ", topLimitHit);
-		SmartDashboard.putBoolean("Bottom Limit Switch Hit: ", bottomLimitHit);
-
+		clock.removeListener(sensorDataEventID);
+	}
+	
+	public void setRefreshRate(int refreshRateMillis)
+	{
+		this.refreshRateMillis = refreshRateMillis;
 	}
 
 }
