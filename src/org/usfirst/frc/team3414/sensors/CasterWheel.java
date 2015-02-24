@@ -66,7 +66,7 @@ public class CasterWheel implements IMeasureDirection
 	 * @ordered
 	 */
 	
-	public double getChangeInDirection() {
+	public double getChangeInDegreesPerSecond() {
 		// TODO implement me
 		return 0L;	
 	}

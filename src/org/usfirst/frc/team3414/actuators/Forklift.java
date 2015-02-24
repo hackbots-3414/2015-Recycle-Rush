@@ -183,10 +183,11 @@ public class Forklift extends Thread implements ILiftAssist
 
 	}
 
-	/*
-	public void setSpeed(double speed) {
-		this.gravityTestMotorSpeed = speed;
+	@Override
+	public void toDisplay()
+	{
+		// TODO Auto-generated method stub
+		
 	}
-	*/
 
 }

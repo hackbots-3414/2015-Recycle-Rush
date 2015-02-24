@@ -23,7 +23,7 @@ public class Gyroscope implements IMeasureDirection
 	/*
 	 * Rate of change of angle per second
 	 */
-	public double getChangeInDirection()
+	public double getChangeInDegreesPerSecond()
 	{
 		return (OnlyGyro.getRate() * rateOffset);
 	}

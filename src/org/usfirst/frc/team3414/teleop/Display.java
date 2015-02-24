@@ -1,132 +1,92 @@
 package org.usfirst.frc.team3414.teleop;
 
-import org.usfirst.frc.team3414.actuators.ActuatorConfig;
-import org.usfirst.frc.team3414.sensors.IClock;
-import org.usfirst.frc.team3414.sensors.ITimeListener;
-import org.usfirst.frc.team3414.sensors.SensorConfig;
-import org.usfirst.frc.team3414.sensors.TimeEventArgs;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Display
 {
 
-	long gameDataEventID;
-	long diagnosticsDataEventID;
-	long driveDataEventID;
-	long sensorDataEventID;
-	int refreshRateMillis;
-	
-	SensorConfig sensors = SensorConfig.getInstance();
-	ActuatorConfig actuators = ActuatorConfig.getInstance();
-	
-	IClock clock = sensors.getClock();
-	
 	private static Display singleton = null;
+
+	// FORKLIFT
+	private long expectedForkPosition;
+	private int currentForkPosition;
+	private double encoderRate;
+	private boolean topLimitHit;
+	private boolean bottomLimitHit;
+	// JOYSTICK
+	private double magnitude;
+	private double direction;
+	private double twist;
+	// MECANUM_DRIVE
+	private double accelX;
+	private double accelY;
+	private double gyroDegrees;
+	private double gyroRate;
 
 	private Display()
 	{
-		
 	}
 
 	public static Display getInstance()
 	{
-		if(singleton == null)
+		if (singleton == null)
 		{
 			singleton = new Display();
 		}
+
 		return singleton;
 	}
-	
-	public void enableGameData()
-	{
-		gameDataEventID = clock.addTimeListener(new ITimeListener()
-		{
 
-			@Override
-			public void timeEvent(TimeEventArgs timeEvent)
-			{
-				if(timeEvent.getTimeEventID() == gameDataEventID)
-				{
-					// Smart dashboard calls to put game data here
-				}
-			}
-			
-		}, refreshRateMillis, true);
-	}
-	
-	public void disableGameData()
+	public void putGameData()
 	{
-		clock.removeListener(gameDataEventID);
+		// FORKLIFT
+		SmartDashboard.putNumber("Expected Forklift Position: ", expectedForkPosition);
+		SmartDashboard.putNumber("Current Forklift Position: ", currentForkPosition);
+		SmartDashboard.putBoolean("Top Limit Switch Hit: ", topLimitHit);
+		SmartDashboard.putBoolean("Bottom Limit Switch Hit: ", bottomLimitHit);
 	}
 
-	public void enableDiagnosticsData()
+	public void putDiagnosticsData()
 	{
-		diagnosticsDataEventID = clock.addTimeListener(new ITimeListener()
-		{
-
-			@Override
-			public void timeEvent(TimeEventArgs timeEvent)
-			{
-				if(timeEvent.getTimeEventID() == gameDataEventID)
-				{
-					// Smart dashboard calls to put diagnostics data here
-				}
-			}
-			
-		}, refreshRateMillis, true);
-	}
-	
-	public void disableDiagnosticsData()
-	{
-		clock.removeListener(gameDataEventID);
+		// FORKLIFT
+		SmartDashboard.putNumber("Expected Forklift Position: ", expectedForkPosition);
+		SmartDashboard.putNumber("Current Forklift Position: ", currentForkPosition);
+		SmartDashboard.putNumber("Forklift Encoder Rate: ", encoderRate);
+		SmartDashboard.putBoolean("Top Limit Switch Hit: ", topLimitHit);
+		SmartDashboard.putBoolean("Bottom Limit Switch Hit: ", bottomLimitHit);
+		// JOYSTICK
+		SmartDashboard.putNumber("Joystick Magnitude: ", magnitude);
+		SmartDashboard.putNumber("Joystick Direction: ", direction);
+		SmartDashboard.putNumber("Joystick Twist: ", twist);
+		// DRIVE_TRAIN
+		SmartDashboard.putNumber("Accelerometer X: ", accelX);
+		SmartDashboard.putNumber("Accelerometer Y: ", accelY);
+		SmartDashboard.putNumber("Gyro Degrees: ", gyroDegrees);
+		SmartDashboard.putNumber("Gyro Rate (Degrees Per Second): ", gyroRate);
 	}
 
-	public void enableDriveData()
+	public void setDriveData(double _accelX, double _accelY, double _gyroDegrees, double _gyroRate)
 	{
-		driveDataEventID = clock.addTimeListener(new ITimeListener()
-		{
-
-			@Override
-			public void timeEvent(TimeEventArgs timeEvent)
-			{
-				if(timeEvent.getTimeEventID() == gameDataEventID)
-				{
-					// Smart dashboard calls to put drive data here
-				}
-			}
-			
-		}, refreshRateMillis, true);
+		this.accelX = _accelX;
+		this.accelY = _accelY;
+		this.gyroDegrees = _gyroDegrees;
+		this.gyroRate = _gyroRate;
 	}
 
-	public void disableDriveData()
+	public void setForkliftData(int expectedPosition, int currentPosition, double rate, boolean _topLimitHit, boolean _bottomLimitHit)
 	{
-		clock.removeListener(driveDataEventID);
+		this.expectedForkPosition = expectedPosition;
+		this.currentForkPosition = currentPosition;
+		this.encoderRate = rate;
+		this.topLimitHit = _topLimitHit;
+		this.bottomLimitHit = _bottomLimitHit;
 	}
-	
-	public void enableSensorData()
-	{
-		sensorDataEventID = clock.addTimeListener(new ITimeListener()
-		{
 
-			@Override
-			public void timeEvent(TimeEventArgs timeEvent)
-			{
-				if(timeEvent.getTimeEventID() == gameDataEventID)
-				{
-					// display sensor data here
-				}
-			}
-			
-		}, refreshRateMillis, true);
-	}
-	
-	public void disableSensorData()
+	public void setJoyData(double _magnitude, double _direction, double _twist)
 	{
-		clock.removeListener(sensorDataEventID);
-	}
-	
-	public void setRefreshRate(int refreshRateMillis)
-	{
-		this.refreshRateMillis = refreshRateMillis;
+		this.magnitude = _magnitude;
+		this.direction = _direction;
+		this.twist = _twist;
 	}
 
 }
