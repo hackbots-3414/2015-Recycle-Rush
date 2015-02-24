@@ -7,7 +7,7 @@ public class Compass implements IMeasureDirection
 		super();
 	}
 	
-	public double getChangeInDirection() {
+	public double getChangeInDegreesPerSecond() {
 		// TODO implement me
 		return 0L;	
 	}

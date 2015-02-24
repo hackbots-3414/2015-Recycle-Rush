@@ -1,0 +1,16 @@
+Button 1: 		s
+Button 2: 		s
+Button 3: 		s
+Button 4: 		s
+Button 5: 		s
+Button 6: 		s
+Button 7: 		Forklift 			Previous Tote Length
+Button 8: 		Forklift 			Next Tote Length
+Button 9: 		Forklift 			Previous Bin Length
+Button 10: 		Forklift 			Next Bin Length
+Button 11: 		Forklift 			Go To Ground
+Button 12:		Forklift 			Go To Bottom Limit
+
+X Axis: 		Drive Train 		Horizontal Control
+y Axis: 		Drive Train 		Vertical Control
+Twist: 			Drive Train 		Rotational Control

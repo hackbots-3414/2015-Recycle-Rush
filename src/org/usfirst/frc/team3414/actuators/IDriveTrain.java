@@ -3,18 +3,10 @@ package org.usfirst.frc.team3414.actuators;
 
 
 /**
- * <!-- begin-user-doc -->
- * <!--  end-user-doc  -->
- * @generated
+ * implemented by MecanumDrive.java
  */
 public  interface IDriveTrain 
 {
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!--  end-user-doc  -->
-	 * @generated
-	 * @ordered
-	 */
 	
 	public void move(double magnitude, double angle, double rotation) ;
 	
@@ -27,7 +19,7 @@ public  interface IDriveTrain
 	
 	public void rotateConstantVelocity(boolean clockWise);
 	
-	public void toLog();
+	public void toDisplay();
 }
 	
 	
