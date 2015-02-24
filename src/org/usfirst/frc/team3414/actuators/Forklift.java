@@ -1,8 +1,6 @@
 package org.usfirst.frc.team3414.actuators;
 
 import org.usfirst.frc.team3414.sensors.*;
-import org.usfirst.frc.team3414.teleop.Display;
-
 import edu.wpi.first.wpilibj.Timer;
 
 public class Forklift extends Thread implements ILiftAssist
@@ -190,10 +188,5 @@ public class Forklift extends Thread implements ILiftAssist
 		this.gravityTestMotorSpeed = speed;
 	}
 	*/
-	
-	public void toDisplay()
-	{
-		Display.getInstance().setForkliftData(goToPosition, encodedMotor.getPosition(), encodedMotor.getRate(), topSwitch.isHit(), botSwitch.isHit());
-	}
 
 }

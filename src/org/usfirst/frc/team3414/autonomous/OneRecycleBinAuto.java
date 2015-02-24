@@ -1,8 +1,8 @@
 package org.usfirst.frc.team3414.autonomous;
 
-import org.usfirst.frc.team3414.actuators.Forklift;
-import org.usfirst.frc.team3414.actuators.IDriveTrain;
-import org.usfirst.frc.team3414.sensors.ITimeEventHandler;
+import org.usfirst.frc.team3414.actuators.ActuatorConfig;
+import org.usfirst.frc.team3414.actuators.ILiftAssist;
+import org.usfirst.frc.team3414.sensors.SweetSpotMode;
 
 /**
  * 
@@ -13,35 +13,27 @@ import org.usfirst.frc.team3414.sensors.ITimeEventHandler;
  */
 public class OneRecycleBinAuto implements AutonomousProcedure
 {
-	public IDriverAssist iDriverAssist;
-	
+	private IDriverAssist driverAssist;
 	private AutonomousProcedure driveIntoZone;
+	private ILiftAssist forkLift;
 	
-	public OneRecycleBinAuto(IDriverAssist iDriverAssist, AutonomousProcedure driveIntoZone, Forklift forkLift, IDriveTrain mecanumDrive, ITimeEventHandler clock) 
+	public OneRecycleBinAuto() 
 	{
 		super();
-		this.iDriverAssist = iDriverAssist;
-		this.driveIntoZone = driveIntoZone;
-		this.forkLift = forkLift;
-		this.mecanumDrive = mecanumDrive;
-		this.clock = clock;
-	}
 
-	private Forklift forkLift;
-	
-	private IDriveTrain mecanumDrive;
-	
-	private ITimeEventHandler clock;
+		driverAssist = AutonomousConfig.getInstance().getDriveAssist();
+		forkLift = ActuatorConfig.getInstance().getForklift();
+		
+		driveIntoZone = new DriveBackwardIntoAuto();
+	}
 
 	@Override
 	public void doAuto() 
-	{
-		driveIntoZone = new DriveBackwardIntoAuto(mecanumDrive, clock);
-		
+	{		
 		forkLift.goToGround(); // Moves to bottom level of lifting positions
 		
-		iDriverAssist.binSweetSpot(); // Moves toward recycle bin that is placed in front of the robot at the beginning of a match
-		iDriverAssist.correctRotation(); // Correct rotation in front of the recycle bin
+		driverAssist.binSweetSpot(SweetSpotMode.TOTE_WIDE); // Moves toward recycle bin that is placed in front of the robot at the beginning of a match
+		driverAssist.correctRotation(SweetSpotMode.TOTE_WIDE); // Correct rotation in front of the recycle bin
 		
 		forkLift.nextBinLength(); // Pick up recycle bin
 		

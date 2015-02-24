@@ -1,9 +1,10 @@
 package org.usfirst.frc.team3414.autonomous;
 
+import org.usfirst.frc.team3414.actuators.ActuatorConfig;
 import org.usfirst.frc.team3414.actuators.IDriveTrain;
-import org.usfirst.frc.team3414.sensors.Camera;
 import org.usfirst.frc.team3414.sensors.ITimeEventHandler;
 import org.usfirst.frc.team3414.sensors.ITimeListener;
+import org.usfirst.frc.team3414.sensors.SensorConfig;
 import org.usfirst.frc.team3414.sensors.TimeEventArgs;
 
 /**
@@ -14,17 +15,20 @@ import org.usfirst.frc.team3414.sensors.TimeEventArgs;
  */
 public class DriveBackwardIntoAuto implements AutonomousProcedure, ITimeListener
 {
-	Camera cameraAssist = new Camera(); // Should be singleton
-	
+	IVision cameraAssist;
 	IDriveTrain mecanumDrive;
 	ITimeEventHandler clock;
 
-	public DriveBackwardIntoAuto(IDriveTrain mecanumDrive, ITimeEventHandler clock) 
+	public DriveBackwardIntoAuto() 
 	{
 		super();
 		
-		this.mecanumDrive = mecanumDrive;
-		this.clock = clock;
+		SensorConfig sensors = SensorConfig.getInstance();
+		ActuatorConfig actuators = ActuatorConfig.getInstance();
+		
+		this.mecanumDrive = actuators.getDriveTrain();
+		this.clock = sensors.getClock();
+		this.cameraAssist = sensors.getVisionAssist();
 	}
 
 	public void doAuto()
@@ -33,7 +37,7 @@ public class DriveBackwardIntoAuto implements AutonomousProcedure, ITimeListener
 		
 		mecanumDrive.move(0, -1.0, 0.0); // Move backward into the autonomous zone
 		
-		while(cameraAssist.areWeInAutoZone() == false)
+		while(cameraAssist.isInAutoZone() == false)
 		{
 			
 		}

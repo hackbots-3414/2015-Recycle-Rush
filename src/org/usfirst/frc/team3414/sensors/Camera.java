@@ -5,7 +5,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Vector;
 
-import org.usfirst.frc.team3414.autonomous.IDetectObjects;
 import org.usfirst.frc.team3414.autonomous.IVision;
 import org.usfirst.frc.team3414.autonomous.ObjectColor;
 import org.usfirst.frc.team3414.autonomous.ObjectType;
