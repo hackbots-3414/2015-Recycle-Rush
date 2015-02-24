@@ -6,8 +6,8 @@ import edu.wpi.first.wpilibj.CANTalon;
 
 public class ActuatorConfig
 {
-	private static ActuatorConfig singleton; 
-	
+	private static ActuatorConfig singleton = null;
+
 	private static final int LIFTER_GRIP = 0;
 	private static final int LIFT_MOTOR = 5;
 	private static final int MOTOR_LEFT_FRONT = 1;
@@ -18,26 +18,41 @@ public class ActuatorConfig
 	private ILiftAssist forklift;
 	private IEncodedMotor motor;
 	private IServo servo;
-	
+	private CANTalon leftFront;
+	private CANTalon rightFront;
+	private CANTalon leftRear;
+	private CANTalon rightRear;
+
 	private ActuatorConfig()
 	{
-		SensorConfig sensors = SensorConfig.getInstance();
-		driveTrain = new MecanumDrive(sensors.getClock(), sensors.getAccelerometer(), sensors.getGyro(), new CANTalon(MOTOR_LEFT_FRONT), new CANTalon(MOTOR_RIGHT_FRONT), new CANTalon(MOTOR_LEFT_REAR), new CANTalon(MOTOR_RIGHT_REAR));
-		motor = new EncodedMotor(new CANTalon(LIFT_MOTOR), sensors.getForkLiftEncoder());
-		servo = new Servo(LIFTER_GRIP);
-		forklift = new Forklift(motor, sensors.getForkLiftTop(), sensors.getForkLiftBottom(), servo);
-		forklift.start();
+		try
+		{
+			SensorConfig sensors = SensorConfig.getInstance();
+			leftFront = new CANTalon(MOTOR_LEFT_FRONT);
+			rightFront = new CANTalon(MOTOR_RIGHT_FRONT);
+			leftRear = new CANTalon(MOTOR_LEFT_REAR);
+			rightRear = new CANTalon(MOTOR_RIGHT_REAR);
+			driveTrain = new MecanumDrive(sensors.getClock(), sensors.getAccelerometer(), sensors.getGyro(), leftFront, rightFront, leftRear,
+					rightRear);
+			motor = new EncodedMotor(new CANTalon(LIFT_MOTOR), sensors.getForkLiftEncoder());
+			servo = new Servo(LIFTER_GRIP);
+			forklift = new Forklift(motor, sensors.getForkLiftTop(), sensors.getForkLiftBottom(), servo);
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
-	
-	public static ActuatorConfig getInstance()
+
+	public static synchronized ActuatorConfig getInstance()
 	{
-		if(singleton == null)
+		if (singleton == null)
 		{
 			singleton = new ActuatorConfig();
 		}
+
 		return singleton;
 	}
-	
+
 	public IDriveTrain getDriveTrain()
 	{
 		return driveTrain;

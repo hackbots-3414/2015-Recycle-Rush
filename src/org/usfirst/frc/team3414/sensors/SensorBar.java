@@ -4,9 +4,9 @@ public class SensorBar implements IDetectSweetSpot, ITimeListener, ISensorBar
 {
 	ISPI spi;
 	
-	byte[] returnedBytes;
-	byte[] distanceSensorNumber;
-	float[] sensorValues;
+	byte[] returnedBytes = new byte[100];
+	byte[] distanceSensorNumber = new byte[100];
+	float[] sensorValues = new float[100];
 	int numberOfSensors;
 	long timeEventID;
 	
@@ -39,6 +39,12 @@ public class SensorBar implements IDetectSweetSpot, ITimeListener, ISensorBar
 
 	protected SensorBar(edu.wpi.first.wpilibj.SPI.Port arduinoPort, int tempNumberOfSensors)
 	{
+		/*
+		distanceSensorNumber = new byte[tempNumberOfSensors];
+		returnedBytes = new byte[tempNumberOfSensors*4];
+		sensorValues = new float[tempNumberOfSensors];
+		*/
+		
 		timeEventID = SensorConfig.getInstance().getClock().addTimeListener(this, 1000); // Updates the values every second
 		
 		numberOfSensors = tempNumberOfSensors;

@@ -1,153 +1,164 @@
 package org.usfirst.frc.team3414.teleop;
 
-import org.usfirst.frc.team3414.actuators.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.usfirst.frc.team3414.actuators.ActuatorConfig;
+import org.usfirst.frc.team3414.actuators.IDriveTrain;
+import org.usfirst.frc.team3414.actuators.ILiftAssist;
+import org.usfirst.frc.team3414.autonomous.AutonomousConfig;
+import org.usfirst.frc.team3414.autonomous.IDriverAssist;
+import org.usfirst.frc.team3414.sensors.IClock;
 import org.usfirst.frc.team3414.sensors.ITimeListener;
 import org.usfirst.frc.team3414.sensors.SensorConfig;
+import org.usfirst.frc.team3414.sensors.SweetSpotMode;
 import org.usfirst.frc.team3414.sensors.TimeEventArgs;
-import org.usfirst.frc.team3414.sensors.VirtualClock;
 
 public class TeleopControl
 {
-	private SensorConfig sensors;
-	private ActuatorConfig actuators;
+	private IJoystick joystick;
 	private IDriveTrain driveTrain;
 	private ILiftAssist lifter;
-	private IServo servo;
-	private MyJoystick joy;
+	private IClock clock;
 
-	private boolean restrictButtonOne = false;
-	private boolean restrictButtonTwo = false;
-	private boolean restrictButtonThree = false;
-	private boolean restrictButtonFour = false;
-	private boolean restrictButtonFive = false;
-	private boolean restrictButtonSix = false;
-	private boolean restrictButtonSeven = false;
-	private boolean restrictButtonEight = false;
-	private boolean restrictButtonNine = false;
-	private boolean restrictButtonTen = false;
-	private boolean restrictButtonEleven = false;
-	private boolean restrictButtonTwelve = false;
+	private IDriverAssist driverAssist;
 
-	private final int DRIVE_JOYSTICK_PORT = 1;
-	private boolean isRegularMove = true;
-	private boolean isTestMode = false;
+	private final int REFRESH_RATE_MS = 200;
 
-	public TeleopControl(SensorConfig _sensors, ActuatorConfig _actuators)
+	private final JoystickButtons UP_TOTE = JoystickButtons.EIGHT;
+	private final JoystickButtons DOWN_TOTE = JoystickButtons.SEVEN;
+	private final JoystickButtons UP_BIN = JoystickButtons.TEN;
+	private final JoystickButtons DOWN_BIN = JoystickButtons.NINE;
+	private final JoystickButtons GO_TO_TOP = JoystickButtons.TWELVE;
+	private final JoystickButtons GO_TO_BOTTOM = JoystickButtons.ELEVEN;
+	private final JoystickButtons STREIGHTEN_WITH_TOTE_WIDE = JoystickButtons.FIVE;
+	private final JoystickButtons STREIGHTEN_WITH_TOTE_THIN = JoystickButtons.THREE;
+	private final JoystickButtons TRIGGER_SLOW_JOYSTICK = JoystickButtons.ONE;
+	
+	final int JOYSTICK_PORT = 1;
+
+	List<Long> eventID = new ArrayList<>();
+
+	public TeleopControl()
 	{
-		this.sensors = _sensors;
-		this.actuators = _actuators;
-		/*
-		 * this.sensors.getClock().addTimeListener(new ITimeListener() {
-		 * 
-		 * @Override public void timeEvent(TimeEventArgs timeEvent) { // do some
-		 * code here
-		 * 
-		 * } }, 1000);
-		 */
-		lifter = actuators.getForklift();
+		SensorConfig sensors = SensorConfig.getInstance();
+		ActuatorConfig actuators = ActuatorConfig.getInstance();
+
+		this.clock = sensors.getClock();
+		this.lifter = actuators.getForklift();
+		this.driveTrain = actuators.getDriveTrain();
+		this.driverAssist = AutonomousConfig.getInstance().getDriveAssist();
+		this.joystick = new Logitech3DProJoystick(JOYSTICK_PORT);
+
 		lifter.goToBottomLimit();
-		servo = actuators.getServo();
-		driveTrain = actuators.getDriveTrain();
-		joy = new MyJoystick(DRIVE_JOYSTICK_PORT);
 	}
 
-	public void runTeleop()
+	private double getJoystickLimitingValue(double input)
 	{
-
-		if (isRegularMove)
+		double returnValue;
+		
+		if(input > 0)
 		{
-			driveTrain.move(joy.getMagnitude(), joy.getDirectionDegrees(), joy.getTwist());
-		}
-		if (isTestMode)
+			returnValue = Math.pow(input, 2);
+		} else if (input < 0)
 		{
-			servo.dashboardSetServo();
+			returnValue = -Math.pow(input, 2);
 		} else
 		{
-			this.forkliftOps();
+			returnValue = 0.0;
 		}
+		
+		return returnValue;
+	}
+	
+	public void enable()
+	{
+		eventID.add(clock.addTimeListener(new ITimeListener()
+		{
 
-		lifter.toDisplay();
-		driveTrain.toDisplay();
-		Display.getInstance().setJoyData(joy.getMagnitude(), joy.getDirectionDegrees(), joy.getTwist());
+			@Override
+			public void timeEvent(TimeEventArgs timeEvent)
+			{
+				if (joystick.getMagnitude() > 0.1 && joystick.getMagnitude() < -0.1)
+				{
+					if (joystick.getButton(TRIGGER_SLOW_JOYSTICK))
+					{
+						driveTrain.move(getJoystickLimitingValue(joystick.getMagnitude())*.2, joystick.getDirectionDegrees(), joystick.getTwist()*.2);
+					} else
+					{
+						driveTrain.move(getJoystickLimitingValue(joystick.getMagnitude()), joystick.getDirectionDegrees(), joystick.getTwist());
+					}
+				}
+
+			}
+
+		}, REFRESH_RATE_MS, true));
+
+		eventID.add(clock.addTimeListener(new ITimeListener()
+		{
+			@Override
+			public void timeEvent(TimeEventArgs timeEvent)
+			{
+				if (joystick.getButton(UP_TOTE))
+				{
+					lifter.nextToteLength();
+				}
+
+				if (joystick.getButton(DOWN_TOTE))
+				{
+					lifter.previousToteLength();
+				}
+
+				if (joystick.getButton(DOWN_BIN))
+				{
+					lifter.previousBinLength();
+				}
+
+				if (joystick.getButton(UP_BIN))
+				{
+					lifter.nextBinLength();
+				}
+
+				if (joystick.getButton(GO_TO_TOP))
+				{
+					lifter.goToTopLimit();
+				}
+
+				if (joystick.getButton(GO_TO_BOTTOM))
+				{
+					lifter.goToGround();
+				}
+			}
+
+		}, REFRESH_RATE_MS, true));
+
+		eventID.add(clock.addTimeListener(new ITimeListener()
+		{
+			@Override
+			public void timeEvent(TimeEventArgs timeEvent)
+			{
+				if (joystick.getButton(STREIGHTEN_WITH_TOTE_WIDE))
+				{
+					driverAssist.binSweetSpot(SweetSpotMode.TOTE_WIDE);
+					driverAssist.correctRotation(SweetSpotMode.TOTE_WIDE);
+				}
+
+				if (joystick.getButton(STREIGHTEN_WITH_TOTE_THIN))
+				{
+					driverAssist.binSweetSpot(SweetSpotMode.TOTE_THIN);
+					driverAssist.correctRotation(SweetSpotMode.TOTE_THIN);
+				}
+			}
+
+		}, REFRESH_RATE_MS, true));
 	}
 
-	private void forkliftOps()
+	public void disable()
 	{
-		// BUTTON SEVEN
-		if (joy.getButtonSeven() && !restrictButtonSeven)
+		for (int i = 0; i < eventID.size(); i++)
 		{
-			restrictButtonSeven = true;
-			lifter.previousToteLength();
+			clock.removeListener(eventID.get(i));
+			eventID.remove(i);
 		}
-		if (!joy.getButtonSeven() && restrictButtonSeven)
-		{
-			restrictButtonSeven = false;
-		}
-
-		// BUTTON EIGHT
-		if (joy.getButtonEight() && !restrictButtonEight)
-		{
-			restrictButtonEight = true;
-			lifter.nextToteLength();
-		}
-		if (!joy.getButtonEight() && restrictButtonEight)
-		{
-			restrictButtonEight = false;
-		}
-
-		// BUTTON NINE
-		if (joy.getButtonNine() && !restrictButtonNine)
-		{
-			restrictButtonNine = true;
-			lifter.previousBinLength();
-		}
-		if (!joy.getButtonNine() && restrictButtonNine)
-		{
-			restrictButtonNine = false;
-		}
-
-		// BUTTON TEN
-		if (joy.getButtonTen() && !restrictButtonTen)
-		{
-			restrictButtonTen = true;
-			lifter.nextBinLength();
-		}
-		if (!joy.getButtonTen() && restrictButtonTen)
-		{
-			restrictButtonTen = false;
-		}
-
-		// BUTTON ElEVEN
-		if (joy.getButtonEleven() && !restrictButtonEleven)
-		{
-			restrictButtonEleven = true;
-			lifter.goToGround();
-		}
-		if (!joy.getButtonEleven() && restrictButtonEleven)
-		{
-			restrictButtonEleven = false;
-		}
-
-		// BUTTON TWELVE
-		if (joy.getButtonTwelve() && !restrictButtonTwelve)
-		{
-			restrictButtonTwelve = true;
-			lifter.goToBottomLimit();
-		}
-		if (!joy.getButtonTwelve() && restrictButtonTwelve)
-		{
-			restrictButtonTwelve = false;
-		}
-	}
-
-	public void setRegularMove(boolean _isRegularMove)
-	{
-		this.isRegularMove = _isRegularMove;
-	}
-
-	public void isTestingRobot(boolean _isTestMode)
-	{
-		this.isTestMode = _isTestMode;
-
 	}
 }

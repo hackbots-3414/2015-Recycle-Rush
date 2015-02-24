@@ -1,12 +1,9 @@
 package org.usfirst.frc.team3414.robot;
 
-import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.usfirst.frc.team3414.sensors.SensorConfig;
+import org.usfirst.frc.team3414.teleop.TeleopControl;
 
-import org.usfirst.frc.team3414.sensors.*;
-import org.usfirst.frc.team3414.autonomous.*;
-import org.usfirst.frc.team3414.teleop.*;
-import org.usfirst.frc.team3414.actuators.*;
+import edu.wpi.first.wpilibj.IterativeRobot;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -17,22 +14,27 @@ import org.usfirst.frc.team3414.actuators.*;
  */
 public class Robot extends IterativeRobot
 {
-	SensorConfig sensorConfig;
-	ActuatorConfig actuatorConfig;
+//	SensorConfig sensorConfig;
+//	ActuatorConfig actuatorConfig;
+//	private boolean a = false;
+//	private boolean b = false;
+//	IJoystick joy;
+	
 	TeleopControl teleop;
-
+	
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
 	 */
 	public void robotInit()
-	{
-		// This must always get run at the start of init. Do not perform any
-		// init before this is called
+	{	
+		//This must always get run at the start of init. Do not perform any init before this is called
 		RobotStatus.setIsRunning(true);
-		sensorConfig = SensorConfig.getInstance();
-		actuatorConfig = ActuatorConfig.getInstance();
-		teleop = new TeleopControl(sensorConfig, actuatorConfig);
+		
+//		sensorConfig = SensorConfig.getInstance();
+//		actuatorConfig = ActuatorConfig.getInstance();
+		
+		teleop = new TeleopControl();
 	}
 
 	public void autonomousInit()
@@ -50,7 +52,7 @@ public class Robot extends IterativeRobot
 
 	public void teleopInit()
 	{
-
+		teleop.enable();
 	}
 
 	/**
@@ -58,17 +60,39 @@ public class Robot extends IterativeRobot
 	 */
 	public void teleopPeriodic()
 	{
-		teleop.runTeleop();
-
-		if (isSimulation())
-		{
-			Display.getInstance().putDiagnosticsData();
-			teleop.isTestingRobot(true);
-		} else if (isReal())
-		{
-			Display.getInstance().putGameData();
-			teleop.isTestingRobot(false);
-		}
+		
+//		while(joy.getButtonSeven())
+//		{
+//			((Forklift)actuatorConfig.getForklift()).up();
+//		}
+//		if(joy.getButtonEight())
+//		{
+//			while(!joy.getButtonEight())
+//			{
+//				((Forklift)actuatorConfig.getForklift()).down();
+//			}
+//			
+//			// Currently the forklift does not engage when it goes down, only when going up.
+//			// This is so because if we call this function it does not 'end' so to speak. It goes through the loop forever...
+//			// Use the tote up and down functions
+//		}
+//		
+//		((Forklift)actuatorConfig.getForklift()).stopLift();
+//		
+//		if(joy.getButtonNine())
+//		{
+//			actuatorConfig.getDriveTrain().move(0, 0, SmartDashboard.getNumber("Rotational Speed", 0.5));
+//		} if(joy.getButtonTwelve())
+//		{
+//			actuatorConfig.getServo().engage();
+//		} if(joy.getButtonEleven())
+//		{
+//			actuatorConfig.getServo().disengage();
+//		}
+//		else{
+//			actuatorConfig.getDriveTrain().move(joy.getMagnitude(), joy.getDirectionDegrees(), joy.getTwist());
+//		}
+		
 	}
 
 	public void testInit()
@@ -82,6 +106,11 @@ public class Robot extends IterativeRobot
 	public void testPeriodic()
 	{
 
+	}
+	
+	public void disabledInit()
+	{
+		teleop.disable();
 	}
 
 }

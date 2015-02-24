@@ -7,31 +7,27 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-
 import org.usfirst.frc.team3414.robot.RobotStatus;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * <!-- begin-user-doc --> <!-- end-user-doc -->
- * 
+ *
  * @generated
  */
-
 public class VirtualClock extends Thread implements IClock
 {
-
 	private Timer timer;
 	private long nextEventID = 0;
 	private long updateInterval;
 	private ExecutorService executor;
-
 	private Map<Long, TimeEventSubscription> timeListeners;
 
 	protected VirtualClock(int updateInterval)
 	{
 		super();
+		timer = new Timer();
 		this.timeListeners = new Hashtable<Long, TimeEventSubscription>();
 		this.updateInterval = updateInterval;
 		executor = Executors.newFixedThreadPool(2);
@@ -45,7 +41,7 @@ public class VirtualClock extends Thread implements IClock
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -57,7 +53,7 @@ public class VirtualClock extends Thread implements IClock
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -69,7 +65,7 @@ public class VirtualClock extends Thread implements IClock
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -86,12 +82,10 @@ public class VirtualClock extends Thread implements IClock
 	}
 
 	@Override
-	public long addTimeListener(ITimeListener listener, long time,
-			boolean repeat)
+	public long addTimeListener(ITimeListener listener, long time, boolean repeat)
 	{
 		long startTime = getTimeInMillis();
-		timeListeners.put(nextEventID, new TimeEventSubscription(listener,
-				startTime, time, repeat));
+		timeListeners.put(nextEventID, new TimeEventSubscription(listener, startTime, time, repeat));
 		return nextEventID++;
 	}
 
@@ -99,7 +93,6 @@ public class VirtualClock extends Thread implements IClock
 	public void removeListener(long timeEventID)
 	{
 		timeListeners.remove(timeEventID);
-
 	}
 
 	@Override
@@ -112,18 +105,14 @@ public class VirtualClock extends Thread implements IClock
 			for (final long key : keys)
 			{
 				final TimeEventSubscription event = timeListeners.get(key);
-
 				if (event != null)
 				{
 					final long currentTime = getTimeInMillis();
-
 					if (currentTime >= event.getEndTime())
 					{
 						futures.add(executor.submit(() -> {
-							event.listener.timeEvent(new TimeEventArgs(key,
-									currentTime));
+							event.listener.timeEvent(new TimeEventArgs(key, currentTime));
 						}));
-
 						if (!event.repeat)
 						{
 							timeListeners.remove(key);
@@ -144,8 +133,7 @@ public class VirtualClock extends Thread implements IClock
 					} catch (InterruptedException e)
 					{
 						// TODO Auto-generated catch block
-						SmartDashboard.putString("DEBUG: ",
-								"Virtual Clock Failed to sleep");
+						SmartDashboard.putString("DEBUG: ", "Virtual Clock Failed to sleep");
 					}
 				}
 			}
@@ -154,8 +142,7 @@ public class VirtualClock extends Thread implements IClock
 				Thread.sleep(updateInterval);
 			} catch (InterruptedException e)
 			{
-				SmartDashboard.putString("DEBUG: ",
-						"Virtual Clock Failed to sleep");
+				SmartDashboard.putString("DEBUG: ", "Virtual Clock Failed to sleep");
 			}
 		}
 	}
@@ -168,15 +155,13 @@ public class VirtualClock extends Thread implements IClock
 		long time;
 		boolean repeat;
 
-		public TimeEventSubscription(ITimeListener listener, long startTime,
-				long time, boolean repeat)
+		public TimeEventSubscription(ITimeListener listener, long startTime, long time, boolean repeat)
 		{
 			super();
 			this.listener = listener;
 			this.startTime = startTime;
 			this.time = time;
 			this.repeat = repeat;
-
 		}
 
 		long getEndTime()

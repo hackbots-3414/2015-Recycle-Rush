@@ -5,82 +5,93 @@ import org.usfirst.frc.team3414.robot.RobotStatus;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.SerialPort;
 
-
-public class Ultrasonic extends Thread implements IMeasureDistance {
+public class Ultrasonic extends Thread implements IMeasureDistance
+{
 
 	public final double VOLTS_PER_CM = .00488281;
 	private final AnalogInput analogInput;
 	private SerialPort serialPort;
 	private int sampleRate;
-	private double[] samples; 
+	private double[] samples;
 	int sampleIndex = 0;
 	private double distance;
-	
-	
-	private Ultrasonic(SerialPort serial, AnalogInput analog, int samplesPerSecond, int sampleSize)
+
+	private Ultrasonic(SerialPort serial, AnalogInput analog,
+			int samplesPerSecond, int sampleSize)
 	{
 		samples = new double[sampleSize];
 		this.analogInput = analog;
 		this.serialPort = serial;
-		if(samplesPerSecond <=0 )
+		if (samplesPerSecond <= 0)
 		{
 			this.sampleRate = 100;
-		}
-		else
+		} else
 		{
-			this.sampleRate = 1000/samplesPerSecond;
+			this.sampleRate = 1000 / samplesPerSecond;
 		}
-		for(int i =0; i< samples.length; i++){samples[i] = 0;}
+		for (int i = 0; i < samples.length; i++)
+		{
+			samples[i] = 0;
+		}
+		
 		start();
 	}
-	
-	protected Ultrasonic(SerialPort input, int sampleSize) {
+
+	protected Ultrasonic(SerialPort input, int sampleSize)
+	{
 		this(input, null, 10, sampleSize);
 	}
-	
-	protected Ultrasonic(SerialPort input) {
+
+	protected Ultrasonic(SerialPort input)
+	{
 		this(input, null, 10, 10);
 	}
-	
-	protected Ultrasonic(AnalogInput input, int sampleSize) {
+
+	protected Ultrasonic(AnalogInput input, int sampleSize)
+	{
 		this(null, input, 10, sampleSize);
 
 	}
-	
-	protected Ultrasonic(AnalogInput input) {
+
+	protected Ultrasonic(AnalogInput input)
+	{
 		this(null, input, 10, 10);
 
 	}
-	
-	@Override 
-	public void run() {
 
-		while(RobotStatus.isRunning()){
-			if (serialPort!= null){
-				//serialPort.readString();
-				//Run lOw pass filter
+	@Override
+	public void run()
+	{
+
+		while (RobotStatus.isRunning())
+		{
+			if (serialPort != null)
+			{
+				// serialPort.readString();
+				// Run lOw pass filter
 			}
-			
-			else if (analogInput!= null){
+
+			else if (analogInput != null)
+			{
 				double voltage = analogInput.getVoltage();
 				double cm = voltage / VOLTS_PER_CM;
 				samples[sampleIndex++] = cm;
 				distance = cm;
 				sampleIndex %= samples.length;
-			}
-			else
+			} else
 			{
 				distance = Double.NaN;
 			}
-			try {
+			try
+			{
 				Thread.sleep(sampleRate);
-			} catch (InterruptedException e) {
-				
+			} catch (InterruptedException e)
+			{
+
 			}
 		}
- 
-	}
 
+	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -89,7 +100,8 @@ public class Ultrasonic extends Thread implements IMeasureDistance {
 	 * @ordered
 	 */
 
-	public double getCm() {
+	public double getCm()
+	{
 		double maxValue = Double.MIN_VALUE;
 		double minValue = Double.MAX_VALUE;
 		double sum = 0;
@@ -107,7 +119,7 @@ public class Ultrasonic extends Thread implements IMeasureDistance {
 			sum += value;
 		}
 		sum -= maxValue + minValue;
-		distance = sum/(samples.length - 2);
+		distance = sum / (samples.length - 2);
 		return distance;
 	}
 
@@ -118,7 +130,8 @@ public class Ultrasonic extends Thread implements IMeasureDistance {
 	 * @ordered
 	 */
 
-	public double getFeet() {
+	public double getFeet()
+	{
 		return DistanceConversion.cmToInches(getCm());
 	}
 
@@ -129,8 +142,8 @@ public class Ultrasonic extends Thread implements IMeasureDistance {
 	 * @ordered
 	 */
 
-	public double getInches() {
+	public double getInches()
+	{
 		return DistanceConversion.inToFeet(getFeet());
 	}
 }
-
