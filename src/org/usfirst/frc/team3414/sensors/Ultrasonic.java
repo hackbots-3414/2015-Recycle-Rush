@@ -1,5 +1,6 @@
 package org.usfirst.frc.team3414.sensors;
 
+import org.usfirst.frc.team3414.logger.LogData;
 import org.usfirst.frc.team3414.robot.RobotStatus;
 
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -87,7 +88,7 @@ public class Ultrasonic extends Thread implements IMeasureDistance
 				Thread.sleep(sampleRate);
 			} catch (InterruptedException e)
 			{
-
+				LogData.getInstance().record("Ultrasonic.run() - Error while sleeping " + e.getMessage());
 			}
 		}
 

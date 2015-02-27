@@ -1,5 +1,7 @@
 package org.usfirst.frc.team3414.sensors;
 
+import org.usfirst.frc.team3414.logger.LogData;
+
 public class SensorBar implements IDetectSweetSpot, ITimeListener, ISensorBar
 {
 	ISPI spi;
@@ -73,10 +75,12 @@ public class SensorBar implements IDetectSweetSpot, ITimeListener, ISensorBar
 		{
 		case TOTE_THIN:
 			state = getSweetSpotStateThin();
+			LogData.getInstance().record("SensorBar.getSweetSpotState() - TOTE_THIN");
 			break;
 		case TOTE_WIDE:
 		default:
 			state = getSweetSpotStateWide();
+			LogData.getInstance().record("SensorBar.getSweetSpotState() - TOTE_WIDE");
 			break;
 		}
 		return state;
@@ -92,23 +96,28 @@ public class SensorBar implements IDetectSweetSpot, ITimeListener, ISensorBar
 			if (slopeD < -VARIABILITY)
 			{
 				state = SweetSpotState.TURN_CLOCKWISE;
+				LogData.getInstance().record("SensorBar.getSweetSpotStateWide() - TURN_CLOCKWISE");
 			}
 			if (slopeD > VARIABILITY)
 			{
 				state = SweetSpotState.TURN_COUNTER_CLOCKWISE;
+				LogData.getInstance().record("SensorBar.getSweetSpotStateWide() - TURN_COUNTER_CLOCKWISE");
 			}
 			if (Math.abs(slopeD) <= VARIABILITY)
 			{
 				state = SweetSpotState.SWEET_SPOT;
+				LogData.getInstance().record("SensorBar.getSweetSpotStateWide() - SWEET_SPOT");
 			}
 		} else if ((Math.abs(slopeA - slopeB) <= VARIABILITY) && (Math.abs(slopeB - slopeC) <= VARIABILITY)
 				&& (Math.abs(slopeC - slopeD) > VARIABILITY))
 		{
 			state = SweetSpotState.MOVE_LEFT;
+			LogData.getInstance().record("SensorBar.getSweetSpotStateWide() - MOVE_LEFT");
 		} else if ((Math.abs(slopeA - slopeB) > VARIABILITY) && (Math.abs(slopeB - slopeC) <= VARIABILITY)
 				&& (Math.abs(slopeC - slopeD) <= VARIABILITY))
 		{
 			state = SweetSpotState.MOVE_RIGHT;
+			LogData.getInstance().record("SensorBar.getSweetSpotStateWide() - MOVE_RIGHT");
 		}
 		return state;
 
@@ -127,14 +136,17 @@ public class SensorBar implements IDetectSweetSpot, ITimeListener, ISensorBar
 			if (slopeB < -VARIABILITY)
 			{
 				state = SweetSpotState.TURN_CLOCKWISE;
+				LogData.getInstance().record("SensorBar.getSweetSpotStateThin() - TURN_CLOCKWISE");
 			}
 			if (slopeB > VARIABILITY)
 			{
 				state = SweetSpotState.TURN_COUNTER_CLOCKWISE;
+				LogData.getInstance().record("SensorBar.getSweetSpotStateThin() - TURN_COUNTER_CLOCKWISE");
 			}
 			if (Math.abs(slopeB) <= VARIABILITY)
 			{
 				state = SweetSpotState.SWEET_SPOT;
+				LogData.getInstance().record("SensorBar.getSweetSpotStateThin() - SWEET_SPOT");
 			}
 		}
 		// TODO Auto-generated method stub

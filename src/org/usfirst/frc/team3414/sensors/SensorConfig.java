@@ -2,6 +2,7 @@ package org.usfirst.frc.team3414.sensors;
 
 import org.usfirst.frc.team3414.autonomous.AutonomousSwitches;
 import org.usfirst.frc.team3414.autonomous.IVision;
+import org.usfirst.frc.team3414.logger.LogData;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.SPI.Port;
@@ -71,7 +72,7 @@ public class SensorConfig
 			
 		} catch (Exception e)
 		{
-			e.printStackTrace();
+			LogData.getInstance().record("SensorConfig.SensorConfig() - Error while sleeping " + e.getMessage());
 		}
 	}
 
