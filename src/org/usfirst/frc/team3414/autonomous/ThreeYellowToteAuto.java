@@ -5,6 +5,7 @@ import java.util.List;
 import org.usfirst.frc.team3414.actuators.ActuatorConfig;
 import org.usfirst.frc.team3414.actuators.IDriveTrain;
 import org.usfirst.frc.team3414.actuators.ILiftAssist;
+import org.usfirst.frc.team3414.logger.LogData;
 import org.usfirst.frc.team3414.sensors.SensorConfig;
 import org.usfirst.frc.team3414.sensors.SweetSpotMode;
 import org.usfirst.frc.team3414.autonomous.Obstacle;
@@ -70,8 +71,7 @@ public class ThreeYellowToteAuto implements AutonomousProcedure {
 		{
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LogData.getInstance().record("ThreeYellowToteAuto.doAuto() - Error while sleeping " + e.getMessage());;
 		}
 
 		mecanumDrive.stop();
