@@ -95,7 +95,14 @@ public class EncodedMotor extends Motor implements IEncodedMotor {
 	@Override
 	public void reset()
 	{
-		encoder.reset();
+		if(encoder != null){
+			encoder.reset();
+		}
+		else if (motorController instanceof CANTalon)
+		{
+			((CANTalon)motorController).setPosition(0);
+		}
+		
 		
 	}
 }

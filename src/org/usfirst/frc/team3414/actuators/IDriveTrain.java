@@ -20,6 +20,8 @@ public  interface IDriveTrain
 	public void rotateConstantVelocity(boolean clockWise);
 	
 	public void toDisplay();
+	
+	public int getSafetyTimeout();
 }
 	
 	

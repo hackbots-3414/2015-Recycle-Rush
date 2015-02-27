@@ -36,7 +36,7 @@ public class ActuatorConfig
 					rightRear);
 			motor = new EncodedMotor(new CANTalon(LIFT_MOTOR), sensors.getForkLiftEncoder());
 			servo = new Servo(LIFTER_GRIP);
-			forklift = new Forklift(motor, sensors.getForkLiftTop(), sensors.getForkLiftBottom(), servo);
+			forklift = new Forklift(motor, sensors.getForkLiftTop(), sensors.getForkLiftBottom(), servo, sensors.getClock());
 		} catch (Exception e)
 		{
 			e.printStackTrace();

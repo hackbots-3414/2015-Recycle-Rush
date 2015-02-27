@@ -8,9 +8,7 @@ package org.usfirst.frc.team3414.actuators;
  */
 
 public interface ILiftAssist
-{
-	public void start();
-	
+{	
 	public void goToGround();
 
 	public void goToTopLimit();
@@ -19,8 +17,6 @@ public interface ILiftAssist
 	 * Goes to bottom Limit
 	 */
 	public void goToBottomLimit();
-
-	public void stop();
 
 	public void previousToteLength();
 
@@ -31,5 +27,6 @@ public interface ILiftAssist
 	public void nextBinLength();
 	
 	public void toDisplay();
-
+	
+	public void calibrate();
 }

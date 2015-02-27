@@ -31,7 +31,7 @@ public class MecanumDrive implements IDriveTrain, ITimeListener
 	private double ROTATE_SECONDS_PER_DEGREE;
 	private double ROTATE_POWER_INTO_MOTORS;
 	private ExecutorService threadpool;
-
+	private static final int SAFETY_TIMEOUT = 300;
 	long eventID;
 
 	double Kp = 1.0;
@@ -46,6 +46,7 @@ public class MecanumDrive implements IDriveTrain, ITimeListener
 		// THIS WORK!!!!!!!!!!!!!!!!!!!!!!!!!
 		accel = accelerometer;
 		drive = new RobotDrive(leftFront, leftRear, rightFront, rightRear);
+		drive.setExpiration(SAFETY_TIMEOUT / 1000);
 		// gyro.reset();
 	}
 
@@ -85,7 +86,6 @@ public class MecanumDrive implements IDriveTrain, ITimeListener
 		this.currentRotation = rotation;
 
 		drive.mecanumDrive_Polar(magnitude, angle, rotation);
-
 	}
 
 	public void rotate(double degrees, boolean clockWise)
@@ -168,5 +168,11 @@ public class MecanumDrive implements IDriveTrain, ITimeListener
 			}
 		}
 
+	}
+
+	@Override
+	public int getSafetyTimeout()
+	{
+		return SAFETY_TIMEOUT;
 	}
 }

@@ -1,9 +1,15 @@
 package org.usfirst.frc.team3414.robot;
 
+import org.usfirst.frc.team3414.sensors.ITimeListener;
 import org.usfirst.frc.team3414.sensors.SensorConfig;
+import org.usfirst.frc.team3414.actuators.ActuatorConfig;
+import org.usfirst.frc.team3414.actuators.ILiftAssist;
+import org.usfirst.frc.team3414.sensors.SweetSpotMode;
+import org.usfirst.frc.team3414.sensors.TimeEventArgs;
 import org.usfirst.frc.team3414.teleop.TeleopControl;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -14,7 +20,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
  */
 public class Robot extends IterativeRobot
 {
-//	SensorConfig sensorConfig;
+	SensorConfig sensorConfig;
 //	ActuatorConfig actuatorConfig;
 //	private boolean a = false;
 //	private boolean b = false;
@@ -31,7 +37,7 @@ public class Robot extends IterativeRobot
 		//This must always get run at the start of init. Do not perform any init before this is called
 		RobotStatus.setIsRunning(true);
 		
-//		sensorConfig = SensorConfig.getInstance();
+		sensorConfig = SensorConfig.getInstance();
 //		actuatorConfig = ActuatorConfig.getInstance();
 		
 		teleop = new TeleopControl();
@@ -54,13 +60,32 @@ public class Robot extends IterativeRobot
 	{
 		teleop.enable();
 	}
-
 	/**
 	 * This function is called periodically during operator control
 	 */
 	public void teleopPeriodic()
 	{
 		
+		teleop.doTeleopButtonEvents();
+		
+		/*
+		
+		SensorConfig.getInstance().getClock().addTimeListener(new ITimeListener()
+		{
+
+			int i = 0;
+			
+			@Override
+			public void timeEvent(TimeEventArgs timeEvent)
+			{
+				i+=1;
+				SmartDashboard.putNumber("Things", i);
+			}
+			
+		}, 100);
+		*/
+		
+//		SmartDashboard.putNumber("Encoder Position", sensorConfig.getForkLiftEncoder().getPosition());
 //		while(joy.getButtonSeven())
 //		{
 //			((Forklift)actuatorConfig.getForklift()).up();
@@ -105,8 +130,8 @@ public class Robot extends IterativeRobot
 	 */
 	public void testPeriodic()
 	{
-
-	}
+	
+	}	
 	
 	public void disabledInit()
 	{

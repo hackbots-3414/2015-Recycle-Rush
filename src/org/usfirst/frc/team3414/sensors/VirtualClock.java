@@ -60,7 +60,7 @@ public class VirtualClock extends Thread implements IClock
 	@Override
 	public double getTimeInSeconds()
 	{
-		return timer.get();
+		return Timer.getFPGATimestamp();
 	}
 
 	/**
@@ -72,6 +72,7 @@ public class VirtualClock extends Thread implements IClock
 	@Override
 	public long getTimeInMillis()
 	{
+		//SmartDashboard.putNumber("Time", getTimeInSeconds());
 		return (long) (getTimeInSeconds() * 1000);
 	}
 

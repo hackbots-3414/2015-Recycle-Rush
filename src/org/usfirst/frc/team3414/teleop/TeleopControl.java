@@ -23,7 +23,7 @@ public class TeleopControl
 
 	private IDriverAssist driverAssist;
 
-	private final int REFRESH_RATE_MS = 200;
+	private final int REFRESH_RATE_MS = 85;
 
 	private final JoystickButtons UP_TOTE = JoystickButtons.EIGHT;
 	private final JoystickButtons DOWN_TOTE = JoystickButtons.SEVEN;
@@ -34,7 +34,10 @@ public class TeleopControl
 	private final JoystickButtons STREIGHTEN_WITH_TOTE_WIDE = JoystickButtons.FIVE;
 	private final JoystickButtons STREIGHTEN_WITH_TOTE_THIN = JoystickButtons.THREE;
 	private final JoystickButtons TRIGGER_SLOW_JOYSTICK = JoystickButtons.ONE;
-	
+	// For testing purposes only!!!
+	private final JoystickButtons GO_UP = JoystickButtons.TWO;
+	private final JoystickButtons GO_DOWN = JoystickButtons.FOUR;
+
 	final int JOYSTICK_PORT = 1;
 
 	List<Long> eventID = new ArrayList<>();
@@ -49,15 +52,13 @@ public class TeleopControl
 		this.driveTrain = actuators.getDriveTrain();
 		this.driverAssist = AutonomousConfig.getInstance().getDriveAssist();
 		this.joystick = new Logitech3DProJoystick(JOYSTICK_PORT);
-
-		lifter.goToBottomLimit();
 	}
 
 	private double getJoystickLimitingValue(double input)
 	{
 		double returnValue;
-		
-		if(input > 0)
+
+		if (input > 0)
 		{
 			returnValue = Math.pow(input, 2);
 		} else if (input < 0)
@@ -67,90 +68,70 @@ public class TeleopControl
 		{
 			returnValue = 0.0;
 		}
-		
+
 		return returnValue;
 	}
-	
+
 	public void enable()
 	{
-		eventID.add(clock.addTimeListener(new ITimeListener()
-		{
+		lifter.calibrate();
 
-			@Override
-			public void timeEvent(TimeEventArgs timeEvent)
+		eventID.add(clock.addTimeListener((event) -> {
+
+			if (joystick.getButton(TRIGGER_SLOW_JOYSTICK))
 			{
-				if (joystick.getMagnitude() > 0.1 && joystick.getMagnitude() < -0.1)
-				{
-					if (joystick.getButton(TRIGGER_SLOW_JOYSTICK))
-					{
-						driveTrain.move(getJoystickLimitingValue(joystick.getMagnitude())*.2, joystick.getDirectionDegrees(), joystick.getTwist()*.2);
-					} else
-					{
-						driveTrain.move(getJoystickLimitingValue(joystick.getMagnitude()), joystick.getDirectionDegrees(), joystick.getTwist());
-					}
-				}
+				driveTrain.move(getJoystickLimitingValue(joystick.getMagnitude()), joystick.getDirectionDegrees(),
+						getJoystickLimitingValue(joystick.getTwist()));
+			} else
+			{
+				driveTrain.move(getJoystickLimitingValue(joystick.getMagnitude()) * .2, joystick.getDirectionDegrees(),
+						getJoystickLimitingValue(joystick.getTwist()) * .2);
 
 			}
+		}, driveTrain.getSafetyTimeout() / 4, true));
 
-		}, REFRESH_RATE_MS, true));
-
-		eventID.add(clock.addTimeListener(new ITimeListener()
-		{
-			@Override
-			public void timeEvent(TimeEventArgs timeEvent)
-			{
-				if (joystick.getButton(UP_TOTE))
-				{
-					lifter.nextToteLength();
-				}
-
-				if (joystick.getButton(DOWN_TOTE))
-				{
-					lifter.previousToteLength();
-				}
-
-				if (joystick.getButton(DOWN_BIN))
-				{
-					lifter.previousBinLength();
-				}
-
-				if (joystick.getButton(UP_BIN))
-				{
-					lifter.nextBinLength();
-				}
-
-				if (joystick.getButton(GO_TO_TOP))
-				{
-					lifter.goToTopLimit();
-				}
-
-				if (joystick.getButton(GO_TO_BOTTOM))
-				{
-					lifter.goToGround();
-				}
-			}
-
-		}, REFRESH_RATE_MS, true));
-
-		eventID.add(clock.addTimeListener(new ITimeListener()
-		{
-			@Override
-			public void timeEvent(TimeEventArgs timeEvent)
-			{
-				if (joystick.getButton(STREIGHTEN_WITH_TOTE_WIDE))
-				{
-					driverAssist.binSweetSpot(SweetSpotMode.TOTE_WIDE);
-					driverAssist.correctRotation(SweetSpotMode.TOTE_WIDE);
-				}
-
-				if (joystick.getButton(STREIGHTEN_WITH_TOTE_THIN))
-				{
-					driverAssist.binSweetSpot(SweetSpotMode.TOTE_THIN);
-					driverAssist.correctRotation(SweetSpotMode.TOTE_THIN);
-				}
-			}
-
-		}, REFRESH_RATE_MS, true));
+//		eventID.add(clock.addTimeListener((event) -> {
+//			if (joystick.getButton(UP_TOTE))
+//			{
+//				lifter.nextToteLength();
+//			}
+//
+//			if (joystick.getButton(DOWN_TOTE))
+//			{
+//				lifter.previousToteLength();
+//			}
+//
+//			if (joystick.getButton(DOWN_BIN))
+//			{
+//				lifter.previousBinLength();
+//			}
+//
+//			if (joystick.getButton(UP_BIN))
+//			{
+//				lifter.nextBinLength();
+//			}
+//
+//			if (joystick.getButton(GO_TO_TOP))
+//			{
+//				lifter.goToTopLimit();
+//			}
+//
+//			if (joystick.getButton(GO_TO_BOTTOM))
+//			{
+//				lifter.goToGround();
+//			}
+//			if (joystick.getButton(STREIGHTEN_WITH_TOTE_WIDE))
+//			{
+//				driverAssist.binSweetSpot(SweetSpotMode.TOTE_WIDE);
+//				driverAssist.correctRotation(SweetSpotMode.TOTE_WIDE);
+//			}
+//
+//			if (joystick.getButton(STREIGHTEN_WITH_TOTE_THIN))
+//			{
+//				driverAssist.binSweetSpot(SweetSpotMode.TOTE_THIN);
+//				driverAssist.correctRotation(SweetSpotMode.TOTE_THIN);
+//			}
+//		}, REFRESH_RATE_MS, true));
 	}
 
 	public void disable()
@@ -159,6 +140,59 @@ public class TeleopControl
 		{
 			clock.removeListener(eventID.get(i));
 			eventID.remove(i);
+		}
+	}
+	
+	public void doTeleopButtonEvents()
+	{
+		if (joystick.getButton(UP_TOTE))
+		{
+			lifter.nextToteLength();
+		}
+
+		if (joystick.getButton(DOWN_TOTE))
+		{
+			lifter.previousToteLength();
+		}
+
+		if (joystick.getButton(DOWN_BIN))
+		{
+			lifter.previousBinLength();
+		}
+
+		if (joystick.getButton(UP_BIN))
+		{
+			lifter.nextBinLength();
+		}
+
+		if (joystick.getButton(GO_TO_TOP))
+		{
+			lifter.goToTopLimit();
+		}
+
+		if (joystick.getButton(GO_TO_BOTTOM))
+		{
+			lifter.goToGround();
+		}
+		if (joystick.getButton(STREIGHTEN_WITH_TOTE_WIDE))
+		{
+			driverAssist.binSweetSpot(SweetSpotMode.TOTE_WIDE);
+			driverAssist.correctRotation(SweetSpotMode.TOTE_WIDE);
+		}
+
+		if (joystick.getButton(STREIGHTEN_WITH_TOTE_THIN))
+		{
+			driverAssist.binSweetSpot(SweetSpotMode.TOTE_THIN);
+			driverAssist.correctRotation(SweetSpotMode.TOTE_THIN);
+		}
+		
+		try
+		{
+			Thread.sleep(200);
+		} catch (InterruptedException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }
