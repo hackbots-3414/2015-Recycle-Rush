@@ -1,15 +1,8 @@
 package org.usfirst.frc.team3414.robot;
 
-import org.usfirst.frc.team3414.sensors.ITimeListener;
-import org.usfirst.frc.team3414.sensors.SensorConfig;
-import org.usfirst.frc.team3414.actuators.ActuatorConfig;
-import org.usfirst.frc.team3414.actuators.ILiftAssist;
-import org.usfirst.frc.team3414.sensors.SweetSpotMode;
-import org.usfirst.frc.team3414.sensors.TimeEventArgs;
 import org.usfirst.frc.team3414.teleop.TeleopControl;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -20,11 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends IterativeRobot
 {
-	SensorConfig sensorConfig;
-//	ActuatorConfig actuatorConfig;
-//	private boolean a = false;
-//	private boolean b = false;
-//	IJoystick joy;
+	//SensorConfig sensorConfig;
 	
 	TeleopControl teleop;
 	
@@ -34,11 +23,9 @@ public class Robot extends IterativeRobot
 	 */
 	public void robotInit()
 	{	
-		//This must always get run at the start of init. Do not perform any init before this is called
 		RobotStatus.setIsRunning(true);
 		
-		sensorConfig = SensorConfig.getInstance();
-//		actuatorConfig = ActuatorConfig.getInstance();
+		//sensorConfig = SensorConfig.getInstance();
 		
 		teleop = new TeleopControl();
 	}
@@ -65,58 +52,6 @@ public class Robot extends IterativeRobot
 	 */
 	public void teleopPeriodic()
 	{
-		
-		teleop.doTeleopButtonEvents();
-		
-		/*
-		
-		SensorConfig.getInstance().getClock().addTimeListener(new ITimeListener()
-		{
-
-			int i = 0;
-			
-			@Override
-			public void timeEvent(TimeEventArgs timeEvent)
-			{
-				i+=1;
-				SmartDashboard.putNumber("Things", i);
-			}
-			
-		}, 100);
-		*/
-		
-//		SmartDashboard.putNumber("Encoder Position", sensorConfig.getForkLiftEncoder().getPosition());
-//		while(joy.getButtonSeven())
-//		{
-//			((Forklift)actuatorConfig.getForklift()).up();
-//		}
-//		if(joy.getButtonEight())
-//		{
-//			while(!joy.getButtonEight())
-//			{
-//				((Forklift)actuatorConfig.getForklift()).down();
-//			}
-//			
-//			// Currently the forklift does not engage when it goes down, only when going up.
-//			// This is so because if we call this function it does not 'end' so to speak. It goes through the loop forever...
-//			// Use the tote up and down functions
-//		}
-//		
-//		((Forklift)actuatorConfig.getForklift()).stopLift();
-//		
-//		if(joy.getButtonNine())
-//		{
-//			actuatorConfig.getDriveTrain().move(0, 0, SmartDashboard.getNumber("Rotational Speed", 0.5));
-//		} if(joy.getButtonTwelve())
-//		{
-//			actuatorConfig.getServo().engage();
-//		} if(joy.getButtonEleven())
-//		{
-//			actuatorConfig.getServo().disengage();
-//		}
-//		else{
-//			actuatorConfig.getDriveTrain().move(joy.getMagnitude(), joy.getDirectionDegrees(), joy.getTwist());
-//		}
 		
 	}
 

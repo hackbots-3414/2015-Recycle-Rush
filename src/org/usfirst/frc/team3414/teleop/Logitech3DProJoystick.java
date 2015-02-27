@@ -1,13 +1,12 @@
 package org.usfirst.frc.team3414.teleop;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Logitech3DProJoystick implements IJoystick
+public class Logitech3DProJoystick extends Thread implements IJoystick
 {
 	Joystick joy;
-
-	public Logitech3DProJoystick(int channel)
+	
+	protected Logitech3DProJoystick(int channel)
 	{
 		joy = new Joystick(channel);
 	}
@@ -24,7 +23,6 @@ public class Logitech3DProJoystick implements IJoystick
 
 	public double getMagnitude()
 	{
-//		SmartDashboard.putNumber("Joystick Axis", getMagnitude());
 		return joy.getMagnitude();
 	}
 
