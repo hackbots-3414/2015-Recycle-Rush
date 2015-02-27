@@ -45,7 +45,7 @@ public class LogData
 	 * @param buffer
 	 * @throws IOException
 	 */
-	private void write(String buffer) throws IOException
+	protected void write(String buffer) throws IOException
 	{
 		BufferedWriter out = new BufferedWriter(new FileWriter(new File(this.logFile)));
 		out.append(getTimeStamp()).append(buffer).append(cr);
