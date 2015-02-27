@@ -4,19 +4,16 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.Formatter;
+import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
-import java.util.Locale;
 
 public class LogData
 {
 
-	private final String logFile = "";
+	private final String logFile = "/home/lvuser/logger3414.log";
 	private static LogData logData = null;
 	private String cr = System.getProperty("line.separator");
-	private StringBuilder sbr = new StringBuilder();
-	private Formatter formatter = new Formatter(sbr, Locale.US);
+    private SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss - ");
 	
 	public static LogData getInstance()
 	{
@@ -28,12 +25,18 @@ public class LogData
 	}
 
 	/**
-	 * record text to Log
-	 * @param buffer
+	 * Record text to Log located in "/home/lvuser/logger3414.log"
+	 * @param buffer is a string of text to be logged
 	 */
-	public void record(String buffer)
+	public synchronized void record(String buffer)
 	{
-		write(buffer);
+		try
+		{
+			write(buffer);
+		} catch (IOException e)
+		{
+			System.err.println("Error writing to log " + e.getMessage());
+		}
 	}
 
 	/**
@@ -42,7 +45,7 @@ public class LogData
 	 * @param buffer
 	 * @throws IOException
 	 */
-	private synchronized void write(String buffer) throws IOException
+	private void write(String buffer) throws IOException
 	{
 		BufferedWriter out = new BufferedWriter(new FileWriter(new File(this.logFile)));
 		out.append(getTimeStamp()).append(buffer).append(cr);
@@ -51,8 +54,6 @@ public class LogData
 	
 	private String getTimeStamp()
 	{
-		Calendar cal = new GregorianCalendar();
-		String date = String.format("%1$tmm %1$tEE,%1$tYY %1$tHH,%1$tMM,%1$tSS.S", cal.get(Calendar.YEAR), cal.get(Calendar.DAY_OF_MONTH), 
-				cal.get(Calendar.HOUR), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND), cal.get(Calendar.MILLISECOND));
+        return this.dateFormater.format(new GregorianCalendar().getTime());
 	}
 }
