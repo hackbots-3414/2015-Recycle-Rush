@@ -68,8 +68,7 @@ public class Camera implements IVision
 	private int session;
 
 	// A structure to hold measurements of a particle
-	public class ParticleReport implements Comparator<ParticleReport>,
-			Comparable<ParticleReport>
+	public class ParticleReport implements Comparator<ParticleReport>, Comparable<ParticleReport>
 	{
 		private double PercentAreaToImageArea;
 		private double Area;
@@ -101,15 +100,22 @@ public class Camera implements IVision
 
 	public Camera()
 	{
+
 		frame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
 
 		server = CameraServer.getInstance();
 		server.setQuality(50);
-		
-		//server.startAutomaticCapture("cam0");
 
-		session = NIVision.IMAQdxOpenCamera("cam1",
-				NIVision.IMAQdxCameraControlMode.CameraControlModeController);
+		SensorConfig.getInstance().getClock().addTimeListener((event) -> {
+			int sessionLookAt = NIVision.IMAQdxOpenCamera("cam0", NIVision.IMAQdxCameraControlMode.CameraControlModeController);
+			Image frameLookAt = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
+			NIVision.IMAQdxGrab(sessionLookAt, frameLookAt, 1);
+			server.setImage(frameLookAt);
+		}, 100, true);
+
+		// server.startAutomaticCapture("cam0");
+
+		session = NIVision.IMAQdxOpenCamera("cam1", NIVision.IMAQdxCameraControlMode.CameraControlModeController);
 		NIVision.IMAQdxConfigureGrab(session);
 
 		// NIVision.ParticleFilterCriteria2 criteria[] = new
@@ -153,11 +159,8 @@ public class Camera implements IVision
 		Image binaryFrame = NIVision.imaqCreateImage(ImageType.IMAGE_U8, 3);
 		// Particle filter and other filter options
 		NIVision.ParticleFilterCriteria2 criteria[] = new NIVision.ParticleFilterCriteria2[1];
-		criteria[0] = new NIVision.ParticleFilterCriteria2(
-				NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA, AREA_MINIMUM,
-				100.0, 0, 0);
-		NIVision.ParticleFilterOptions2 filterOptions = new NIVision.ParticleFilterOptions2(
-				0, 0, 1, 1);
+		criteria[0] = new NIVision.ParticleFilterCriteria2(NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA, AREA_MINIMUM, 100.0, 0, 0);
+		NIVision.ParticleFilterOptions2 filterOptions = new NIVision.ParticleFilterOptions2(0, 0, 1, 1);
 
 		// CameraServer.getInstance().setImage(frame);
 
@@ -169,33 +172,26 @@ public class Camera implements IVision
 			TOTE_SAT_RANGE.maxValue = (int) SmartDashboard.getNumber("MAX SAT");
 			TOTE_SAT_RANGE.minValue = (int) SmartDashboard.getNumber("MIN SAT");
 
-			TOTE_VAL_RANGE.maxValue = (int) SmartDashboard
-					.getNumber("MAX VALUE");
-			TOTE_VAL_RANGE.minValue = (int) SmartDashboard
-					.getNumber("MIN VALUE");
+			TOTE_VAL_RANGE.maxValue = (int) SmartDashboard.getNumber("MAX VALUE");
+			TOTE_VAL_RANGE.minValue = (int) SmartDashboard.getNumber("MIN VALUE");
 		}
 
 		// Threshold the image looking for yellow (tote color)
-		NIVision.imaqColorThreshold(binaryFrame, frame, 255,
-				NIVision.ColorMode.HSV, TOTE_HUE_RANGE, TOTE_SAT_RANGE,
-				TOTE_VAL_RANGE);
+		NIVision.imaqColorThreshold(binaryFrame, frame, 255, NIVision.ColorMode.HSV, TOTE_HUE_RANGE, TOTE_SAT_RANGE, TOTE_VAL_RANGE);
 
 		// Image morphFrame = NIVision.imaqCreateImage(ImageType.IMAGE_U8, 3);
 		// StructuringElement structure = new StructuringElement(3, 3, 1);
 
-		NIVision.imaqGrayMorphology(binaryFrame, binaryFrame,
-				NIVision.MorphologyMethod.ERODE, null);
+		NIVision.imaqGrayMorphology(binaryFrame, binaryFrame, NIVision.MorphologyMethod.ERODE, null);
 
 		// OUTPUT IMAGE TO SMART DASHBOARD
 		// CameraServer.getInstance().setImage(binaryFrame);
 
 		// filter out small particles
-		float areaMin = (float) SmartDashboard.getNumber("Area min %",
-				AREA_MINIMUM);
+		float areaMin = (float) SmartDashboard.getNumber("Area min %", AREA_MINIMUM);
 		criteria[0].lower = areaMin;
 
-		imaqError = NIVision.imaqParticleFilter4(binaryFrame, binaryFrame,
-				criteria, filterOptions, null);
+		imaqError = NIVision.imaqParticleFilter4(binaryFrame, binaryFrame, criteria, filterOptions, null);
 
 		int numParticles = NIVision.imaqCountParticles(binaryFrame, 1);
 		numParticles = NIVision.imaqCountParticles(binaryFrame, 1);
@@ -212,23 +208,14 @@ public class Camera implements IVision
 			for (int particleIndex = 0; particleIndex < numParticles; particleIndex++)
 			{
 				ParticleReport par = new ParticleReport();
-				par.PercentAreaToImageArea = NIVision.imaqMeasureParticle(
-						binaryFrame, particleIndex, 0,
+				par.PercentAreaToImageArea = NIVision.imaqMeasureParticle(binaryFrame, particleIndex, 0,
 						NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA);
-				par.Area = NIVision.imaqMeasureParticle(binaryFrame,
-						particleIndex, 0, NIVision.MeasurementType.MT_AREA);
-				par.BoundingRectTop = NIVision.imaqMeasureParticle(binaryFrame,
-						particleIndex, 0,
-						NIVision.MeasurementType.MT_BOUNDING_RECT_TOP);
-				par.BoundingRectLeft = NIVision.imaqMeasureParticle(
-						binaryFrame, particleIndex, 0,
-						NIVision.MeasurementType.MT_BOUNDING_RECT_LEFT);
-				par.BoundingRectBottom = NIVision.imaqMeasureParticle(
-						binaryFrame, particleIndex, 0,
-						NIVision.MeasurementType.MT_BOUNDING_RECT_BOTTOM);
-				par.BoundingRectRight = NIVision.imaqMeasureParticle(
-						binaryFrame, particleIndex, 0,
-						NIVision.MeasurementType.MT_BOUNDING_RECT_RIGHT);
+				par.Area = NIVision.imaqMeasureParticle(binaryFrame, particleIndex, 0, NIVision.MeasurementType.MT_AREA);
+				par.BoundingRectTop = NIVision.imaqMeasureParticle(binaryFrame, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_TOP);
+				par.BoundingRectLeft = NIVision.imaqMeasureParticle(binaryFrame, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_LEFT);
+				par.BoundingRectBottom = NIVision
+						.imaqMeasureParticle(binaryFrame, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_BOTTOM);
+				par.BoundingRectRight = NIVision.imaqMeasureParticle(binaryFrame, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_RIGHT);
 				particles.add(par);
 
 				// Keeps the largest particle known
@@ -241,14 +228,10 @@ public class Camera implements IVision
 
 			if (outputToDashboard)
 			{
-				SmartDashboard.putNumber("Bounding Top",
-						particles.get(largest_inx).BoundingRectTop);
-				SmartDashboard.putNumber("Bounding Left",
-						particles.get(largest_inx).BoundingRectLeft);
-				SmartDashboard.putNumber("Bounding Right",
-						particles.get(largest_inx).BoundingRectRight);
-				SmartDashboard.putNumber("Bounding Bottom",
-						particles.get(largest_inx).BoundingRectBottom);
+				SmartDashboard.putNumber("Bounding Top", particles.get(largest_inx).BoundingRectTop);
+				SmartDashboard.putNumber("Bounding Left", particles.get(largest_inx).BoundingRectLeft);
+				SmartDashboard.putNumber("Bounding Right", particles.get(largest_inx).BoundingRectRight);
+				SmartDashboard.putNumber("Bounding Bottom", particles.get(largest_inx).BoundingRectBottom);
 			}
 
 			// This example only scores the largest particle. Extending to score
@@ -327,53 +310,39 @@ public class Camera implements IVision
 		Image binaryFrame = NIVision.imaqCreateImage(ImageType.IMAGE_U8, 3);
 		// Particle filter and other filter options
 		NIVision.ParticleFilterCriteria2 criteria[] = new NIVision.ParticleFilterCriteria2[1];
-		criteria[0] = new NIVision.ParticleFilterCriteria2(
-				NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA, AREA_MINIMUM,
-				100.0, 0, 0);
-		NIVision.ParticleFilterOptions2 filterOptions = new NIVision.ParticleFilterOptions2(
-				0, 0, 1, 1);
+		criteria[0] = new NIVision.ParticleFilterCriteria2(NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA, AREA_MINIMUM, 100.0, 0, 0);
+		NIVision.ParticleFilterOptions2 filterOptions = new NIVision.ParticleFilterOptions2(0, 0, 1, 1);
 
 		// CameraServer.getInstance().setImage(frame);
 
 		if (outputToDashboard)
 		{
-			BIN_HUE_RANGE.maxValue = (int) SmartDashboard
-					.getNumber("MAX HUE_BIN");
-			BIN_HUE_RANGE.minValue = (int) SmartDashboard
-					.getNumber("MIN HUE_BIN");
+			BIN_HUE_RANGE.maxValue = (int) SmartDashboard.getNumber("MAX HUE_BIN");
+			BIN_HUE_RANGE.minValue = (int) SmartDashboard.getNumber("MIN HUE_BIN");
 
-			BIN_SAT_RANGE.maxValue = (int) SmartDashboard
-					.getNumber("MAX SAT_BIN");
-			BIN_SAT_RANGE.minValue = (int) SmartDashboard
-					.getNumber("MIN SAT_BIN");
+			BIN_SAT_RANGE.maxValue = (int) SmartDashboard.getNumber("MAX SAT_BIN");
+			BIN_SAT_RANGE.minValue = (int) SmartDashboard.getNumber("MIN SAT_BIN");
 
-			BIN_VAL_RANGE.maxValue = (int) SmartDashboard
-					.getNumber("MAX VALUE_BIN");
-			BIN_VAL_RANGE.minValue = (int) SmartDashboard
-					.getNumber("MIN VALUE_BIN");
+			BIN_VAL_RANGE.maxValue = (int) SmartDashboard.getNumber("MAX VALUE_BIN");
+			BIN_VAL_RANGE.minValue = (int) SmartDashboard.getNumber("MIN VALUE_BIN");
 		}
 
 		// Threshold the image looking for yellow (tote color)
-		NIVision.imaqColorThreshold(binaryFrame, frame, 255,
-				NIVision.ColorMode.HSV, BIN_HUE_RANGE, BIN_SAT_RANGE,
-				BIN_VAL_RANGE);
+		NIVision.imaqColorThreshold(binaryFrame, frame, 255, NIVision.ColorMode.HSV, BIN_HUE_RANGE, BIN_SAT_RANGE, BIN_VAL_RANGE);
 
 		// Image morphFrame = NIVision.imaqCreateImage(ImageType.IMAGE_U8, 3);
 		// StructuringElement structure = new StructuringElement(3, 3, 1);
 
-		NIVision.imaqGrayMorphology(binaryFrame, binaryFrame,
-				NIVision.MorphologyMethod.CLOSE, null);
+		NIVision.imaqGrayMorphology(binaryFrame, binaryFrame, NIVision.MorphologyMethod.CLOSE, null);
 
 		// OUTPUT IMAGE TO SMART DASHBOARD
 		// CameraServer.getInstance().setImage(binaryFrame);
 
 		// filter out small particles
-		float areaMin = (float) SmartDashboard.getNumber("Area min %",
-				AREA_MINIMUM);
+		float areaMin = (float) SmartDashboard.getNumber("Area min %", AREA_MINIMUM);
 		criteria[0].lower = areaMin;
 
-		imaqError = NIVision.imaqParticleFilter4(binaryFrame, binaryFrame,
-				criteria, filterOptions, null);
+		imaqError = NIVision.imaqParticleFilter4(binaryFrame, binaryFrame, criteria, filterOptions, null);
 
 		int numParticles = NIVision.imaqCountParticles(binaryFrame, 1);
 		numParticles = NIVision.imaqCountParticles(binaryFrame, 1);
@@ -390,23 +359,14 @@ public class Camera implements IVision
 			for (int particleIndex = 0; particleIndex < numParticles; particleIndex++)
 			{
 				ParticleReport par = new ParticleReport();
-				par.PercentAreaToImageArea = NIVision.imaqMeasureParticle(
-						binaryFrame, particleIndex, 0,
+				par.PercentAreaToImageArea = NIVision.imaqMeasureParticle(binaryFrame, particleIndex, 0,
 						NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA);
-				par.Area = NIVision.imaqMeasureParticle(binaryFrame,
-						particleIndex, 0, NIVision.MeasurementType.MT_AREA);
-				par.BoundingRectTop = NIVision.imaqMeasureParticle(binaryFrame,
-						particleIndex, 0,
-						NIVision.MeasurementType.MT_BOUNDING_RECT_TOP);
-				par.BoundingRectLeft = NIVision.imaqMeasureParticle(
-						binaryFrame, particleIndex, 0,
-						NIVision.MeasurementType.MT_BOUNDING_RECT_LEFT);
-				par.BoundingRectBottom = NIVision.imaqMeasureParticle(
-						binaryFrame, particleIndex, 0,
-						NIVision.MeasurementType.MT_BOUNDING_RECT_BOTTOM);
-				par.BoundingRectRight = NIVision.imaqMeasureParticle(
-						binaryFrame, particleIndex, 0,
-						NIVision.MeasurementType.MT_BOUNDING_RECT_RIGHT);
+				par.Area = NIVision.imaqMeasureParticle(binaryFrame, particleIndex, 0, NIVision.MeasurementType.MT_AREA);
+				par.BoundingRectTop = NIVision.imaqMeasureParticle(binaryFrame, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_TOP);
+				par.BoundingRectLeft = NIVision.imaqMeasureParticle(binaryFrame, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_LEFT);
+				par.BoundingRectBottom = NIVision
+						.imaqMeasureParticle(binaryFrame, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_BOTTOM);
+				par.BoundingRectRight = NIVision.imaqMeasureParticle(binaryFrame, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_RIGHT);
 				particles.add(par);
 
 				// Keeps the largest particle known
@@ -419,14 +379,10 @@ public class Camera implements IVision
 
 			if (outputToDashboard)
 			{
-				SmartDashboard.putNumber("Bounding Top",
-						particles.get(largest_inx).BoundingRectTop);
-				SmartDashboard.putNumber("Bounding Left",
-						particles.get(largest_inx).BoundingRectLeft);
-				SmartDashboard.putNumber("Bounding Right",
-						particles.get(largest_inx).BoundingRectRight);
-				SmartDashboard.putNumber("Bounding Bottom",
-						particles.get(largest_inx).BoundingRectBottom);
+				SmartDashboard.putNumber("Bounding Top", particles.get(largest_inx).BoundingRectTop);
+				SmartDashboard.putNumber("Bounding Left", particles.get(largest_inx).BoundingRectLeft);
+				SmartDashboard.putNumber("Bounding Right", particles.get(largest_inx).BoundingRectRight);
+				SmartDashboard.putNumber("Bounding Bottom", particles.get(largest_inx).BoundingRectBottom);
 			}
 
 			// This example only scores the largest particle. Extending to score
@@ -449,13 +405,11 @@ public class Camera implements IVision
 				SmartDashboard.putNumber("Tote Score Aspect", scores.Aspect);
 			}
 
-			double binRectangularity = rectangularity(particles
-					.elementAt(largest_inx));
+			double binRectangularity = rectangularity(particles.elementAt(largest_inx));
 
 			if (outputToDashboard)
 			{
-				SmartDashboard.putNumber("Bin Rectangularity",
-						binRectangularity);
+				SmartDashboard.putNumber("Bin Rectangularity", binRectangularity);
 			}
 
 			if (binRectangularity > 0.95 && binRectangularity < 1.65)
@@ -496,8 +450,7 @@ public class Camera implements IVision
 
 	private double AreaScore(ParticleReport report)
 	{
-		double boundingArea = (report.BoundingRectBottom - report.BoundingRectTop)
-				* (report.BoundingRectRight - report.BoundingRectLeft);
+		double boundingArea = (report.BoundingRectBottom - report.BoundingRectTop) * (report.BoundingRectRight - report.BoundingRectLeft);
 
 		// Tape is 7" edge so 49" bounding rect. With 2" wide tape it covers 24"
 		// of the rect.
@@ -525,8 +478,7 @@ public class Camera implements IVision
 
 	private double rectangularity(ParticleReport report)
 	{
-		return (report.BoundingRectBottom - report.BoundingRectTop)
-				/ (report.BoundingRectRight - report.BoundingRectLeft);
+		return (report.BoundingRectBottom - report.BoundingRectTop) / (report.BoundingRectRight - report.BoundingRectLeft);
 	}
 
 	/*
@@ -574,14 +526,10 @@ public class Camera implements IVision
 		NIVision.GetImageSizeResult size;
 
 		size = NIVision.imaqGetImageSize(image);
-		normalizedWidth = 2
-				* (report.BoundingRectRight - report.BoundingRectLeft)
-				/ size.width;
+		normalizedWidth = 2 * (report.BoundingRectRight - report.BoundingRectLeft) / size.width;
 		targetWidth = 7;
 
-		return targetWidth
-				/ (normalizedWidth * 12 * Math.tan(VIEW_ANGLE * Math.PI
-						/ (180 * 2)));
+		return targetWidth / (normalizedWidth * 12 * Math.tan(VIEW_ANGLE * Math.PI / (180 * 2)));
 	}
 
 	ToteSide toteDetect;
