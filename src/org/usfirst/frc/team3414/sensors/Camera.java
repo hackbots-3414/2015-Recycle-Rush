@@ -105,10 +105,11 @@ public class Camera implements IVision
 
 		server = CameraServer.getInstance();
 		server.setQuality(50);
-
+		
+		int sessionLookAt = NIVision.IMAQdxOpenCamera("cam0", NIVision.IMAQdxCameraControlMode.CameraControlModeController);
+		Image frameLookAt = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
+		
 		SensorConfig.getInstance().getClock().addTimeListener((event) -> {
-			int sessionLookAt = NIVision.IMAQdxOpenCamera("cam0", NIVision.IMAQdxCameraControlMode.CameraControlModeController);
-			Image frameLookAt = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
 			NIVision.IMAQdxGrab(sessionLookAt, frameLookAt, 1);
 			server.setImage(frameLookAt);
 		}, 100, true);

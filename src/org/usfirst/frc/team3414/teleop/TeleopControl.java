@@ -3,7 +3,6 @@ package org.usfirst.frc.team3414.teleop;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import org.usfirst.frc.team3414.actuators.ActuatorConfig;
 import org.usfirst.frc.team3414.actuators.IDriveTrain;
 import org.usfirst.frc.team3414.actuators.ILiftAssist;
@@ -15,7 +14,6 @@ import org.usfirst.frc.team3414.sensors.SensorConfig;
 import org.usfirst.frc.team3414.sensors.SweetSpotMode;
 import org.usfirst.frc.team3414.sensors.TimeEventArgs;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 
 public class TeleopControl
 {
@@ -147,8 +145,19 @@ public class TeleopControl
 				SmartDashboard.putBoolean("A", true);
 				joystickEventHandler.clearQueue();
 				lifter.forkOverride();
-				
-				//lifter.stop();
+
+				// lifter.stop();
+			}
+
+			if (joystick.getButton(UP_BIN))
+			{
+				lifter.up();
+			} else if (joystick.getButton(DOWN_BIN))
+			{
+				lifter.down();
+			} else
+			{
+				lifter.stop();
 			}
 		}, 10, true));
 

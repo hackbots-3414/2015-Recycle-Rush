@@ -28,6 +28,9 @@ public class Forklift implements ILiftAssist
 	private boolean isCalibrated = false;
 	private IClock clock;
 
+	private boolean upInit = true;
+	private boolean downInit = true;
+	
 	private boolean forkOverride = false;
 
 	// private ExecutorService executor;
@@ -46,6 +49,9 @@ public class Forklift implements ILiftAssist
 	public void stop()
 	{
 		encodedMotor.stop();
+		lockLift();
+		upInit = true;
+		downInit = true;
 	}
 
 	private void stopLiftDown()
@@ -254,6 +260,30 @@ public class Forklift implements ILiftAssist
 	public void forkOverride()
 	{
 		forkOverride = true;
+	}
+
+	public void up()
+	{
+		if (upInit) {
+			latch.disengage();
+			upInit = false;
+		}
+		if (!isAtTop())
+		{
+			encodedMotor.up(LIFTER_UP_SPEED);
+		}
+	}
+
+	public void down()
+	{
+		if (downInit) {
+			unlockLift();
+			downInit = false;
+		}
+		if (!isAtBottom())
+		{
+			encodedMotor.down(LIFTER_DOWN_SPEED);
+		}
 	}
 
 }

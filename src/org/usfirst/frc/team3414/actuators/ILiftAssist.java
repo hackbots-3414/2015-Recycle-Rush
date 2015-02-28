@@ -28,4 +28,8 @@ public interface ILiftAssist
 	public void stop();
 	
 	public void forkOverride();
+
+	public void up();
+	
+	public void down();
 }
