@@ -27,8 +27,11 @@ public class Forklift implements ILiftAssist
 	private ILimitSwitch botSwitch;
 	private boolean isCalibrated = false;
 	private IClock clock;
-	//private ExecutorService executor;
-	
+
+	private boolean forkOverride = false;
+
+	// private ExecutorService executor;
+
 	protected Forklift(IEncodedMotor motor, ILimitSwitch topSwitch, ILimitSwitch bottomSwitch, IServo servo, IClock clock)
 	{
 		encodedMotor = motor;
@@ -37,9 +40,9 @@ public class Forklift implements ILiftAssist
 		latch = servo;
 		latch.disengage();
 		this.clock = clock;
-		//this.executor = Executors.newFixedThreadPool(1);
+		// this.executor = Executors.newFixedThreadPool(1);
 	}
-	
+
 	public void stop()
 	{
 		encodedMotor.stop();
@@ -47,24 +50,39 @@ public class Forklift implements ILiftAssist
 
 	private void stopLiftDown()
 	{
-		encodedMotor.stop();
-		waitServo();
-		lockLift();
+		if (!forkOverride)
+		{
+			encodedMotor.stop();
+			waitServo();
+			lockLift();
+		} else
+		{
+			encodedMotor.stop();
+		}
 	}
-	private void stopLiftUp() {
-		encodedMotor.stop();
-		lockLift();
+
+	private void stopLiftUp()
+	{
+		if (!forkOverride)
+		{
+			encodedMotor.stop();
+			lockLift();
+		} else
+		{
+			encodedMotor.stop();
+		}
 	}
 
 	@Override
 	public void goToBottomLimit()
 	{
 		unlockLift();
-		while (!isAtBottom())
+		while (!isAtBottom() && !forkOverride)
 		{
 			goDownSafe();
 			SmartDashboard.putNumber("Distance", encodedMotor.getDistance());
 		}
+		forkOverride = false;
 
 		stopLiftDown();
 	}
@@ -100,11 +118,12 @@ public class Forklift implements ILiftAssist
 	public void goToTopLimit()
 	{
 		unlockLift();
-		while (!isAtTop())
+		while (!isAtTop() && !forkOverride)
 		{
 			encodedMotor.up(LIFTER_UP_SPEED);
 			SmartDashboard.putNumber("Distance", encodedMotor.getDistance());
 		}
+		forkOverride = false;
 		stopLiftUp();
 	}
 
@@ -133,41 +152,44 @@ public class Forklift implements ILiftAssist
 
 	private void nextLength(double encoderCount)
 	{
-		//executor.submit(() -> {
-			if (!isAtTop())
+		// executor.submit(() -> {
+		if (!isAtTop())
+		{
+			double previousDistance = encodedMotor.getDistance();
+			unlockLift();
+			while (!isAtTop() && encodedMotor.getDistance() < (previousDistance + encoderCount) && !forkOverride)
 			{
-				double previousDistance = encodedMotor.getDistance();
-				unlockLift();
-				while (!isAtTop() && encodedMotor.getDistance() < (previousDistance + encoderCount))
-				{
-					encodedMotor.up(LIFTER_UP_SPEED);
-					SmartDashboard.putNumber("Distance", encodedMotor.getDistance());
-				}
+				encodedMotor.up(LIFTER_UP_SPEED);
+				SmartDashboard.putNumber("Distance", encodedMotor.getDistance());
 			}
-			stopLiftUp();
-		//});
+		}
+		forkOverride = false;
+		stopLiftUp();
+		// });
 
 	}
 
 	private void previousLength(double encoderCount)
 	{
-		//executor.submit(() -> {
-			if (!isAtBottom())
+		// executor.submit(() -> {
+		if (!isAtBottom())
+		{
+			double previousDistance = encodedMotor.getDistance();
+			unlockLift();
+			/*
+			 * if (!isAtBottom() && encodedMotor.getDistance() >
+			 * (previousDistance - encoderCount)) {
+			 * encodedMotor.down(LIFTER_DOWN_SPEED); }
+			 */
+			while (!isAtBottom() && encodedMotor.getDistance() > (previousDistance - encoderCount) && !forkOverride)
 			{
-				double previousDistance = encodedMotor.getDistance();
-				unlockLift();
-				/*if (!isAtBottom() && encodedMotor.getDistance() > (previousDistance - encoderCount))
-				{
-					encodedMotor.down(LIFTER_DOWN_SPEED);
-				}*/
-				while (!isAtBottom() && encodedMotor.getDistance() > (previousDistance - encoderCount))
-				{
-					goDownSafe();
-					SmartDashboard.putNumber("Distance", encodedMotor.getDistance());
-				}
+				goDownSafe();
+				SmartDashboard.putNumber("Distance", encodedMotor.getDistance());
 			}
-			stopLiftDown();
-		//});
+		}
+		forkOverride = false;
+		stopLiftDown();
+		// });
 	}
 
 	private void goDownSafe()
@@ -209,25 +231,29 @@ public class Forklift implements ILiftAssist
 	@Override
 	public void calibrate()
 	{
-		//executor.submit(() -> {
+		// executor.submit(() -> {
 
-			unlockLift();
-			/*if (!isAtBottom())
-			{
-				encodedMotor.down(CALIBRATE_SPEED);
-			}*/
-			while (!isAtBottom())
-			{
-				goDownSafe();
-				SmartDashboard.putNumber("Distance", encodedMotor.getDistance());
-			}
+		unlockLift();
+		/*
+		 * if (!isAtBottom()) { encodedMotor.down(CALIBRATE_SPEED); }
+		 */
+		while (!isAtBottom())
+		{
+			goDownSafe();
+			SmartDashboard.putNumber("Distance", encodedMotor.getDistance());
+		}
 
-			stopLiftDown();
+		stopLiftDown();
 
-			encodedMotor.reset();
-			isCalibrated = true;
-		//});
+		encodedMotor.reset();
+		isCalibrated = true;
+		// });
 
+	}
+
+	public void forkOverride()
+	{
+		forkOverride = true;
 	}
 
 }

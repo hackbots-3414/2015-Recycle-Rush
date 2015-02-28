@@ -60,14 +60,18 @@ public class ButtonEventHandler extends Thread implements IButtonEventHandler
 	@Override
 	public void run()
 	{
+		List<Future<?>> futures = new ArrayList<Future<?>>();
+		
 		while (RobotStatus.isRunning())
 		{
-			List<Future<?>> futures = new ArrayList<Future<?>>();
 			List<Long> keys = new ArrayList<Long>(buttonListeners.keySet());
+			SmartDashboard.putBoolean("B", override);
 			if (!override)
 			{
+				SmartDashboard.putBoolean("C", false);
 				for (final long key : keys)
 				{
+					SmartDashboard.putBoolean("D", true);
 					final ButtonEventSubscription event = buttonListeners.get(key);
 					if (event != null)
 					{
@@ -92,10 +96,14 @@ public class ButtonEventHandler extends Thread implements IButtonEventHandler
 						}
 					}
 				}
+				
 			} else
 			{
+				SmartDashboard.putBoolean("D", false);
+				SmartDashboard.putBoolean("C", true);
 				for (Future<?> f : futures)
 				{
+	
 					SmartDashboard.putBoolean("Is Cancelled", f.isCancelled());
 					if (!f.isCancelled())
 					{

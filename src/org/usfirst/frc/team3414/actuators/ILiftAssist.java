@@ -26,4 +26,6 @@ public interface ILiftAssist
 	public void calibrate();
 	
 	public void stop();
+	
+	public void forkOverride();
 }
