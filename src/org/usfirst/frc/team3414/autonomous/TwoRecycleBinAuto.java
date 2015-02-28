@@ -48,7 +48,7 @@ public class TwoRecycleBinAuto implements AutonomousProcedure
 	@Override
 	public void doAuto() 
 	{
-		forkLift.goToGround(); // Moves to bottom level of lifting positions
+		forkLift.goToBottomLimit(); // Moves to bottom level of lifting positions
 		
 		driverAssist.binSweetSpot(SweetSpotMode.TOTE_WIDE); // Moves toward recycle bin that is placed in front of the robot at the beginning of a match
 		driverAssist.correctRotation(SweetSpotMode.TOTE_WIDE); // Correct rotation in front of the recycle bin
@@ -59,7 +59,7 @@ public class TwoRecycleBinAuto implements AutonomousProcedure
 		driveIntoZone.doAuto();
 		
 		// Drop recycle bin
-		forkLift.goToGround();
+		forkLift.goToBottomLimit();
 		
 		// Move sideways until the next bin is in sight
 		mecanumDrive.move(90, 1.0, 0);
@@ -86,7 +86,7 @@ public class TwoRecycleBinAuto implements AutonomousProcedure
 		
 		driveIntoZone.doAuto(); // Drive backward into the autonomous zone
 		
-		forkLift.goToGround(); // Drop the bin in the autonomous zone
+		forkLift.goToBottomLimit(); // Drop the bin in the autonomous zone
 	}
 
 }

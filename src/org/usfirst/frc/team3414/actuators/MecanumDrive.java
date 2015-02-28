@@ -13,41 +13,41 @@ import org.usfirst.frc.team3414.teleop.Display;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SpeedController;
 
-/**
- * <!-- begin-user-doc --> <!-- end-user-doc -->
- * 
- * @generated
- */
-
 public class MecanumDrive implements IDriveTrain, ITimeListener
 {
 	private double currentVelocity, currentAngle, currentRotation;
+	private double devAngle;
+
 	private RobotDrive drive;
 	private IMeasureDirection gyro;
 	private IMeasureAcceleration accel;
-	private double devAngle;
 	private IClock clock;
+	private ExecutorService threadpool;
+
 	private static final double ROTATE_CONSTANT = 0.5;
 	private double ROTATE_SECONDS_PER_DEGREE;
 	private double ROTATE_POWER_INTO_MOTORS;
-	private ExecutorService threadpool;
-	private static final int SAFETY_TIMEOUT = 300;
-	long eventID;
 
-	double Kp = 1.0;
+	private static final int SAFETY_TIMEOUT = 500;
+	private long eventID;
+	private final double PROPORTIONAL_CONSTANT = 1.0;
+	
+	private int UPPER_BOUND_ACCEL = 5;
+	private int LOWER_BOUND_ANGLE = 2;
+
+	private double accelY;
+	private double accelX;
 
 	protected MecanumDrive(IClock handler, IMeasureAcceleration accelerometer, IMeasureDirection gyro, SpeedController leftFront,
-			SpeedController rightFront, SpeedController leftRear, SpeedController rightRear)
+			SpeedController leftRear, SpeedController rightFront, SpeedController rightRear)
 	{
 		threadpool = Executors.newFixedThreadPool(1);
 		this.clock = handler;
 		eventID = clock.addTimeListener(this, 2000, true);
 		this.gyro = gyro;
-		// THIS WORK!!!!!!!!!!!!!!!!!!!!!!!!!
 		accel = accelerometer;
 		drive = new RobotDrive(leftFront, leftRear, rightFront, rightRear);
-		drive.setExpiration(SAFETY_TIMEOUT / 1000);
-		// gyro.reset();
+		drive.setExpiration(SAFETY_TIMEOUT / 4);
 	}
 
 	private boolean isGyroAvailable()
@@ -57,14 +57,21 @@ public class MecanumDrive implements IDriveTrain, ITimeListener
 
 	private void rotateDegreesGyroBased(double degrees, boolean clockWise)
 	{
-		double currentAngle = gyro.getDegrees();
-		threadpool.submit(() -> {
-			while (gyro.getDegrees() < currentAngle + degrees)
-			{
-				drive.mecanumDrive_Polar(0, 0, ROTATE_POWER_INTO_MOTORS);
-			}
-			MecanumDrive.this.stop();
-		});
+			double currentAngle = gyro.getDegrees();
+			threadpool.submit(() -> {
+				if (clockWise) {
+				while (gyro.getDegrees() < currentAngle + degrees)
+				{
+					drive.mecanumDrive_Polar(0, 0, ROTATE_POWER_INTO_MOTORS);
+				}
+				} else {
+					while (gyro.getDegrees() < currentAngle - degrees)
+					{
+						drive.mecanumDrive_Polar(0, 0, -ROTATE_POWER_INTO_MOTORS);
+					}
+				}
+				MecanumDrive.this.stop();
+			});
 	}
 
 	private void rotateDegreesTimeBased(double degrees, boolean clockWise)
@@ -129,14 +136,8 @@ public class MecanumDrive implements IDriveTrain, ITimeListener
 
 	public void toDisplay()
 	{
-		Display.getInstance().setDriveData(accelX, accelY, gyro.getDegrees(), gyro.getChangeInDegreesPerSecond());
+		//Display.getInstance().setDriveData(accelX, accelY, gyro.getDegrees(), gyro.getChangeInDegreesPerSecond());
 	}
-
-	int UPPER_BOUND_ACCEL = 5;
-	int LOWER_BOUND_ANGLE = 2;
-
-	double accelY;
-	double accelX;
 
 	@Override
 	public void timeEvent(TimeEventArgs timeEvent)
@@ -145,7 +146,7 @@ public class MecanumDrive implements IDriveTrain, ITimeListener
 		{
 			if (gyro != null)
 			{
-				drive.mecanumDrive_Polar(currentVelocity, currentAngle - gyro.getChangeInDegreesPerSecond() * Kp, currentRotation);
+				drive.mecanumDrive_Polar(currentVelocity, currentAngle - gyro.getChangeInDegreesPerSecond() * PROPORTIONAL_CONSTANT, currentRotation);
 			}
 
 			if (accel != null)
@@ -167,6 +168,7 @@ public class MecanumDrive implements IDriveTrain, ITimeListener
 				}
 			}
 		}
+		Display.getInstance().setDriveData(accelX, accelY, gyro.getDegrees(), gyro.getChangeInDegreesPerSecond());
 
 	}
 

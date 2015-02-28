@@ -9,5 +9,5 @@ import org.usfirst.frc.team3414.sensors.IEncoder;
  */
 public interface IEncodedMotor extends IMotor, IEncoder
 {
-	static final int DISTANCE_PER_PULSE = 1;
+	static final double DISTANCE_PER_PULSE = 0.0114122233;
 }

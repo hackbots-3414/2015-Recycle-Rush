@@ -8,8 +8,7 @@ public class Display
 	private static Display singleton = null;
 
 	// FORKLIFT
-	private long expectedForkPosition;
-	private int currentForkPosition;
+	private double currentForkPosition;
 	private double encoderRate;
 	private boolean topLimitHit;
 	private boolean bottomLimitHit;
@@ -40,7 +39,6 @@ public class Display
 	public void putGameData()
 	{
 		// FORKLIFT
-		SmartDashboard.putNumber("Expected Forklift Position: ", expectedForkPosition);
 		SmartDashboard.putNumber("Current Forklift Position: ", currentForkPosition);
 		SmartDashboard.putBoolean("Top Limit Switch Hit: ", topLimitHit);
 		SmartDashboard.putBoolean("Bottom Limit Switch Hit: ", bottomLimitHit);
@@ -49,7 +47,6 @@ public class Display
 	public void putDiagnosticsData()
 	{
 		// FORKLIFT
-		SmartDashboard.putNumber("Expected Forklift Position: ", expectedForkPosition);
 		SmartDashboard.putNumber("Current Forklift Position: ", currentForkPosition);
 		SmartDashboard.putNumber("Forklift Encoder Rate: ", encoderRate);
 		SmartDashboard.putBoolean("Top Limit Switch Hit: ", topLimitHit);
@@ -73,9 +70,8 @@ public class Display
 		this.gyroRate = _gyroRate;
 	}
 
-	public void setForkliftData(int expectedPosition, int currentPosition, double rate, boolean _topLimitHit, boolean _bottomLimitHit)
+	public void setForkliftData(double currentPosition, double rate, boolean _topLimitHit, boolean _bottomLimitHit)
 	{
-		this.expectedForkPosition = expectedPosition;
 		this.currentForkPosition = currentPosition;
 		this.encoderRate = rate;
 		this.topLimitHit = _topLimitHit;

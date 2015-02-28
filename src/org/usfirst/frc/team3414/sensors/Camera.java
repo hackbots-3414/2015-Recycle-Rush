@@ -105,7 +105,8 @@ public class Camera implements IVision
 
 		server = CameraServer.getInstance();
 		server.setQuality(50);
-		// server.startAutomaticCapture("cam1");
+		
+		//server.startAutomaticCapture("cam0");
 
 		session = NIVision.IMAQdxOpenCamera("cam1",
 				NIVision.IMAQdxCameraControlMode.CameraControlModeController);

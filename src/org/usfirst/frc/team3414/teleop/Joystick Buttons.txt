@@ -1,15 +1,15 @@
-Button 1: 		s
-Button 2: 		s
-Button 3: 		s
-Button 4: 		s
-Button 5: 		s
-Button 6: 		s
-Button 7: 		Forklift 			Previous Tote Length
-Button 8: 		Forklift 			Next Tote Length
-Button 9: 		Forklift 			Previous Bin Length
-Button 10: 		Forklift 			Next Bin Length
-Button 11: 		Forklift 			Go To Ground
-Button 12:		Forklift 			Go To Bottom Limit
+Button 1: 		Drive Train			Default = *0.2; Click to Speed Up
+Button 2: 		N/A
+Button 3: 		Driver Assist		STREIGHTEN_WITH_TOTE_WIDE
+Button 4: 		N/A
+Button 5: 		Driver Assist		STREIGHTEN_WITH_TOTE_WIDE
+Button 6: 		N/A
+Button 7: 		Forklift 			Down Tote Length
+Button 8: 		Forklift 			Up Tote Length
+Button 9: 		Forklift 			Down Bin Length
+Button 10: 		Forklift 			Up Bin Length
+Button 11: 		Forklift 			Go To Bottom Limit
+Button 12:		Forklift 			Go To Top Limit
 
 X Axis: 		Drive Train 		Horizontal Control
 y Axis: 		Drive Train 		Vertical Control

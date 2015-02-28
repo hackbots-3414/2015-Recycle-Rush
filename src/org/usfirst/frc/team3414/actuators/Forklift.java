@@ -3,24 +3,23 @@ package org.usfirst.frc.team3414.actuators;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import javax.swing.JToggleButton.ToggleButtonModel;
-
 import org.usfirst.frc.team3414.sensors.*;
+import org.usfirst.frc.team3414.teleop.Display;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Forklift implements ILiftAssist
 {
-	private static final int UNLOCK_TIME = 150;
-	private static final double ALLOWANCE = 5.0;
+	private static final int UNLOCK_TIME = 500;
 	private static final double LIFTER_UP_SPEED = 1.0;
 	private static final double LIFTER_DOWN_SPEED = 1.0;
-	private static final double LIFTER_TOP_LIMIT = 20000;
+	private static final double CALIBRATE_SPEED = 0.2;
+	private static final double LIFTER_TOP_LIMIT = 19000;
 	private static final double LIFTER_BOTTOM_LIMIT = 200;
 
-	private static final int TOTE_ENCODER_COUNT = 1500;
-	private static final int BIN_ENCODER_COUNT = 700;
+	private static final double TOTE_HEIGHT_IN = 12;
+	private static final double BIN_HEIGHT_IN = 28.75;
 
 	private IEncodedMotor encodedMotor;
 	private IServo latch;
@@ -28,11 +27,8 @@ public class Forklift implements ILiftAssist
 	private ILimitSwitch botSwitch;
 	private boolean isCalibrated = false;
 	private IClock clock;
-	private int goToPosition = 0;
-	private ExecutorService executor;
-
-	// private double gravityTestMotorSpeed = 0;
-
+	//private ExecutorService executor;
+	
 	protected Forklift(IEncodedMotor motor, ILimitSwitch topSwitch, ILimitSwitch bottomSwitch, IServo servo, IClock clock)
 	{
 		encodedMotor = motor;
@@ -41,41 +37,41 @@ public class Forklift implements ILiftAssist
 		latch = servo;
 		latch.disengage();
 		this.clock = clock;
-		this.executor = Executors.newFixedThreadPool(1);
+		//this.executor = Executors.newFixedThreadPool(1);
 	}
-
-	@Override
-	public void goToGround()
-	{
-		goToPosition = 1;
-	}
-
-	public void stopLift()
+	
+	public void stop()
 	{
 		encodedMotor.stop();
-		latch.engage();
+	}
+
+	private void stopLiftDown()
+	{
+		encodedMotor.stop();
+		waitServo();
+		lockLift();
+	}
+	private void stopLiftUp() {
+		encodedMotor.stop();
+		lockLift();
 	}
 
 	@Override
 	public void goToBottomLimit()
 	{
 		unlockLift();
-		if (!isAtBottom())
-		{
-			encodedMotor.down(LIFTER_DOWN_SPEED);
-		}
 		while (!isAtBottom())
 		{
-
+			goDownSafe();
+			SmartDashboard.putNumber("Distance", encodedMotor.getDistance());
 		}
 
-		encodedMotor.stop();
-		lockLift();
+		stopLiftDown();
 	}
 
 	private boolean isAtBottom()
 	{
-		return isCalibrated ? botSwitch.isHit() || encodedMotor.getPosition() <= LIFTER_BOTTOM_LIMIT : botSwitch.isHit();
+		return (isCalibrated ? (botSwitch.isHit() || encodedMotor.getPosition() <= LIFTER_BOTTOM_LIMIT) : botSwitch.isHit());
 	}
 
 	private void lockLift()
@@ -87,35 +83,34 @@ public class Forklift implements ILiftAssist
 	{
 		latch.disengage();
 		encodedMotor.up(LIFTER_UP_SPEED);
+		waitServo();
+		encodedMotor.stop();
+	}
+
+	private void waitServo()
+	{
 		long time = clock.getTimeInMillis();
 		while (clock.getTimeInMillis() < time + UNLOCK_TIME)
 		{
 			// Wait for unlock
 		}
-		encodedMotor.stop();
 	}
 
 	@Override
 	public void goToTopLimit()
 	{
 		unlockLift();
-		if (!isAtTop())
-		{
-			encodedMotor.up(LIFTER_UP_SPEED);
-		}
 		while (!isAtTop())
 		{
-
+			encodedMotor.up(LIFTER_UP_SPEED);
+			SmartDashboard.putNumber("Distance", encodedMotor.getDistance());
 		}
-
-		encodedMotor.stop();
-		lockLift();
-
+		stopLiftUp();
 	}
 
 	private boolean isAtTop()
 	{
-		return isCalibrated ? topSwitch.isHit() || encodedMotor.getPosition() >= LIFTER_TOP_LIMIT : topSwitch.isHit();
+		return (isCalibrated ? (topSwitch.isHit() || encodedMotor.getPosition() >= LIFTER_TOP_LIMIT) : topSwitch.isHit());
 	}
 
 	@Override
@@ -124,7 +119,7 @@ public class Forklift implements ILiftAssist
 	 */
 	public void previousToteLength()
 	{
-		previousLength(TOTE_ENCODER_COUNT);
+		previousLength(TOTE_HEIGHT_IN);
 	}
 
 	@Override
@@ -133,48 +128,58 @@ public class Forklift implements ILiftAssist
 	 */
 	public void nextToteLength()
 	{
-		nextLength(TOTE_ENCODER_COUNT);
+		nextLength(TOTE_HEIGHT_IN);
 	}
 
-	private void nextLength(int encoderCount)
+	private void nextLength(double encoderCount)
 	{
-		executor.submit(() -> {
+		//executor.submit(() -> {
 			if (!isAtTop())
 			{
-				int previousDistance = encodedMotor.getPosition();
+				double previousDistance = encodedMotor.getDistance();
 				unlockLift();
-				if (!isAtTop() && encodedMotor.getPosition() < (previousDistance + encoderCount))
+				while (!isAtTop() && encodedMotor.getDistance() < (previousDistance + encoderCount))
 				{
 					encodedMotor.up(LIFTER_UP_SPEED);
-				}
-				while (!isAtTop() && encodedMotor.getPosition() < (previousDistance + encoderCount))
-				{
+					SmartDashboard.putNumber("Distance", encodedMotor.getDistance());
 				}
 			}
-			encodedMotor.stop();
-			lockLift();
-		});
+			stopLiftUp();
+		//});
 
 	}
 
-	private void previousLength(int encoderCount)
+	private void previousLength(double encoderCount)
 	{
-		executor.submit(() -> {
+		//executor.submit(() -> {
 			if (!isAtBottom())
 			{
-				int previousDistance = encodedMotor.getPosition();
+				double previousDistance = encodedMotor.getDistance();
 				unlockLift();
-				if (!isAtBottom() && encodedMotor.getPosition() > (previousDistance - encoderCount))
+				/*if (!isAtBottom() && encodedMotor.getDistance() > (previousDistance - encoderCount))
 				{
 					encodedMotor.down(LIFTER_DOWN_SPEED);
-				}
-				while (!isAtBottom() && encodedMotor.getPosition() > (previousDistance - encoderCount))
+				}*/
+				while (!isAtBottom() && encodedMotor.getDistance() > (previousDistance - encoderCount))
 				{
+					goDownSafe();
+					SmartDashboard.putNumber("Distance", encodedMotor.getDistance());
 				}
 			}
-			encodedMotor.stop();
-			lockLift();
-		});
+			stopLiftDown();
+		//});
+	}
+
+	private void goDownSafe()
+	{
+		if (encodedMotor.getDistance() <= 3)
+		{
+			encodedMotor.down(CALIBRATE_SPEED);
+		} else
+		{
+			encodedMotor.down(LIFTER_DOWN_SPEED);
+		}
+
 	}
 
 	@Override
@@ -183,7 +188,7 @@ public class Forklift implements ILiftAssist
 	 */
 	public void previousBinLength()
 	{
-		previousLength(BIN_ENCODER_COUNT);
+		previousLength(BIN_HEIGHT_IN);
 	}
 
 	@Override
@@ -192,27 +197,36 @@ public class Forklift implements ILiftAssist
 	 */
 	public void nextBinLength()
 	{
-		nextLength(BIN_ENCODER_COUNT);
+		nextLength(BIN_HEIGHT_IN);
 	}
 
 	@Override
 	public void toDisplay()
 	{
-		// TODO Auto-generated method stub
-
+		Display.getInstance().setForkliftData(encodedMotor.getDistance(), encodedMotor.getRate(), isAtTop(), isAtBottom());
 	}
 
 	@Override
 	public void calibrate()
 	{
-		executor.submit(() -> {
-			goToBottomLimit();
+		//executor.submit(() -> {
+
+			unlockLift();
+			/*if (!isAtBottom())
+			{
+				encodedMotor.down(CALIBRATE_SPEED);
+			}*/
+			while (!isAtBottom())
+			{
+				goDownSafe();
+				SmartDashboard.putNumber("Distance", encodedMotor.getDistance());
+			}
+
+			stopLiftDown();
+
 			encodedMotor.reset();
-			SmartDashboard.putNumber("Bottom", encodedMotor.getPosition());
-			// goToTopLimit();
-			// SmartDashboard.putNumber("Top", encodedMotor.getPosition());
-				isCalibrated = true;
-			});
+			isCalibrated = true;
+		//});
 
 	}
 

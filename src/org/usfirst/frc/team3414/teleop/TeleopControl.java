@@ -34,6 +34,7 @@ public class TeleopControl
 	private final JoystickButtons STREIGHTEN_WITH_TOTE_WIDE = JoystickButtons.FIVE;
 	private final JoystickButtons STREIGHTEN_WITH_TOTE_THIN = JoystickButtons.THREE;
 	private final JoystickButtons TRIGGER_SLOW_JOYSTICK = JoystickButtons.ONE;
+	private final JoystickButtons OVERRIDE_BUTTON = JoystickButtons.TWO;
 
 	final int JOYSTICK_PORT = 1;
 
@@ -72,75 +73,78 @@ public class TeleopControl
 		return returnValue;
 	}
 
+	private void displayStuff()
+	{
+		Display.getInstance().setJoyData(joystick.getMagnitude(), joystick.getDirectionDegrees(), joystick.getTwist());
+		lifter.toDisplay();
+		driveTrain.toDisplay();
+		Display.getInstance().putDiagnosticsData();
+	}
+
 	public void enable()
 	{
 		lifter.calibrate();
-
-		timeEventID.add(clock.addTimeListener((event) ->
-		{
+		displayStuff();
+		timeEventID.add(clock.addTimeListener((event) -> {
 
 			if (joystick.getButton(TRIGGER_SLOW_JOYSTICK))
 			{
-				driveTrain.move(
-						getJoystickLimitingValue(joystick.getMagnitude()),
-						joystick.getDirectionDegrees(),
+				driveTrain.move(getJoystickLimitingValue(joystick.getMagnitude()), joystick.getDirectionDegrees(),
 						getJoystickLimitingValue(joystick.getTwist()));
 			} else
 			{
-				driveTrain.move(
-						getJoystickLimitingValue(joystick.getMagnitude()) * .2,
-						joystick.getDirectionDegrees(),
-						getJoystickLimitingValue(joystick.getTwist()) * .2);
+				driveTrain.move(getJoystickLimitingValue(joystick.getMagnitude()) * .4, joystick.getDirectionDegrees(),
+						getJoystickLimitingValue(joystick.getTwist()) * .4);
 
 			}
 		}, driveTrain.getSafetyTimeout() / 4, true));
 
-		buttonEventID.add(joystickEventHandler.addButtonListener((event) ->
-		{
+		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
 			lifter.nextToteLength();
 		}, UP_TOTE, true));
 
-		buttonEventID.add(joystickEventHandler.addButtonListener((event) ->
-		{
+		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
 			lifter.previousToteLength();
 		}, DOWN_TOTE, true));
 
-		buttonEventID.add(joystickEventHandler.addButtonListener((event) ->
-		{
+		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
 			lifter.previousBinLength();
 		}, DOWN_BIN, true));
 
-		buttonEventID.add(joystickEventHandler.addButtonListener((event) ->
-		{
+		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
 			lifter.nextBinLength();
 		}, UP_BIN, true));
 
-		buttonEventID.add(joystickEventHandler.addButtonListener((event) ->
-		{
+		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
 			lifter.previousBinLength();
 		}, DOWN_BIN, true));
 
-		buttonEventID.add(joystickEventHandler.addButtonListener((event) ->
-		{
+		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
 			lifter.goToTopLimit();
 		}, GO_TO_TOP, true));
 
-		buttonEventID.add(joystickEventHandler.addButtonListener((event) ->
-		{
+		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
 			lifter.goToBottomLimit();
 		}, GO_TO_BOTTOM, true));
 
-		buttonEventID.add(joystickEventHandler.addButtonListener((event) ->
-		{
+		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
 			driverAssist.binSweetSpot(SweetSpotMode.TOTE_WIDE);
 			driverAssist.correctRotation(SweetSpotMode.TOTE_WIDE);
 		}, STREIGHTEN_WITH_TOTE_WIDE, true));
 
-		buttonEventID.add(joystickEventHandler.addButtonListener((event) ->
-		{
+		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
 			driverAssist.binSweetSpot(SweetSpotMode.TOTE_THIN);
 			driverAssist.correctRotation(SweetSpotMode.TOTE_THIN);
 		}, STREIGHTEN_WITH_TOTE_THIN, true));
+
+		timeEventID.add(clock.addTimeListener((event) -> {
+			if (joystick.getButton(OVERRIDE_BUTTON))
+			{
+				joystickEventHandler.clearQueue();
+				lifter.stop();
+			}
+		}, 10, true));
+
 	}
 
 	public void disable()

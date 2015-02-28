@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.SpeedController;
 public class EncodedMotor extends Motor implements IEncodedMotor {
 
 	private IEncoder encoder;
-	private static final double DISTANCE_PER_PULSE = 1;
 	
 	public EncodedMotor(SpeedController motor, IEncoder encoder) {
 		super(motor, false);

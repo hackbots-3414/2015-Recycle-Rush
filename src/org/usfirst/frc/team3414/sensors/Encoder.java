@@ -8,6 +8,7 @@ public class Encoder implements IEncoder
 	public Encoder(int channelPortA, int channelPortB)
 	{
 		encoder = new edu.wpi.first.wpilibj.Encoder(channelPortA, channelPortB);
+		encoder.setDistancePerPulse(0.0114122233);
 	}
 
 	/**

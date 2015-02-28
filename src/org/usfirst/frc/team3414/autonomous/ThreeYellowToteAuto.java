@@ -50,7 +50,7 @@ public class ThreeYellowToteAuto implements AutonomousProcedure {
 	@Override
 	public void doAuto() 
 	{
-		forkLift.goToGround(); // Moves to bottom level of lifting positions
+		forkLift.goToBottomLimit(); // Moves to bottom level of lifting positions
 
 		driverAssist.toteSweetSpot(SweetSpotMode.TOTE_WIDE); // Moves toward tote that is placed in
 										// front of the robot at the beginning
@@ -105,7 +105,7 @@ public class ThreeYellowToteAuto implements AutonomousProcedure {
 		driverAssist.toteSweetSpot(SweetSpotMode.TOTE_WIDE); // get square with the tote and drive up
 										// to it correctly
 
-		forkLift.goToGround(); // Put tote back on the other tote and go back
+		forkLift.goToBottomLimit(); // Put tote back on the other tote and go back
 								// down to the bottom position so we can lift
 								// the whole stack up
 
@@ -144,7 +144,7 @@ public class ThreeYellowToteAuto implements AutonomousProcedure {
 		driverAssist.toteSweetSpot(SweetSpotMode.TOTE_WIDE); // get square with the tote and drive up
 										// to it correctly
 
-		forkLift.goToGround(); // Put tote back on the other tote and go back
+		forkLift.goToBottomLimit(); // Put tote back on the other tote and go back
 								// down to the bottom position so we can lift
 								// the whole stack up
 
@@ -152,7 +152,7 @@ public class ThreeYellowToteAuto implements AutonomousProcedure {
 		driveIntoZone.doAuto();
 
 		// Drop totes
-		forkLift.goToGround();
+		forkLift.goToBottomLimit();
 
 	}
 

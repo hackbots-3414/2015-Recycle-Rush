@@ -4,6 +4,7 @@ public class ButtonEventArgs
 {
 	public long buttonEventID;
 	JoystickButtons buttonPressed;
+	boolean override;
 
 	public ButtonEventArgs(long buttonEventID, JoystickButtons button)
 	{
@@ -20,5 +21,10 @@ public class ButtonEventArgs
 	public JoystickButtons getButtonPressed()
 	{
 		return buttonPressed;
+	}
+	
+	public boolean isOverriden()
+	{
+		return override;
 	}
 }

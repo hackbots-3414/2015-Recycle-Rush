@@ -34,7 +34,7 @@ public class OneYellowToteAuto implements AutonomousProcedure
 	@Override
 	public void doAuto() 
 	{
-		forkLift.goToGround(); // Moves to bottom level of lifting positions to pick up the tote
+		forkLift.goToBottomLimit(); // Moves to bottom level of lifting positions to pick up the tote
 		
 		driverAssist.toteSweetSpot(SweetSpotMode.TOTE_WIDE); // Moves toward and squares with the tote that is placed in front of the robot at the beginning of a match
 		driverAssist.correctRotation(SweetSpotMode.TOTE_WIDE); // Correct rotation in front of the tote
@@ -45,6 +45,6 @@ public class OneYellowToteAuto implements AutonomousProcedure
 		driveIntoZone.doAuto();
 		
 		// Drop totes
-		forkLift.goToGround();
+		forkLift.goToBottomLimit();
 	}
 }

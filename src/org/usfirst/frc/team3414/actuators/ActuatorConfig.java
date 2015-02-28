@@ -3,6 +3,7 @@ package org.usfirst.frc.team3414.actuators;
 import org.usfirst.frc.team3414.sensors.SensorConfig;
 
 import edu.wpi.first.wpilibj.CANTalon;
+import edu.wpi.first.wpilibj.SpeedController;
 
 public class ActuatorConfig
 {
@@ -22,7 +23,9 @@ public class ActuatorConfig
 	private CANTalon rightFront;
 	private CANTalon leftRear;
 	private CANTalon rightRear;
-
+	private SpeedController leftFrontInvert;
+	private SpeedController leftRearInvert;
+	
 	private ActuatorConfig()
 	{
 		try
@@ -32,7 +35,11 @@ public class ActuatorConfig
 			rightFront = new CANTalon(MOTOR_RIGHT_FRONT);
 			leftRear = new CANTalon(MOTOR_LEFT_REAR);
 			rightRear = new CANTalon(MOTOR_RIGHT_REAR);
-			driveTrain = new MecanumDrive(sensors.getClock(), sensors.getAccelerometer(), sensors.getGyro(), leftFront, rightFront, leftRear,
+			
+			leftFrontInvert = new InverseController(leftFront);
+			leftRearInvert = new InverseController(leftRear);
+			
+			driveTrain = new MecanumDrive(sensors.getClock(), sensors.getAccelerometer(), sensors.getGyro(), leftFrontInvert, leftRearInvert, rightFront,
 					rightRear);
 			motor = new EncodedMotor(new CANTalon(LIFT_MOTOR), sensors.getForkLiftEncoder());
 			servo = new Servo(LIFTER_GRIP);
