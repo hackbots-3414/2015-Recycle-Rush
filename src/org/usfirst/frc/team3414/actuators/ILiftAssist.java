@@ -27,7 +27,7 @@ public interface ILiftAssist
 	
 	public void stop();
 	
-	public void forkOverride();
+	public void stopAction();
 
 	public void up();
 	

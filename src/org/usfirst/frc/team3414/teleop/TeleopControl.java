@@ -9,22 +9,20 @@ import org.usfirst.frc.team3414.actuators.ILiftAssist;
 import org.usfirst.frc.team3414.autonomous.AutonomousConfig;
 import org.usfirst.frc.team3414.autonomous.IDriverAssist;
 import org.usfirst.frc.team3414.sensors.IClock;
-import org.usfirst.frc.team3414.sensors.ITimeListener;
 import org.usfirst.frc.team3414.sensors.SensorConfig;
 import org.usfirst.frc.team3414.sensors.SweetSpotMode;
-import org.usfirst.frc.team3414.sensors.TimeEventArgs;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TeleopControl
 {
 	private IJoystick joystick;
+	private IGamepad gamepad;
 	private IDriveTrain driveTrain;
 	private ILiftAssist lifter;
 	private IClock clock;
 
 	private IDriverAssist driverAssist;
 
-	private final int REFRESH_RATE_MS = 85;
+	private final int OVERRIDE_REFRESH_RATE_MS = 10;
 
 	private final JoystickButtons UP_TOTE = JoystickButtons.EIGHT;
 	private final JoystickButtons DOWN_TOTE = JoystickButtons.SEVEN;
@@ -37,11 +35,17 @@ public class TeleopControl
 	private final JoystickButtons TRIGGER_SLOW_JOYSTICK = JoystickButtons.ONE;
 	private final JoystickButtons OVERRIDE_BUTTON = JoystickButtons.TWO;
 
+	private final JoystickButtons UP = null;
+	private final JoystickButtons DOWN = null;
+
 	final int JOYSTICK_PORT = 1;
+	final int GAMEPAD_PORT = 2;
 
 	List<Long> timeEventID = new ArrayList<>();
 	List<Long> buttonEventID = new ArrayList<>();
+	
 	private ButtonEventHandler joystickEventHandler;
+	private ButtonEventHandler gamepadEventHandler;
 
 	public TeleopControl()
 	{
@@ -53,7 +57,10 @@ public class TeleopControl
 		this.driveTrain = actuators.getDriveTrain();
 		this.driverAssist = AutonomousConfig.getInstance().getDriveAssist();
 		this.joystick = new Logitech3DProJoystick(JOYSTICK_PORT);
+		this.gamepad = new LogitechGamepad(GAMEPAD_PORT);
+		
 		this.joystickEventHandler = new ButtonEventHandler(joystick);
+		this.gamepadEventHandler = new ButtonEventHandler(gamepad);
 	}
 
 	private double getJoystickLimitingValue(double input)
@@ -86,80 +93,94 @@ public class TeleopControl
 	{
 		lifter.calibrate();
 		displayStuff();
-		timeEventID.add(clock.addTimeListener((event) -> {
+		timeEventID.add(clock.addTimeListener((event) ->
+		{
 
 			if (joystick.getButton(TRIGGER_SLOW_JOYSTICK))
 			{
-				driveTrain.move(getJoystickLimitingValue(joystick.getMagnitude()), joystick.getDirectionDegrees(),
-						getJoystickLimitingValue(joystick.getTwist()));
+				driveTrain.move(getJoystickLimitingValue(joystick.getMagnitude()), joystick.getDirectionDegrees(), getJoystickLimitingValue(joystick.getTwist()));
 			} else
 			{
-				driveTrain.move(getJoystickLimitingValue(joystick.getMagnitude()) * .4, joystick.getDirectionDegrees(),
-						getJoystickLimitingValue(joystick.getTwist()) * .4);
+				driveTrain.move(getJoystickLimitingValue(joystick.getMagnitude()) * .4, joystick.getDirectionDegrees(), getJoystickLimitingValue(joystick.getTwist()) * .4);
 
 			}
 		}, driveTrain.getSafetyTimeout() / 4, true));
 
-		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
+		buttonEventID.add(joystickEventHandler.addButtonListener((event) ->
+		{
 			lifter.nextToteLength();
 		}, UP_TOTE, true));
 
-		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
+		buttonEventID.add(joystickEventHandler.addButtonListener((event) ->
+		{
 			lifter.previousToteLength();
 		}, DOWN_TOTE, true));
 
-		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
+		buttonEventID.add(joystickEventHandler.addButtonListener((event) ->
+		{
 			lifter.previousBinLength();
 		}, DOWN_BIN, true));
 
-		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
+		buttonEventID.add(joystickEventHandler.addButtonListener((event) ->
+		{
 			lifter.nextBinLength();
 		}, UP_BIN, true));
 
-		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
+		buttonEventID.add(joystickEventHandler.addButtonListener((event) ->
+		{
 			lifter.previousBinLength();
 		}, DOWN_BIN, true));
 
-		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
+		buttonEventID.add(joystickEventHandler.addButtonListener((event) ->
+		{
 			lifter.goToTopLimit();
 		}, GO_TO_TOP, true));
 
-		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
+		buttonEventID.add(joystickEventHandler.addButtonListener((event) ->
+		{
 			lifter.goToBottomLimit();
 		}, GO_TO_BOTTOM, true));
 
-		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
+		buttonEventID.add(joystickEventHandler.addButtonListener((event) ->
+		{
 			driverAssist.binSweetSpot(SweetSpotMode.TOTE_WIDE);
 			driverAssist.correctRotation(SweetSpotMode.TOTE_WIDE);
 		}, STREIGHTEN_WITH_TOTE_WIDE, true));
 
-		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
+		buttonEventID.add(joystickEventHandler.addButtonListener((event) ->
+		{
 			driverAssist.binSweetSpot(SweetSpotMode.TOTE_THIN);
 			driverAssist.correctRotation(SweetSpotMode.TOTE_THIN);
 		}, STREIGHTEN_WITH_TOTE_THIN, true));
 
-		timeEventID.add(clock.addTimeListener((event) -> {
-			SmartDashboard.putBoolean("A", false);
+		buttonEventID.add(joystickEventHandler.addButtonListener((event) ->
+		{
+			lifter.up();
+		}, UP, true));
+
+		buttonEventID.add(joystickEventHandler.addButtonListener((event) ->
+		{
+			lifter.down();
+		}, DOWN, true));
+
+		buttonEventID.add(joystickEventHandler.addButtonListener((event) ->
+		{
+			lifter.stop();
+		}, UP, true, ButtonStates.RELEASED));
+
+		buttonEventID.add(joystickEventHandler.addButtonListener((event) ->
+		{
+			lifter.stop();
+		}, DOWN, true, ButtonStates.RELEASED));
+
+		timeEventID.add(clock.addTimeListener((event) ->
+		{
 			if (joystick.getButton(OVERRIDE_BUTTON))
 			{
-				SmartDashboard.putBoolean("A", true);
 				joystickEventHandler.clearQueue();
-				lifter.forkOverride();
-
-				// lifter.stop();
+				lifter.stopAction();
 			}
-
-			if (joystick.getButton(UP_BIN))
-			{
-				lifter.up();
-			} else if (joystick.getButton(DOWN_BIN))
-			{
-				lifter.down();
-			} else
-			{
-				lifter.stop();
-			}
-		}, 10, true));
+		}, OVERRIDE_REFRESH_RATE_MS, true));
 
 	}
 

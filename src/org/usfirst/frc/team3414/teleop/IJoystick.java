@@ -1,10 +1,9 @@
 package org.usfirst.frc.team3414.teleop;
 
-public interface IJoystick
+public interface IJoystick extends IHaveButtons
 {
-	public double getAxis(JoystickAxis axis);
 	public double getDirectionDegrees();
 	public double getMagnitude();
 	public double getTwist();
-	public boolean getButton(JoystickButtons button);
+	public double getAxis(JoystickAxis axis);
 }
