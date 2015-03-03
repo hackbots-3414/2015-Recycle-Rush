@@ -5,12 +5,14 @@ public class ButtonEventArgs
 	public long buttonEventID;
 	JoystickButtons buttonPressed;
 	boolean override;
+	ButtonStates buttonState;
 
-	public ButtonEventArgs(long buttonEventID, JoystickButtons button)
+	public ButtonEventArgs(long buttonEventID, JoystickButtons button, ButtonStates buttonState)
 	{
 		super();
 		this.buttonEventID = buttonEventID;
 		this.buttonPressed = button;
+		this.buttonState = buttonState;
 	}
 	
 	public long getButtonEventID()
@@ -26,5 +28,10 @@ public class ButtonEventArgs
 	public boolean isOverriden()
 	{
 		return override;
+	}
+	
+	public ButtonStates getButtonState()
+	{
+		return buttonState;
 	}
 }

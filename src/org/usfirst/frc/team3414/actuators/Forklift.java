@@ -94,7 +94,7 @@ public class Forklift implements ILiftAssist
 		latch.engage();
 	}
 
-	private void unlockLift()
+	public void unlockLift()
 	{
 		latch.disengage();
 		encodedMotor.up(LIFTER_UP_SPEED);
@@ -102,7 +102,7 @@ public class Forklift implements ILiftAssist
 		encodedMotor.stop();
 	}
 
-	private void waitServo()
+	public void waitServo()
 	{
 		long time = clock.getTimeInMillis();
 		while (clock.getTimeInMillis() < time + UNLOCK_TIME)
@@ -240,14 +240,12 @@ public class Forklift implements ILiftAssist
 			encodedMotor.up(LIFTER_UP_SPEED);
 		}
 	}
-
+	
 	public void down()
 	{
-		unlockLift();
-		
 		if (!isAtBottom())
 		{
-			encodedMotor.down(LIFTER_DOWN_SPEED);
+			goDownSafe();
 		}
 	}
 	

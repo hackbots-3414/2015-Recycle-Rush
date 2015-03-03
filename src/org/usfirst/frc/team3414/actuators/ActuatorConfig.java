@@ -9,7 +9,7 @@ public class ActuatorConfig
 {
 	private static ActuatorConfig singleton = null;
 
-	private static final int LIFTER_GRIP = 0;
+	private static final int LIFTER_GRIP = 9;
 	private static final int LIFT_MOTOR = 5;
 	private static final int MOTOR_LEFT_FRONT = 1;
 	private static final int MOTOR_LEFT_REAR = 2;

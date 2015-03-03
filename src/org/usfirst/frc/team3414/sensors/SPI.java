@@ -35,8 +35,7 @@ public class SPI implements ISPI
 	}
 
 	@Override
-	public void transaction(byte[] dataToSend, byte[] dataToRecieve, int size) {
-		spi.transaction(dataToSend, dataToRecieve, size);
+	public int transaction(byte[] dataToSend, byte[] dataToRecieve, int size) {
+		return spi.transaction(dataToSend, dataToRecieve, size);
 	}
-
 }

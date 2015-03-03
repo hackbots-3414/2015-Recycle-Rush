@@ -31,5 +31,9 @@ public interface ILiftAssist
 
 	public void up();
 	
+	public void unlockLift();
+	
 	public void down();
+	
+	public void waitServo();
 }

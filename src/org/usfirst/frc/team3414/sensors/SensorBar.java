@@ -1,6 +1,8 @@
 package org.usfirst.frc.team3414.sensors;
 
-public class SensorBar implements IDetectSweetSpot, ITimeListener, ISensorBar
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+public class SensorBar implements IDetectSweetSpot, ISensorBar
 {
 	ISPI spi;
 	
@@ -11,14 +13,50 @@ public class SensorBar implements IDetectSweetSpot, ITimeListener, ISensorBar
 	long timeEventID;
 	
 
-	@Override
-	public void timeEvent(TimeEventArgs timeEvent) {
-		if(timeEvent.getTimeEventID() == timeEventID)
+//	@Override
+//	public void timeEvent(TimeEventArgs timeEvent) {
+//		if(timeEvent.getTimeEventID() == timeEventID)
+//		{
+//			int val = 0;
+//		
+//			spi.transaction(distanceSensorNumber, returnedBytes, numberOfSensors*4);
+//		
+//			for(int i = 0; i <= numberOfSensors; i++)
+//			{
+//				for(int j = i*4, k = 0; k < 4; k++, j++)
+//				{
+//					val += returnedBytes[j] << (k*8);
+//				}
+//			
+//				sensorValues[i] = (float)val;
+//				val = 0;
+//			}
+//			
+//			SmartDashboard.putNumber("Sensor One", sensorValues[0]);
+//		}
+//	}
+	
+	double slopeA = slope(sensorValues[0], sensorValues[1], 9.5);
+	double slopeB = slope(sensorValues[1], sensorValues[2], 17.9);
+	double slopeC = slope(sensorValues[2], sensorValues[3], 17.9);
+	double slopeD = slope(sensorValues[3], sensorValues[4], 9.5);
+
+	protected SensorBar(edu.wpi.first.wpilibj.SPI.Port arduinoPort, int tempNumberOfSensors)
+	{	
+		//timeEventID = SensorConfig.getInstance().getClock().addTimeListener(this, 1000); // Updates the values every second
+		
+		spi = new SPI(arduinoPort);
+		
+	    spi.setClockRate(1000);
+		spi.setMSBFirst();
+		spi.setChipSelectActiveLow();
+		
+		timeEventID = SensorConfig.getInstance().getClock().addTimeListener((event) -> 
 		{
 			int val = 0;
-		
-			spi.transaction(distanceSensorNumber, returnedBytes, numberOfSensors*4);
-		
+			
+			int spiRecieve = spi.transaction(distanceSensorNumber, returnedBytes, numberOfSensors*4);
+			
 			for(int i = 0; i <= numberOfSensors; i++)
 			{
 				for(int j = i*4, k = 0; k < 4; k++, j++)
@@ -29,31 +67,11 @@ public class SensorBar implements IDetectSweetSpot, ITimeListener, ISensorBar
 				sensorValues[i] = (float)val;
 				val = 0;
 			}
-		}
-	}
-	
-	double slopeA = slope(sensorValues[0], sensorValues[1], 9.5);
-	double slopeB = slope(sensorValues[1], sensorValues[2], 17.9);
-	double slopeC = slope(sensorValues[2], sensorValues[3], 17.9);
-	double slopeD = slope(sensorValues[3], sensorValues[4], 9.5);
-
-	protected SensorBar(edu.wpi.first.wpilibj.SPI.Port arduinoPort, int tempNumberOfSensors)
-	{
-		/*
-		distanceSensorNumber = new byte[tempNumberOfSensors];
-		returnedBytes = new byte[tempNumberOfSensors*4];
-		sensorValues = new float[tempNumberOfSensors];
-		*/
-		
-		timeEventID = SensorConfig.getInstance().getClock().addTimeListener(this, 1000); // Updates the values every second
+			
+			SmartDashboard.putNumber("Sensor Value", sensorValues[0]);
+		}, 500, true);
 		
 		numberOfSensors = tempNumberOfSensors;
-		
-		spi = new SPI(arduinoPort);
-		
-	    spi.setClockRate(1000000);
-		spi.setMSBFirst();
-		spi.setChipSelectActiveLow();
 		
 		
 		distanceSensorNumber = new byte[numberOfSensors];

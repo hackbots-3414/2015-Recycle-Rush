@@ -30,7 +30,7 @@ public class VirtualClock extends Thread implements IClock
 		timer = new Timer();
 		this.timeListeners = new Hashtable<Long, TimeEventSubscription>();
 		this.updateInterval = updateInterval;
-		executor = Executors.newFixedThreadPool(2);
+		executor = Executors.newFixedThreadPool(4);
 		start();
 	}
 

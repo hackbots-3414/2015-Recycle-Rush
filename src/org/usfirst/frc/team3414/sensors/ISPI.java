@@ -12,5 +12,5 @@ public interface ISPI {
 	
 	public void setChipSelectActiveHigh();
 	
-	public void transaction(byte[] dataToSend, byte[] dataToRecieve , int size);
+	public int transaction(byte[] dataToSend, byte[] dataToRecieve , int size);
 }
