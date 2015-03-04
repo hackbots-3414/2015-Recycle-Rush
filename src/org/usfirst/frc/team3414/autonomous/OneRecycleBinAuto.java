@@ -32,8 +32,8 @@ public class OneRecycleBinAuto implements AutonomousProcedure
 	{		
 		forkLift.goToBottomLimit(); // Moves to bottom level of lifting positions
 		
-		driverAssist.binSweetSpot(SweetSpotMode.TOTE_WIDE); // Moves toward recycle bin that is placed in front of the robot at the beginning of a match
-		driverAssist.correctRotation(SweetSpotMode.TOTE_WIDE); // Correct rotation in front of the recycle bin
+//		driverAssist.binSweetSpot(SweetSpotMode.TOTE_WIDE); // Moves toward recycle bin that is placed in front of the robot at the beginning of a match
+//		driverAssist.correctRotation(SweetSpotMode.TOTE_WIDE); // Correct rotation in front of the recycle bin
 		
 		forkLift.nextBinLength(); // Pick up recycle bin
 		
@@ -41,7 +41,7 @@ public class OneRecycleBinAuto implements AutonomousProcedure
 		driveIntoZone.doAuto();
 		
 		// Drop recycle bin
-		forkLift.goToBottomLimit();
+//		forkLift.goToBottomLimit();
 		
 	}
 

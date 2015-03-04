@@ -4,6 +4,7 @@ import org.usfirst.frc.team3414.autonomous.SwitchPositions;
 
 /**
  * The class responsible for controlling limit switches on digital IO ports.
+ * Called by AutonomousSwitches.java
  */
 
 public class MyAutoLimitSwitch
