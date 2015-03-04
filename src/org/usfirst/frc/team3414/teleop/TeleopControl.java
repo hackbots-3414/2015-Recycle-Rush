@@ -93,6 +93,29 @@ public class TeleopControl
 	public void enable()
 	{
 		lifter.calibrate();
+
+		timeEventID.add(clock.addTimeListener((event) -> {
+			if (gamepad.getButton(DO_LIFTER_COMMANDS))
+			{
+				joystickEventHandler.setAbleToDoCommands(true);
+			} else
+			{
+				joystickEventHandler.setAbleToDoCommands(false);
+				if (gamepad.getButton(UP))
+				{
+					lifter.upLift();
+
+				} else if (gamepad.getButton(DOWN))
+				{
+					lifter.downLift();
+
+				} else
+				{
+					lifter.stopLift();
+				}
+			}
+		}, OVERRIDE_REFRESH_RATE_MS, true));
+
 		timeEventID.add(clock.addTimeListener((event) -> {
 			displayStuff();
 			if (joystick.getButton(TRIGGER_SLOW_JOYSTICK))
@@ -136,15 +159,15 @@ public class TeleopControl
 			lifter.goToBottomLimit();
 		}, GO_TO_BOTTOM, true));
 
-//		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
-//			driverAssist.binSweetSpot(SweetSpotMode.TOTE_WIDE);
-//			driverAssist.correctRotation(SweetSpotMode.TOTE_WIDE);
-//		}, STREIGHTEN_WITH_TOTE_WIDE, true));
-//
-//		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
-//			driverAssist.binSweetSpot(SweetSpotMode.TOTE_THIN);
-//			driverAssist.correctRotation(SweetSpotMode.TOTE_THIN);
-//		}, STREIGHTEN_WITH_TOTE_THIN, true));
+		// buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
+		// driverAssist.binSweetSpot(SweetSpotMode.TOTE_WIDE);
+		// driverAssist.correctRotation(SweetSpotMode.TOTE_WIDE);
+		// }, STREIGHTEN_WITH_TOTE_WIDE, true));
+		//
+		// buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
+		// driverAssist.binSweetSpot(SweetSpotMode.TOTE_THIN);
+		// driverAssist.correctRotation(SweetSpotMode.TOTE_THIN);
+		// }, STREIGHTEN_WITH_TOTE_THIN, true));
 
 		// buttonEventID.add(joystickEventHandler.addButtonListener((event) ->
 		// {
@@ -165,28 +188,6 @@ public class TeleopControl
 		// {
 		// lifter.stop();
 		// }, DOWN, true, ButtonStates.RELEASED));
-
-		timeEventID.add(clock.addTimeListener((event) -> {
-			if (gamepad.getButton(DO_LIFTER_COMMANDS))
-			{
-				joystickEventHandler.setAbleToDoCommands(true);
-			} else
-			{
-				joystickEventHandler.setAbleToDoCommands(false);
-				if (gamepad.getButton(UP))
-				{
-					lifter.upLift();
-
-				} else if (gamepad.getButton(DOWN))
-				{
-					lifter.downLift();
-
-				} else
-				{
-					lifter.stopLift();
-				}
-			}
-		}, OVERRIDE_REFRESH_RATE_MS, true));
 
 		timeEventID.add(clock.addTimeListener((event) -> {
 			if (gamepad.getButton(OVERRIDE_BUTTON))

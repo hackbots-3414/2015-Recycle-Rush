@@ -19,24 +19,24 @@ public class Servo implements IServo
 	{
 		servo = new edu.wpi.first.wpilibj.Servo(channel);
 		//servo.set(SERVO_UNLATCHED_BIG_BOY);
-//		servo.set(SERVO_UNLATCHED_HONEY_BADGER);
-		dashboardSetServo();
+		servo.set(SERVO_UNLATCHED_HONEY_BADGER);
+		//dashboardSetServo();
 		isLatched = false;
 	}
 
 	public void engage()
 	{
 		//servo.set(SERVO_LATCHED_BIG_BOY);
-		//servo.set(SERVO_LATCHED_HONEY_BADGER);
-		dashboardSetServo();
+		servo.set(SERVO_LATCHED_HONEY_BADGER);
+		//dashboardSetServo();
 		isLatched = true;
 	}
 
 	public void disengage()
 	{
 		//servo.set(SERVO_UNLATCHED_BIG_BOY);
-		dashboardSetServo();
-//		servo.set(SERVO_UNLATCHED_HONEY_BADGER);
+		//dashboardSetServo();
+		servo.set(SERVO_UNLATCHED_HONEY_BADGER);
 		isLatched = false;
 	}
 
