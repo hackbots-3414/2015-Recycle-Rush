@@ -1,6 +1,5 @@
 package org.usfirst.frc.team3414.actuators;
 
-
 /**
  * 
  * implemented by Forklift.java
@@ -8,9 +7,16 @@ package org.usfirst.frc.team3414.actuators;
  */
 
 public interface ILiftAssist
-{	
+{
+	// PUBLIC FUNCTIONS
+	public void upLift();
+
+	public void downLift();
+
+	public void stopLift();
+
 	public void goToTopLimit();
-	
+
 	public void goToBottomLimit();
 
 	public void previousToteLength();
@@ -21,19 +27,15 @@ public interface ILiftAssist
 
 	public void nextBinLength();
 	
-	public void toDisplay();
-	
-	public void calibrate();
-	
-	public void stop();
-	
-	public void stopAction();
+	// PRIVATE OPERATIONS
 
-	public void up();
-	
-	public void unlockLift();
-	
-	public void down();
-	
-	public void waitServo();
+	// PRIVATE BASELINE FUNCTIONS
+
+	// OTHER
+	public void toDisplay();
+
+	public void calibrate();
+
+	public void setEStopAllAction(boolean override);
+
 }

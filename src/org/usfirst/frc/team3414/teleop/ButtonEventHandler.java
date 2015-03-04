@@ -20,6 +20,7 @@ public class ButtonEventHandler extends Thread implements IButtonEventHandler
 	private int updateInterval;
 	private IHaveButtons joy;
 	public boolean override = false;
+	private boolean canDoCommands = true;
 
 	protected ButtonEventHandler(IHaveButtons joystick, int updateInterval)
 	{
@@ -70,74 +71,77 @@ public class ButtonEventHandler extends Thread implements IButtonEventHandler
 		while (RobotStatus.isRunning())
 		{
 			List<Long> keys = new ArrayList<Long>(buttonListeners.keySet());
-			if (!override)
+			if (canDoCommands)
 			{
-				for (final long key : keys)
+				if (!override)
 				{
-					final ButtonEventSubscription event = buttonListeners.get(key);
-
-					if (event != null && event.button != null)
+					for (final long key : keys)
 					{
-						// Pressed
-						if ((!previousValues.get(event.button.getValue()) && joy.getButton(event.button)))
-						{
-							event.buttonState = ButtonStates.PRESSED;
+						final ButtonEventSubscription event = buttonListeners.get(key);
 
-							if (event.whenToFire == ButtonStates.PRESSED)
+						if (event != null && event.button != null)
+						{
+							// Pressed
+							if (!previousValues.get(event.button.getValue()) && joy.getButton(event.button))
 							{
-								futures.add(executor.submit(() -> {
-									event.listener.buttonEvent(new ButtonEventArgs(key, event.button, ButtonStates.PRESSED));
-								}));
-								
-								event.future = futures.get(futures.size()-1);
+								event.buttonState = ButtonStates.PRESSED;
+
+								if (event.whenToFire == ButtonStates.PRESSED)
+								{
+									futures.add(executor.submit(() -> {
+										event.listener.buttonEvent(new ButtonEventArgs(key, event.button, ButtonStates.PRESSED));
+									}));
+
+									event.future = futures.get(futures.size() - 1);
+								}
 							}
-						}
 
-						// Released
-						if ((previousValues.get(event.button.getValue()) && !joy.getButton(event.button)))
-						{
-							event.buttonState = ButtonStates.RELEASED;
+							// Released
+							if ((previousValues.get(event.button.getValue()) && !joy.getButton(event.button)))
+							{
+								event.buttonState = ButtonStates.RELEASED;
 
-							event.future.cancel(true);
-							
-							if (event.whenToFire == ButtonStates.RELEASED)
-							{	
-								futures.add(executor.submit(() -> {
-									event.listener.buttonEvent(new ButtonEventArgs(key, event.button, ButtonStates.RELEASED));
-								}));
+								event.future.cancel(true);
+
+								if (event.whenToFire == ButtonStates.RELEASED)
+								{
+									futures.add(executor.submit(() -> {
+										event.listener.buttonEvent(new ButtonEventArgs(key, event.button, ButtonStates.RELEASED));
+									}));
+								}
 							}
+
+							if (!event.repeat)
+							{
+								buttonListeners.remove(key);
+							} else
+							{
+
+							}
+
+							previousValues.put(event.button.getValue(), (joy.getButton(event.button)));
+
+							// if (!joy.getButton(event.button) &&
+							// event.buttonRestrict)
+							// {
+							// event.buttonRestrict = false;
+							// }
 						}
-
-						if (!event.repeat)
-						{
-							buttonListeners.remove(key);
-						} else
-						{
-
-						}
-
-						previousValues.put(event.button.getValue(), (joy.getButton(event.button)));
-
-						// if (!joy.getButton(event.button) &&
-						// event.buttonRestrict)
-						// {
-						// event.buttonRestrict = false;
-						// }
 					}
-				}
 
-			} else
-			{
-				for (Future<?> f : futures)
+				} else
 				{
-					if (!f.isCancelled())
+					for (Future<?> f : futures)
 					{
-						f.cancel(true);
-					}
+						if (!f.isCancelled())
+						{
+							f.cancel(true);
+						}
 
+					}
+					futures.clear();
+					override = false;
 				}
-				futures.clear();
-				override = false;
 			}
 
 			try
@@ -168,7 +172,7 @@ public class ButtonEventHandler extends Thread implements IButtonEventHandler
 		boolean repeat;
 		ButtonStates buttonState = null;
 		ButtonStates whenToFire;
-		
+
 		Future<?> future;
 
 		public ButtonEventSubscription(IButtonListener listener, JoystickButtons button, boolean repeat, ButtonStates whenToFire)
@@ -179,5 +183,11 @@ public class ButtonEventHandler extends Thread implements IButtonEventHandler
 			this.repeat = repeat;
 			this.whenToFire = whenToFire;
 		}
+	}
+
+	public void setAbleToDoCommands(boolean isAble)
+	{
+		canDoCommands = isAble;
+
 	}
 }

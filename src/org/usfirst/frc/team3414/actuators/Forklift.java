@@ -21,13 +21,21 @@ public class Forklift implements ILiftAssist
 	private IServo latch;
 	private ILimitSwitch topSwitch;
 	private ILimitSwitch botSwitch;
-	private boolean isCalibrated = false;
+	private boolean isCalibrated;
 	private IClock clock;
-	
-	private boolean forkOverride = false;
+
+	private boolean forkOverride;
+	private boolean upInit;
+	private boolean downInit;
+	private boolean stopInit;
 
 	protected Forklift(IEncodedMotor motor, ILimitSwitch topSwitch, ILimitSwitch bottomSwitch, IServo servo, IClock clock)
 	{
+		isCalibrated = false;
+		forkOverride = false;
+		upInit = true;
+		downInit = true;
+		stopInit = true;
 		encodedMotor = motor;
 		this.topSwitch = topSwitch;
 		this.botSwitch = bottomSwitch;
@@ -36,78 +44,84 @@ public class Forklift implements ILiftAssist
 		this.clock = clock;
 	}
 
-	public void stop()
-	{
-		if(encodedMotor.getRate() >= 0)
-		{
-			stopLiftUp();
-		} else
-		{
-			stopLiftDown();
-		}
-//		encodedMotor.stop();
-//		lockLift();
-	}
-
-	private void stopLiftDown()
+	// PUBLIC FUNCTIONS
+	/**
+	 * To be called periodically
+	 */
+	public void upLift()
 	{
 		if (!forkOverride)
 		{
-			encodedMotor.stop();
-			waitServo();
-			lockLift();
+			if (upInit)
+			{
+				unlockLift();
+				stopInit = true;
+				upInit = false;
+			}
+
+			if (!isAtTop())
+			{
+				encodedMotor.up(LIFTER_UP_SPEED);
+			}
 		} else
 		{
-			encodedMotor.stop();
+			stop();
 		}
 	}
 
-	private void stopLiftUp()
+	/**
+	 * To be called periodically
+	 */
+	public void downLift()
 	{
 		if (!forkOverride)
 		{
-			encodedMotor.stop();
-			lockLift();
+			if (downInit)
+			{
+				unlockLiftMotion();
+				stopInit = true;
+				downInit = false;
+			}
+
+			if (!isAtBottom())
+			{
+				goDownSafe();
+			}
 		} else
 		{
-			encodedMotor.stop();
+			stop();
 		}
+	}
+
+	/**
+	 * To be called periodically
+	 */
+	public void stopLift()
+	{
+		stop();
+		if (stopInit)
+		{
+			lockLift();
+			stopInit = false;
+		}
+		upInit = true;
+		downInit = true;
+
 	}
 
 	@Override
 	public void goToBottomLimit()
 	{
-		unlockLift();
+		unlockLiftMotion();
 		while (!isAtBottom() && !forkOverride)
 		{
 			goDownSafe();
-			SmartDashboard.putNumber("Distance", encodedMotor.getDistance());
+
 		}
-		forkOverride = false;
-
-		//stopLiftDown();
 		stop();
-	}
-	
-	private void lockLift()
-	{
-		latch.engage();
-	}
-
-	public void unlockLift()
-	{
-		latch.disengage();
-		encodedMotor.up(LIFTER_UP_SPEED);
-		waitServo();
-		encodedMotor.stop();
-	}
-
-	public void waitServo()
-	{
-		long time = clock.getTimeInMillis();
-		while (clock.getTimeInMillis() < time + UNLOCK_TIME)
+		if (!forkOverride)
 		{
-			// Wait for unlock
+			lockLift();
 		}
 	}
 
@@ -118,29 +132,45 @@ public class Forklift implements ILiftAssist
 		while (!isAtTop() && !forkOverride)
 		{
 			encodedMotor.up(LIFTER_UP_SPEED);
-			SmartDashboard.putNumber("Distance", encodedMotor.getDistance());
 		}
-		forkOverride = false;
-		//stopLiftUp();
 		stop();
+		if (!forkOverride) {
+			lockLift();
+		}
 	}
 
 	@Override
-	/**
-	 * Such will NOT hit the limit switch
-	 */
 	public void previousToteLength()
 	{
 		previousLength(TOTE_HEIGHT_IN);
 	}
 
 	@Override
-	/**
-	 * Such will NOT hit the limit switch
-	 */
 	public void nextToteLength()
 	{
 		nextLength(TOTE_HEIGHT_IN);
+	}
+
+	@Override
+	public void previousBinLength()
+	{
+		previousLength(BIN_HEIGHT_IN);
+	}
+
+	@Override
+	public void nextBinLength()
+	{
+		nextLength(BIN_HEIGHT_IN);
+	}
+
+	// PRIVATE OPERATIONS
+
+	private void unlockLiftMotion()
+	{
+		latch.disengage();
+		encodedMotor.up(LIFTER_UP_SPEED);
+		waitServo();
+		encodedMotor.stop();
 	}
 
 	private void nextLength(double encoderCount)
@@ -154,8 +184,10 @@ public class Forklift implements ILiftAssist
 				encodedMotor.up(LIFTER_UP_SPEED);
 			}
 		}
-		forkOverride = false;
-		stopLiftUp();
+		stop();
+		if (!forkOverride) {
+			lockLift();
+		}
 	}
 
 	private void previousLength(double encoderCount)
@@ -163,15 +195,16 @@ public class Forklift implements ILiftAssist
 		if (!isAtBottom())
 		{
 			double previousDistance = encodedMotor.getDistance();
-			unlockLift();
+			unlockLiftMotion();
 			while (!isAtBottom() && encodedMotor.getDistance() > (previousDistance - encoderCount) && !forkOverride)
 			{
 				goDownSafe();
-				SmartDashboard.putNumber("Distance", encodedMotor.getDistance());
 			}
 		}
-		forkOverride = false;
-		stopLiftDown();
+		stop();
+		if (!forkOverride) {
+			lockLift();
+		}
 	}
 
 	private void goDownSafe()
@@ -186,23 +219,35 @@ public class Forklift implements ILiftAssist
 
 	}
 
-	@Override
-	/**
-	 * Such will NOT hit the limit switch
-	 */
-	public void previousBinLength()
+	// PRIVATE BASELINE FUNCTIONS
+
+	private void lockLift()
 	{
-		previousLength(BIN_HEIGHT_IN);
+		latch.engage();
+		waitServo();
 	}
 
-	@Override
-	/**
-	 * Such will NOT hit the limit switch
-	 */
-	public void nextBinLength()
+	private void unlockLift()
 	{
-		nextLength(BIN_HEIGHT_IN);
+		latch.disengage();
+		waitServo();
 	}
+
+	private void waitServo()
+	{
+		long time = clock.getTimeInMillis();
+		while (clock.getTimeInMillis() < time + UNLOCK_TIME)
+		{
+			// Wait for unlock
+		}
+	}
+
+	private void stop()
+	{
+		encodedMotor.stop();
+	}
+
+	// OTHER
 
 	@Override
 	public void toDisplay()
@@ -220,35 +265,17 @@ public class Forklift implements ILiftAssist
 			SmartDashboard.putNumber("Distance", encodedMotor.getDistance());
 		}
 
-		stopLiftDown();
+		stop();
 
 		encodedMotor.reset();
 		isCalibrated = true;
 	}
 
-	public void stopAction()
+	public void setEStopAllAction(boolean override)
 	{
-		forkOverride = true;
+		forkOverride = override;
 	}
 
-	public void up()
-	{
-		latch.disengage();
-		
-		if (!isAtTop())
-		{
-			encodedMotor.up(LIFTER_UP_SPEED);
-		}
-	}
-	
-	public void down()
-	{
-		if (!isAtBottom())
-		{
-			goDownSafe();
-		}
-	}
-	
 	private boolean isAtBottom()
 	{
 		return (isCalibrated ? (botSwitch.isHit() || encodedMotor.getPosition() <= LIFTER_BOTTOM_LIMIT) : botSwitch.isHit()) && !forkOverride;
@@ -258,5 +285,4 @@ public class Forklift implements ILiftAssist
 	{
 		return ((isCalibrated ? (topSwitch.isHit() || encodedMotor.getPosition() >= LIFTER_TOP_LIMIT) : topSwitch.isHit())) && !forkOverride;
 	}
-
 }
