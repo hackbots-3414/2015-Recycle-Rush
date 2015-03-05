@@ -2,15 +2,27 @@ Button 1: 		Drive Train			Default = *0.2; Click to Speed Up
 Button 2: 		N/A
 Button 3: 		Driver Assist		STREIGHTEN_WITH_TOTE_WIDE
 Button 4: 		N/A
-Button 5: 		Driver Assist		STREIGHTEN_WITH_TOTE_WIDE
-Button 6: 		N/A
+Button 5: 		Forklift			Up Tote Length
+Button 6: 		Forklift			Up Bin Length
 Button 7: 		Forklift 			Down Tote Length
-Button 8: 		Forklift 			Up Tote Length
-Button 9: 		Forklift 			Down Bin Length
-Button 10: 		Forklift 			Up Bin Length
+Button 8: 		Forklift 			Down Bin Length
+Button 9: 		Forklift 			DO LIFTER STUFF PROBABLY DOESNT WORK
+Button 10: 		Forklift 			OVERRIDE
 Button 11: 		Forklift 			Go To Bottom Limit
 Button 12:		Forklift 			Go To Top Limit
 
 X Axis: 		Drive Train 		Horizontal Control
 y Axis: 		Drive Train 		Vertical Control
 Twist: 			Drive Train 		Rotational Control
+
+private final JoystickButtons UP_TOTE = JoystickButtons.FIVE;
+	private final JoystickButtons DOWN_TOTE = JoystickButtons.SEVEN;
+	private final JoystickButtons UP_BIN = JoystickButtons.SIX;
+	private final JoystickButtons DOWN_BIN = JoystickButtons.EIGHT;
+	private final JoystickButtons GO_TO_TOP = JoystickButtons.TWELVE;
+	private final JoystickButtons GO_TO_BOTTOM = JoystickButtons.ELEVEN;
+	private final JoystickButtons STREIGHTEN_WITH_TOTE_WIDE = JoystickButtons.FIVE;
+	private final JoystickButtons STREIGHTEN_WITH_TOTE_THIN = JoystickButtons.THREE;
+	private final JoystickButtons TRIGGER_SLOW_JOYSTICK = JoystickButtons.ONE;
+	private final JoystickButtons OVERRIDE_BUTTON = JoystickButtons.TEN;
+	private final JoystickButtons DO_LIFTER_COMMANDS = JoystickButtons.NINE;
