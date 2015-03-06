@@ -4,5 +4,5 @@ import org.usfirst.frc.team3414.sensors.IDetectAutoZone;
 
 public interface IVision extends IDetectObjects, IDetectAutoZone
 {
-
+	public void startAutomaticCapture(String cameraName);
 }

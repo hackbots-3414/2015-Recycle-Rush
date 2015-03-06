@@ -1,9 +1,13 @@
 package org.usfirst.frc.team3414.robot;
 
 import org.usfirst.frc.team3414.autonomous.AutonomousControl;
-import org.usfirst.frc.team3414.sensors.Camera;
+import org.usfirst.frc.team3414.sensors.SensorConfig;
 import org.usfirst.frc.team3414.teleop.TeleopControl;
 
+import com.ni.vision.NIVision;
+import com.ni.vision.NIVision.Image;
+
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 
 /**
@@ -17,7 +21,7 @@ public class Robot extends IterativeRobot
 {	
 	TeleopControl teleop;
 	AutonomousControl auto;
-	//Camera cam;
+	CameraServer server;
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -25,7 +29,9 @@ public class Robot extends IterativeRobot
 	public void robotInit()
 	{	
 		RobotStatus.setIsRunning(true);
-		//cam = new Camera();
+		server = CameraServer.getInstance();
+//		server.setQuality(50);
+		server.startAutomaticCapture("cam3");
 		teleop = new TeleopControl();
 		auto = new AutonomousControl();
 	}

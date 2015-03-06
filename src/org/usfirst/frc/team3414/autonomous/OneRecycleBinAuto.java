@@ -33,18 +33,17 @@ public class OneRecycleBinAuto implements AutonomousProcedure
 	public void doAuto() 
 	{		
 		SmartDashboard.putBoolean("Doing Bin 1", true);
-		forkLift.previousToteLength(); // Moves to bottom level of lifting positions
+		 // Moves to bottom level of lifting positions
 		
 		
 //		driverAssist.binSweetSpot(SweetSpotMode.TOTE_WIDE); // Moves toward recycle bin that is placed in front of the robot at the beginning of a match
 //		driverAssist.correctRotation(SweetSpotMode.TOTE_WIDE); // Correct rotation in front of the recycle bin
 		
-		forkLift.nextToteLength(); // Pick up recycle bin
-		
+		forkLift.previousToteLength(); // Pick up recycle bin
+		forkLift.nextToteLength();
 		// Move backward into the autonomous zone
 		driveIntoZone.doAuto();
-		forkLift.calibrate();
-		
+		//forkLift.calibrate();
 		// Drop recycle bin
 //		forkLift.goToBottomLimit();
 		

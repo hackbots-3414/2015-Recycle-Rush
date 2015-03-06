@@ -34,6 +34,7 @@ public class AutonomousControl
 //		threeYellowToteAuto = new ThreeYellowToteAuto();
 		oneRecycleBinAuto = new OneRecycleBinAuto();
 //		twoRecycleBinAuto = new TwoRecycleBinAuto();
+		
 		SmartDashboard.putBoolean("Prep Bin 1", false);
 	}
 

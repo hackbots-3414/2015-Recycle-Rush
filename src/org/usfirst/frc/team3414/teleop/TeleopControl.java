@@ -8,6 +8,7 @@ import org.usfirst.frc.team3414.actuators.IDriveTrain;
 import org.usfirst.frc.team3414.actuators.ILiftAssist;
 import org.usfirst.frc.team3414.autonomous.AutonomousConfig;
 import org.usfirst.frc.team3414.autonomous.IDriverAssist;
+import org.usfirst.frc.team3414.autonomous.IVision;
 import org.usfirst.frc.team3414.sensors.IClock;
 import org.usfirst.frc.team3414.sensors.SensorConfig;
 import org.usfirst.frc.team3414.sensors.SweetSpotMode;
@@ -19,6 +20,7 @@ public class TeleopControl
 	private IDriveTrain driveTrain;
 	private ILiftAssist lifter;
 	private IClock clock;
+	private IVision camera;
 
 	private IDriverAssist driverAssist;
 
@@ -30,8 +32,10 @@ public class TeleopControl
 	private final JoystickButtons DOWN_BIN = JoystickButtons.EIGHT;
 	private final JoystickButtons GO_TO_TOP = JoystickButtons.TWELVE;
 	private final JoystickButtons GO_TO_BOTTOM = JoystickButtons.ELEVEN;
-	private final JoystickButtons STREIGHTEN_WITH_TOTE_WIDE = JoystickButtons.FIVE;
-	private final JoystickButtons STREIGHTEN_WITH_TOTE_THIN = JoystickButtons.THREE;
+	//private final JoystickButtons STREIGHTEN_WITH_TOTE_WIDE = JoystickButtons.FIVE;
+	private final JoystickButtons CAMERA_TOP = JoystickButtons.TWELVE;
+	//private final JoystickButtons STREIGHTEN_WITH_TOTE_THIN = JoystickButtons.THREE;
+	private final JoystickButtons CAMERA_BOTTOM = JoystickButtons.ELEVEN;
 	private final JoystickButtons TRIGGER_SLOW_JOYSTICK = JoystickButtons.ONE;
 	private final JoystickButtons OVERRIDE_BUTTON = JoystickButtons.TEN;
 	private final JoystickButtons DO_LIFTER_COMMANDS = JoystickButtons.NINE;
@@ -54,6 +58,7 @@ public class TeleopControl
 		ActuatorConfig actuators = ActuatorConfig.getInstance();
 
 		this.clock = sensors.getClock();
+		this.camera = sensors.getVisionAssist();
 		this.lifter = actuators.getForklift();
 		this.driveTrain = actuators.getDriveTrain();
 		this.driverAssist = AutonomousConfig.getInstance().getDriveAssist();
@@ -92,7 +97,7 @@ public class TeleopControl
 
 	public void enable()
 	{
-		lifter.calibrate();
+		//lifter.calibrate();
 
 		timeEventID.add(clock.addTimeListener((event) -> {
 			if (gamepad.getButton(DO_LIFTER_COMMANDS))
@@ -158,7 +163,14 @@ public class TeleopControl
 		buttonEventID.add(gamepadEventHandler.addButtonListener((event) -> {
 			lifter.goToBottomLimit();
 		}, GO_TO_BOTTOM, true));
-
+		
+		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
+			camera.startAutomaticCapture("cam1");
+		}, CAMERA_TOP, true));
+		
+		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
+			camera.startAutomaticCapture("cam3");
+		}, CAMERA_BOTTOM, true));
 		// buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
 		// driverAssist.binSweetSpot(SweetSpotMode.TOTE_WIDE);
 		// driverAssist.correctRotation(SweetSpotMode.TOTE_WIDE);

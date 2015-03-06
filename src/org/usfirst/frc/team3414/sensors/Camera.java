@@ -106,18 +106,18 @@ public class Camera implements IVision
 		server = CameraServer.getInstance();
 		server.setQuality(50);
 		
-//		int sessionLookAt = NIVision.IMAQdxOpenCamera("cam1", NIVision.IMAQdxCameraControlMode.CameraControlModeController);
-//		Image frameLookAt = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
-//		
-//		SensorConfig.getInstance().getClock().addTimeListener((event) -> {
-//			NIVision.IMAQdxGrab(sessionLookAt, frameLookAt, 1);
-//			server.setImage(frameLookAt);
-//		}, 100, true);
+		int sessionLookAt = NIVision.IMAQdxOpenCamera("cam1", NIVision.IMAQdxCameraControlMode.CameraControlModeController);
+		Image frameLookAt = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
+		
+		SensorConfig.getInstance().getClock().addTimeListener((event) -> {
+			NIVision.IMAQdxGrab(sessionLookAt, frameLookAt, 1);
+			server.setImage(frameLookAt);
+		}, 100, true);
 
 		server.startAutomaticCapture("cam1");
 
-//		session = NIVision.IMAQdxOpenCamera("cam3", NIVision.IMAQdxCameraControlMode.CameraControlModeController);
-//		NIVision.IMAQdxConfigureGrab(session);
+		session = NIVision.IMAQdxOpenCamera("cam3", NIVision.IMAQdxCameraControlMode.CameraControlModeController);
+		NIVision.IMAQdxConfigureGrab(session);
 		
 		server.startAutomaticCapture("cam3");
 		// NIVision.ParticleFilterCriteria2 criteria[] = new
@@ -580,5 +580,11 @@ public class Camera implements IVision
 	{
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void startAutomaticCapture(String cameraName)
+	{
+		server.startAutomaticCapture(cameraName);
 	}
 }

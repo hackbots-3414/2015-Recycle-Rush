@@ -4,6 +4,7 @@ import org.usfirst.frc.team3414.autonomous.AutonomousSwitches;
 import org.usfirst.frc.team3414.autonomous.IVision;
 
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.SPI.Port;
 
 public class SensorConfig
@@ -21,6 +22,7 @@ public class SensorConfig
 	private final int ULTRASONIC_REAR = 0;
 	private final int ULTRASONIC_RIGHT = 1;
 	private final int ULTRASONIC_LEFT = 2;
+	private final int LED_PORT = 9;
 
 	private final int GYROSCOPE_PORT = 5;
 
@@ -48,6 +50,7 @@ public class SensorConfig
 	private IMeasureDirection gyro;
 	private ISwitch autoModeSelectSwitch;
 	private IVision visionAssist;
+	private CANTalon led;
 
 	private SensorConfig()
 	{
@@ -66,7 +69,7 @@ public class SensorConfig
 			//gyro = new Gyroscope(GYROSCOPE_PORT);
 			autoModeSelectSwitch = new AutonomousSwitches(AUTO_SWITCH_ONES, AUTO_SWITCH_TWOS, AUTO_SWITCH_FOURS);
 			visionAssist = new Camera();
-			
+			led = new CANTalon(LED_PORT);
 			sensorBar = new SensorBar(SPI_PORT, TEMP_NUMBER_OF_SENSORS);
 			
 		} catch (Exception e)
@@ -161,5 +164,10 @@ public class SensorConfig
 	public IVision getVisionAssist()
 	{
 		return visionAssist;
+	}
+	
+	public CANTalon getLed()
+	{
+		return led;
 	}
 }
