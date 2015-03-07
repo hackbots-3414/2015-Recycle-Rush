@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class AutonomousControl
 {// Creates all of the autonomouses that will be used.
-//	private AutonomousProcedure driveIntoAuto; 
+	//private AutonomousProcedure driveIntoAuto; 
 //	private AutonomousProcedure oneYellowToteAuto;
 //	private AutonomousProcedure twoYellowToteAuto;
 //	private AutonomousProcedure threeYellowToteAuto;
@@ -35,7 +35,7 @@ public class AutonomousControl
 		oneRecycleBinAuto = new OneRecycleBinAuto();
 //		twoRecycleBinAuto = new TwoRecycleBinAuto();
 		
-		SmartDashboard.putBoolean("Prep Bin 1", false);
+		//SmartDashboard.putBoolean("Prep Bin 1", false);
 	}
 
 	/**
@@ -46,6 +46,9 @@ public class AutonomousControl
 	 */
 	public void doAuto()
 	{
+		oneRecycleBinAuto.doAuto();
+
+		
 //		SwitchPositions AutonomousType = switches.get();
 
 		// Each autonomous if loop calls it's respective autonomous procedure
@@ -67,7 +70,7 @@ public class AutonomousControl
 //			break;
 //		case RECYCLECAN1:
 //			SmartDashboard.putBoolean("Prep Bin 1", true);
-			oneRecycleBinAuto.doAuto();
+			//oneRecycleBinAuto.doAuto();
 //			break;
 //		case RECYCLECAN2:
 //			twoRecycleBinAuto.doAuto();

@@ -8,46 +8,69 @@ import org.usfirst.frc.team3414.sensors.SensorConfig;
 import org.usfirst.frc.team3414.sensors.TimeEventArgs;
 
 import edu.wpi.first.wpilibj.Timer;
+
 /**
- * An autonomous routine that drives into the autonomous zone and does nothing else
+ * An autonomous routine that drives into the autonomous zone and does nothing
+ * else
  * 
  * @author Ray
  *
  */
-public class DriveIntoAuto implements AutonomousProcedure  //, ITimeListener
+public class DriveIntoAuto implements AutonomousProcedure, ITimeListener
 {
-	IVision cameraAssist;
-	IDriveTrain mecanumDrive;
-	ITimeEventHandler clock;
+	private IVision cameraAssist;
+	private IDriveTrain mecanumDrive;
+	private ITimeEventHandler clock;
+	private final long RUNTIME = 2100; //previously 2250
 
-	public DriveIntoAuto() 
+	public DriveIntoAuto()
 	{
 		super();
-		
+
 		SensorConfig sensors = SensorConfig.getInstance();
-		
+
 		this.mecanumDrive = ActuatorConfig.getInstance().getDriveTrain();
 		this.clock = sensors.getClock();
 		this.cameraAssist = sensors.getVisionAssist();
 	}
-	
+
 	public void doAuto()
 	{
-		mecanumDrive.move(-1.0, 0, 0.0); // Move backward into the autonomous zone
-		Timer.delay(3); //Change for timeout value (this sets the value where the robot gives up on finding the line and just stops by timebase)
+
+		//mecanumDrive.move(-0.5, 0, 0.0); // Move backward into the autonomous
+			
+		long current = System.currentTimeMillis();
+		while (System.currentTimeMillis() < current + RUNTIME) {
+			mecanumDrive.move(-0.5, 0, 0.0);
+		}
+		mecanumDrive.stop();
 		
-//		while(cameraAssist.isInAutoZone() == false)
-//		{
-//			
+//		long current = System.currentTimeMillis();
+//		while (System.currentTimeMillis() < current + RUNTIME) {
+//			mecanumDrive.move(-0.5, 0, 0.0);
 //		}
+//		mecanumDrive.stop();
+		//clock.addTimeListener(this, 3000, false);// zone
+//		clock.addTimeListener((event) -> {
+//			mecanumDrive.stop();
+//		}, 3000, false); 
 		
-		mecanumDrive.stop(); // Stops when we get into the autonomous zone
+		// Timer.delay(2); //Change for timeout value (this
+							// sets the value where the robot gives up on
+							// finding the line and just stops by timebase)
+		//
+		// while(cameraAssist.isInAutoZone() == false)
+		// {
+		//
+		// }
+
+		// mecanumDrive.stop(); // Stops when we get into the autonomous zone
 	}
 
-//	@Override
-//	public void timeEvent(TimeEventArgs timeEvent) 
-//	{
-//		mecanumDrive.stop();
-//	}
+	@Override
+	public void timeEvent(TimeEventArgs timeEvent)
+	{
+		mecanumDrive.stop();
+	}
 
 }

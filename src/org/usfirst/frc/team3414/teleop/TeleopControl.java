@@ -26,17 +26,22 @@ public class TeleopControl
 
 	private final int OVERRIDE_REFRESH_RATE_MS = 10;
 
+	private final JoystickButtons DRIVE_RIGHT = JoystickButtons.FOUR;
+	private final JoystickButtons DRIVE_LEFT = JoystickButtons.THREE;
+
 	private final JoystickButtons UP_TOTE = JoystickButtons.FIVE;
 	private final JoystickButtons DOWN_TOTE = JoystickButtons.SEVEN;
 	private final JoystickButtons UP_BIN = JoystickButtons.SIX;
 	private final JoystickButtons DOWN_BIN = JoystickButtons.EIGHT;
 	private final JoystickButtons GO_TO_TOP = JoystickButtons.TWELVE;
 	private final JoystickButtons GO_TO_BOTTOM = JoystickButtons.ELEVEN;
-	//private final JoystickButtons STREIGHTEN_WITH_TOTE_WIDE = JoystickButtons.FIVE;
+	// private final JoystickButtons STREIGHTEN_WITH_TOTE_WIDE =
+	// JoystickButtons.FIVE;
 	private final JoystickButtons CAMERA_TOP = JoystickButtons.TWELVE;
-	//private final JoystickButtons STREIGHTEN_WITH_TOTE_THIN = JoystickButtons.THREE;
+	// private final JoystickButtons STREIGHTEN_WITH_TOTE_THIN =
+	// JoystickButtons.THREE;
 	private final JoystickButtons CAMERA_BOTTOM = JoystickButtons.ELEVEN;
-	private final JoystickButtons TRIGGER_SLOW_JOYSTICK = JoystickButtons.ONE;
+	private final JoystickButtons TRIGGER_GO_REGULAR_SPEED_IF_CLICKED_JOYSTICK = JoystickButtons.ONE;
 	private final JoystickButtons OVERRIDE_BUTTON = JoystickButtons.TEN;
 	private final JoystickButtons DO_LIFTER_COMMANDS = JoystickButtons.NINE;
 
@@ -51,6 +56,8 @@ public class TeleopControl
 
 	private ButtonEventHandler joystickEventHandler;
 	private ButtonEventHandler gamepadEventHandler;
+
+	private final double SIDE_VELOCITY = 0.3;
 
 	public TeleopControl()
 	{
@@ -76,9 +83,11 @@ public class TeleopControl
 		if (input > 0)
 		{
 			returnValue = Math.pow(input, 2);
+			//returnValue = Math.sqrt(Math.pow(input, 3));
 		} else if (input < 0)
 		{
 			returnValue = -Math.pow(input, 2);
+			//returnValue = -Math.sqrt(Math.pow(input, 3));
 		} else
 		{
 			returnValue = 0.0;
@@ -97,7 +106,7 @@ public class TeleopControl
 
 	public void enable()
 	{
-		//lifter.calibrate();
+		// lifter.calibrate();
 
 		timeEventID.add(clock.addTimeListener((event) -> {
 			if (gamepad.getButton(DO_LIFTER_COMMANDS))
@@ -123,14 +132,32 @@ public class TeleopControl
 
 		timeEventID.add(clock.addTimeListener((event) -> {
 			displayStuff();
-			if (joystick.getButton(TRIGGER_SLOW_JOYSTICK))
-			{
-				driveTrain.move(getJoystickLimitingValue(joystick.getMagnitude()), joystick.getDirectionDegrees(),
-						getJoystickLimitingValue(joystick.getTwist()));
+			if (joystick.getButton(TRIGGER_GO_REGULAR_SPEED_IF_CLICKED_JOYSTICK))
+			{                                                         
+				if (joystick.getButton(DRIVE_RIGHT))
+				{
+					driveTrain.move(SIDE_VELOCITY, 90, 0.01);
+				} else if (joystick.getButton(DRIVE_LEFT))
+				{
+					driveTrain.move(-SIDE_VELOCITY, 90, -0.01);
+				} else
+				{
+					driveTrain.move(getJoystickLimitingValue(joystick.getMagnitude()), joystick.getDirectionDegrees(),
+							getJoystickLimitingValue(joystick.getTwist()));
+				}
 			} else
 			{
-				driveTrain.move(getJoystickLimitingValue(joystick.getMagnitude()) * .4, joystick.getDirectionDegrees(),
-						getJoystickLimitingValue(joystick.getTwist()) * .4);
+				if (joystick.getButton(DRIVE_RIGHT))
+				{
+					driveTrain.move(SIDE_VELOCITY, 90, 0.01);
+				} else if (joystick.getButton(DRIVE_LEFT))
+				{
+					driveTrain.move(-SIDE_VELOCITY, 90, -0.01);
+				} else
+				{
+					driveTrain.move(getJoystickLimitingValue(joystick.getMagnitude()) * .4, joystick.getDirectionDegrees(),
+							getJoystickLimitingValue(joystick.getTwist()) * .4);
+				}
 
 			}
 		}, driveTrain.getSafetyTimeout() / 4, true));
@@ -163,11 +190,11 @@ public class TeleopControl
 		buttonEventID.add(gamepadEventHandler.addButtonListener((event) -> {
 			lifter.goToBottomLimit();
 		}, GO_TO_BOTTOM, true));
-		
+
 		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
 			camera.startAutomaticCapture("cam1");
 		}, CAMERA_TOP, true));
-		
+
 		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
 			camera.startAutomaticCapture("cam3");
 		}, CAMERA_BOTTOM, true));

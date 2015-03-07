@@ -24,8 +24,8 @@ public class AutonomousSwitches implements ISwitch
 		one = new MyAutoLimitSwitch(channelOnes, false);
 		two = new MyAutoLimitSwitch(channelTwos, false);
 		four = new MyAutoLimitSwitch(channelFours, false);
-		SmartDashboard.putBoolean("BIN 1", false);
-		SmartDashboard.putBoolean("Something Else", false);
+		//SmartDashboard.putBoolean("BIN 1", false);
+		//SmartDashboard.putBoolean("Something Else", false);
 	}
 
 	/**
@@ -60,49 +60,49 @@ public class AutonomousSwitches implements ISwitch
 		// }
 		if (one.get() == SwitchPositions.ON && two.get() == SwitchPositions.OFF && four.get() == SwitchPositions.OFF)
 		{
-			SmartDashboard.putBoolean("Something Else", true);
+			//SmartDashboard.putBoolean("Something Else", true);
 			return SwitchPositions.NOTHING;
 		} else if (one.get() == SwitchPositions.ON && two.get() == SwitchPositions.OFF && four.get() == SwitchPositions.OFF)
 		{
-			SmartDashboard.putBoolean("Something Else", true);
+			//SmartDashboard.putBoolean("Something Else", true);
 			return SwitchPositions.DRIVEFORWARD;
 		} else if (one.get() == SwitchPositions.OFF && two.get() == SwitchPositions.ON && four.get() == SwitchPositions.OFF)
 		{
-			SmartDashboard.putBoolean("Something Else", true);
+			//SmartDashboard.putBoolean("Something Else", true);
 			return SwitchPositions.YELLOWTOTE1;
 		} else
 
 		if (one.get() == SwitchPositions.ON && two.get() == SwitchPositions.ON && four.get() == SwitchPositions.OFF)
 		{
-			SmartDashboard.putBoolean("Something Else", true);
+			//SmartDashboard.putBoolean("Something Else", true);
 			return SwitchPositions.YELLOWTOTE2;
 		} else
 
 		if (one.get() == SwitchPositions.OFF && two.get() == SwitchPositions.OFF && four.get() == SwitchPositions.ON)
 		{
-			SmartDashboard.putBoolean("Something Else", true);
+			//SmartDashboard.putBoolean("Something Else", true);
 			return SwitchPositions.YELLOWTOTE3;
 		} else
 
 		if (one.get() == SwitchPositions.ON && two.get() == SwitchPositions.OFF && four.get() == SwitchPositions.ON)
 		{
-			SmartDashboard.putBoolean("BIN 1", true);
+			//SmartDashboard.putBoolean("BIN 1", true);
 			return SwitchPositions.RECYCLECAN1;
 		} else
 
 		if (one.get() == SwitchPositions.OFF && two.get() == SwitchPositions.ON && four.get() == SwitchPositions.ON)
 		{
-			SmartDashboard.putBoolean("Something Else", true);
+			//SmartDashboard.putBoolean("Something Else", true);
 			return SwitchPositions.RECYCLECAN2;
 		} else
 
 		if (one.get() == SwitchPositions.ON && two.get() == SwitchPositions.ON && four.get() == SwitchPositions.ON)
 		{
-			SmartDashboard.putBoolean("Something Else", true);
+			//SmartDashboard.putBoolean("Something Else", true);
 			return SwitchPositions.GREYTOTES;
 		} else
 		{
-			SmartDashboard.putBoolean("Something Else", true);
+			//SmartDashboard.putBoolean("Something Else", true);
 
 			return SwitchPositions.DRIVEFORWARD;
 		}

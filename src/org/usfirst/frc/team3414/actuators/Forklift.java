@@ -7,14 +7,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Forklift implements ILiftAssist
 {
-	private static final int UNLOCK_TIME = 500;
+	private static final int UNLOCK_TIME = 300; //previously 500
 	private static final double LIFTER_UP_SPEED = 1.0;
 	private static final double LIFTER_DOWN_SPEED = 1.0;
 	private static final double CALIBRATE_SPEED = 0.3;
 	private static final double LIFTER_TOP_LIMIT = 19500;
 	private static final double LIFTER_BOTTOM_LIMIT = 200;
 
-	private static final double TOTE_HEIGHT_IN = 12;
+	private static final double TOTE_HEIGHT_IN = 14; //previously 12
 	private static final double BIN_HEIGHT_IN = 28.75;
 
 	private IEncodedMotor encodedMotor;
@@ -123,6 +123,7 @@ public class Forklift implements ILiftAssist
 
 		}
 		stop();
+		encodedMotor.reset();
 //		if (!forkOverride)
 //		{
 			lockLift();
@@ -216,7 +217,7 @@ public class Forklift implements ILiftAssist
 
 	private void goDownSafe()
 	{
-		if (Math.abs(encodedMotor.getDistance()) <= 3)
+		if (Math.abs(encodedMotor.getDistance()) <= 3 && isCalibrated)
 		{
 			encodedMotor.down(CALIBRATE_SPEED);
 		} else
