@@ -36,6 +36,8 @@ public class MecanumDrive implements IDriveTrain, ITimeListener
 	private int LOWER_BOUND_ANGLE = 2;
 
 	private double accelY;
+	
+	
 	private double accelX;
 
 	protected MecanumDrive(IClock handler, IMeasureAcceleration accelerometer, IMeasureDirection gyro, SpeedController leftFront,

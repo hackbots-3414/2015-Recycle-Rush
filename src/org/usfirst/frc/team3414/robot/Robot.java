@@ -1,6 +1,7 @@
 package org.usfirst.frc.team3414.robot;
 
 import org.usfirst.frc.team3414.autonomous.AutonomousControl;
+import org.usfirst.frc.team3414.sensors.EthernetCamera;
 import org.usfirst.frc.team3414.teleop.TeleopControl;
 
 import edu.wpi.first.wpilibj.CameraServer;
@@ -19,6 +20,7 @@ public class Robot extends IterativeRobot
 	TeleopControl teleop;
 	AutonomousControl auto;
 	CameraServer server;
+	EthernetCamera camera;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -29,8 +31,10 @@ public class Robot extends IterativeRobot
 		RobotStatus.setIsRunning(true);
 		server = CameraServer.getInstance();
 		server.setQuality(25);
-		//server.startAutomaticCapture("cam1");
-		server.startAutomaticCapture("cam3");
+		server.startAutomaticCapture("cam1");
+		//server.startAutomaticCapture("cam3");
+//		camera = new EthernetCamera();
+//		camera.init();
 		teleop = new TeleopControl();
 		auto = new AutonomousControl();
 	}

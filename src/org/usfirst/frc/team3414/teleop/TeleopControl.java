@@ -28,7 +28,9 @@ public class TeleopControl
 
 	private final JoystickButtons DRIVE_RIGHT = JoystickButtons.FOUR;
 	private final JoystickButtons DRIVE_LEFT = JoystickButtons.THREE;
-
+	
+	private final JoystickButtons REDUCE_DRIVE_RATE = JoystickButtons.ELEVEN;
+	
 	private final JoystickButtons UP_TOTE = JoystickButtons.FIVE;
 	private final JoystickButtons DOWN_TOTE = JoystickButtons.SEVEN;
 	private final JoystickButtons UP_BIN = JoystickButtons.SIX;
@@ -45,8 +47,14 @@ public class TeleopControl
 	private final JoystickButtons OVERRIDE_BUTTON = JoystickButtons.TEN;
 	private final JoystickButtons DO_LIFTER_COMMANDS = JoystickButtons.NINE;
 
-	private final JoystickButtons UP = JoystickButtons.FOUR;
+	private final JoystickButtons UP = JoystickButtons.THREE; //PREV FOUR
 	private final JoystickButtons DOWN = JoystickButtons.TWO;
+	
+	private final JoystickSide LEFT = JoystickSide.LEFT;
+	private final JoystickSide RIGHT = JoystickSide.RIGHT;
+	
+	private final JoystickAxis HORIZONTAL = JoystickAxis.HORIZONTAL_AXIS;
+	private final JoystickAxis VERTICAL = JoystickAxis.VERTICAL_AXIS;
 
 	final int JOYSTICK_PORT = 1;
 	final int GAMEPAD_PORT = 2;
@@ -87,7 +95,7 @@ public class TeleopControl
 		} else if (input < 0)
 		{
 			returnValue = -Math.pow(input, 2);
-			//returnValue = -Math.sqrt(Math.pow(input, 3));
+			//returnValue = -(Math.sqrt(Math.pow(input, 3)));
 		} else
 		{
 			returnValue = 0.0;
@@ -98,7 +106,7 @@ public class TeleopControl
 
 	private void displayStuff()
 	{
-		Display.getInstance().setJoyData(joystick.getMagnitude(), joystick.getDirectionDegrees(), joystick.getTwist());
+		Display.getInstance().setJoyData(gamepad.getMagnitude(LEFT), gamepad.getDirection(LEFT), gamepad.getTwist(RIGHT));
 		lifter.toDisplay();
 		driveTrain.toDisplay();
 		Display.getInstance().putDiagnosticsData();
@@ -115,11 +123,11 @@ public class TeleopControl
 			} else
 			{
 				joystickEventHandler.setAbleToDoCommands(false);
-				if (gamepad.getButton(UP))
+				if (joystick.getButton(UP))
 				{
 					lifter.upLift();
 
-				} else if (gamepad.getButton(DOWN))
+				} else if (joystick.getButton(DOWN))
 				{
 					lifter.downLift();
 
@@ -132,34 +140,44 @@ public class TeleopControl
 
 		timeEventID.add(clock.addTimeListener((event) -> {
 			displayStuff();
-			if (joystick.getButton(TRIGGER_GO_REGULAR_SPEED_IF_CLICKED_JOYSTICK))
-			{                                                         
-				if (joystick.getButton(DRIVE_RIGHT))
-				{
-					driveTrain.move(SIDE_VELOCITY, 90, 0.01);
-				} else if (joystick.getButton(DRIVE_LEFT))
-				{
-					driveTrain.move(-SIDE_VELOCITY, 90, -0.01);
-				} else
-				{
-					driveTrain.move(getJoystickLimitingValue(joystick.getMagnitude()), joystick.getDirectionDegrees(),
-							getJoystickLimitingValue(joystick.getTwist()));
-				}
-			} else
-			{
-				if (joystick.getButton(DRIVE_RIGHT))
-				{
-					driveTrain.move(SIDE_VELOCITY, 90, 0.01);
-				} else if (joystick.getButton(DRIVE_LEFT))
-				{
-					driveTrain.move(-SIDE_VELOCITY, 90, -0.01);
-				} else
-				{
-					driveTrain.move(getJoystickLimitingValue(joystick.getMagnitude()) * .4, joystick.getDirectionDegrees(),
-							getJoystickLimitingValue(joystick.getTwist()) * .4);
-				}
-
+			
+			double reduceRate = 1;
+			if (!gamepad.getButton(REDUCE_DRIVE_RATE)) {
+				reduceRate = 0.4;
+			} else {
+				reduceRate = 1;
 			}
+			
+			driveTrain.move(gamepad.getMagnitude(LEFT) * reduceRate, gamepad.getDirection(LEFT), gamepad.getTwist(RIGHT) * 0.6);
+			
+//			if (joystick.getButton(TRIGGER_GO_REGULAR_SPEED_IF_CLICKED_JOYSTICK))
+//			{                                                         
+//				if (joystick.getButton(DRIVE_RIGHT))
+//				{
+//					driveTrain.move(SIDE_VELOCITY, 90, 0.01);
+//				} else if (joystick.getButton(DRIVE_LEFT))
+//				{
+//					driveTrain.move(-SIDE_VELOCITY, 90, -0.01);
+//				} else
+//				{
+//					driveTrain.move(getJoystickLimitingValue(joystick.getMagnitude()), joystick.getDirectionDegrees(),
+//							getJoystickLimitingValue(joystick.getTwist()));
+//				}
+//			} else
+//			{
+//				if (joystick.getButton(DRIVE_RIGHT))
+//				{
+//					driveTrain.move(SIDE_VELOCITY, 90, 0.01);
+//				} else if (joystick.getButton(DRIVE_LEFT))
+//				{
+//					driveTrain.move(-SIDE_VELOCITY, 90, -0.01);
+//				} else
+//				{
+//					driveTrain.move(getJoystickLimitingValue(joystick.getMagnitude()) * .4, joystick.getDirectionDegrees(),
+//							getJoystickLimitingValue(joystick.getTwist()) * .4);
+//				}
+//
+//			}
 		}, driveTrain.getSafetyTimeout() / 4, true));
 
 		buttonEventID.add(gamepadEventHandler.addButtonListener((event) -> {
@@ -183,21 +201,21 @@ public class TeleopControl
 			lifter.previousBinLength();
 		}, DOWN_BIN, true));
 
-		buttonEventID.add(gamepadEventHandler.addButtonListener((event) -> {
+		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
 			lifter.goToTopLimit();
 		}, GO_TO_TOP, true));
 
-		buttonEventID.add(gamepadEventHandler.addButtonListener((event) -> {
+		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
 			lifter.goToBottomLimit();
 		}, GO_TO_BOTTOM, true));
 
-		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
-			camera.startAutomaticCapture("cam1");
-		}, CAMERA_TOP, true));
-
-		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
-			camera.startAutomaticCapture("cam3");
-		}, CAMERA_BOTTOM, true));
+//		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
+//			camera.startAutomaticCapture("cam1");
+//		}, CAMERA_TOP, true));
+//
+//		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
+//			camera.startAutomaticCapture("cam3");
+//		}, CAMERA_BOTTOM, true));
 		// buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
 		// driverAssist.binSweetSpot(SweetSpotMode.TOTE_WIDE);
 		// driverAssist.correctRotation(SweetSpotMode.TOTE_WIDE);
