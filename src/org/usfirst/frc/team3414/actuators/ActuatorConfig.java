@@ -17,8 +17,8 @@ public class ActuatorConfig
 	private static final int MOTOR_RIGHT_FRONT = 3;
 	private static final int MOTOR_RIGHT_REAR = 4;
 	
-	private static final int SUCKING_MOTOR_LEFT;
-	private static final int SUCKING_MOTOR_RIGHT;
+	private static final int SUCKING_MOTOR_LEFT = 0;
+	private static final int SUCKING_MOTOR_RIGHT = 0;
 	
 	private static final int LED_PORT = 8;
 	

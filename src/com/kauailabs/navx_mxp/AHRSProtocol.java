@@ -22,7 +22,9 @@
  ===============================================
  */
 
-package org.usfirst.frc.team3414.sensors;
+package com.kauailabs.navx_mxp;
+
+import com.kauailabs.nav6.IMUProtocol;
 
 public class AHRSProtocol extends IMUProtocol {
 

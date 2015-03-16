@@ -8,9 +8,13 @@
 /* in the root directory of the project.                                      */
 /*----------------------------------------------------------------------------*/
 
-package org.usfirst.frc.team3414.sensors;
+package com.kauailabs.nav6.frc;
 
 import java.util.Arrays;
+
+import com.kauailabs.nav6.IMUProtocol;
+import com.kauailabs.nav6.IMUProtocol.StreamResponse;
+import com.kauailabs.nav6.IMUProtocol.YPRUpdate;
 
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.SensorBase;

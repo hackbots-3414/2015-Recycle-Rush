@@ -8,7 +8,10 @@
 /* in the root directory of the project.                                      */
 /*----------------------------------------------------------------------------*/
 
-package org.usfirst.frc.team3414.sensors;
+package com.kauailabs.navx_mxp;
+
+import com.kauailabs.nav6.frc.IMU;
+import com.kauailabs.navx_mxp.AHRSProtocol.AHRSUpdate;
 
 import edu.wpi.first.wpilibj.SerialPort;
 
