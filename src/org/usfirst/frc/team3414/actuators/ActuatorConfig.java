@@ -16,6 +16,10 @@ public class ActuatorConfig
 	private static final int MOTOR_LEFT_REAR = 2;
 	private static final int MOTOR_RIGHT_FRONT = 3;
 	private static final int MOTOR_RIGHT_REAR = 4;
+	
+	private static final int SUCKING_MOTOR_LEFT;
+	private static final int SUCKING_MOTOR_RIGHT;
+	
 	private static final int LED_PORT = 8;
 	
 	private IDriveTrain driveTrain;
@@ -26,9 +30,12 @@ public class ActuatorConfig
 	private CANTalon rightFront;
 	private CANTalon leftRear;
 	private CANTalon rightRear;
+	private CANTalon suckingLeft;
+	private CANTalon suckingRight;
 	private Talon ledTalon;
 	private SpeedController leftFrontInvert;
 	private SpeedController leftRearInvert;
+	private ISucker sucker;
 	
 	private ActuatorConfig()
 	{
@@ -39,6 +46,8 @@ public class ActuatorConfig
 			rightFront = new CANTalon(MOTOR_RIGHT_FRONT);
 			leftRear = new CANTalon(MOTOR_LEFT_REAR);
 			rightRear = new CANTalon(MOTOR_RIGHT_REAR);
+			suckingLeft = new CANTalon(SUCKING_MOTOR_LEFT);
+			suckingRight = new CANTalon(SUCKING_MOTOR_RIGHT);
 			ledTalon = new Talon(LED_PORT);
 			
 			leftFrontInvert = new InverseController(leftFront);
@@ -49,6 +58,7 @@ public class ActuatorConfig
 			motor = new EncodedMotor(new CANTalon(LIFT_MOTOR), sensors.getForkLiftEncoder());
 			servo = new Servo(LIFTER_GRIP);
 			forklift = new Forklift(motor, sensors.getForkLiftTop(), sensors.getForkLiftBottom(), servo, sensors.getClock());
+			sucker = new Sucker(new Motor(suckingLeft, false), new Motor(suckingRight, false));
 		} catch (Exception e)
 		{
 			e.printStackTrace();
@@ -78,5 +88,10 @@ public class ActuatorConfig
 	public IServo getServo()
 	{
 		return servo;
+	}
+	
+	public ISucker getSucker()
+	{
+		return sucker;
 	}
 }

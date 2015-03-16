@@ -6,6 +6,7 @@ import java.util.List;
 import org.usfirst.frc.team3414.actuators.ActuatorConfig;
 import org.usfirst.frc.team3414.actuators.IDriveTrain;
 import org.usfirst.frc.team3414.actuators.ILiftAssist;
+import org.usfirst.frc.team3414.actuators.ISucker;
 import org.usfirst.frc.team3414.autonomous.AutonomousConfig;
 import org.usfirst.frc.team3414.autonomous.IDriverAssist;
 import org.usfirst.frc.team3414.autonomous.IVision;
@@ -19,6 +20,7 @@ public class TeleopControl
 	private IGamepad gamepad;
 	private IDriveTrain driveTrain;
 	private ILiftAssist lifter;
+	private ISucker sucker;
 	private IClock clock;
 	private IVision camera;
 
@@ -50,6 +52,9 @@ public class TeleopControl
 	private final JoystickButtons UP = JoystickButtons.THREE; //PREV FOUR
 	private final JoystickButtons DOWN = JoystickButtons.TWO;
 	
+	private final JoystickButtons SUCKER_IN = JoystickButtons.NINE;
+	private final JoystickButtons SUCKER_OUT = JoystickButtons.TEN;
+	
 	private final JoystickSide LEFT = JoystickSide.LEFT;
 	private final JoystickSide RIGHT = JoystickSide.RIGHT;
 	
@@ -76,6 +81,7 @@ public class TeleopControl
 		this.camera = sensors.getVisionAssist();
 		this.lifter = actuators.getForklift();
 		this.driveTrain = actuators.getDriveTrain();
+		this.sucker = actuators.getSucker();
 		this.driverAssist = AutonomousConfig.getInstance().getDriveAssist();
 		this.joystick = new Logitech3DProJoystick(JOYSTICK_PORT);
 		this.gamepad = new LogitechGamepad(GAMEPAD_PORT);
@@ -208,6 +214,14 @@ public class TeleopControl
 		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
 			lifter.goToBottomLimit();
 		}, GO_TO_BOTTOM, true));
+		
+		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
+			sucker.In(1.0);;
+		}, SUCKER_IN, true));
+		
+		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
+			sucker.Out(1.0);;
+		}, SUCKER_OUT, true));
 
 //		buttonEventID.add(joystickEventHandler.addButtonListener((event) -> {
 //			camera.startAutomaticCapture("cam1");
