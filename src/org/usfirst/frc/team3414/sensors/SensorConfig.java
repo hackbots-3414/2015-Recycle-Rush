@@ -3,9 +3,12 @@ package org.usfirst.frc.team3414.sensors;
 import org.usfirst.frc.team3414.autonomous.AutonomousSwitches;
 import org.usfirst.frc.team3414.autonomous.IVision;
 
+import com.kauailabs.navx_mxp.AHRS;
+
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.SPI.Port;
+import edu.wpi.first.wpilibj.SerialPort;
 
 public class SensorConfig
 {
@@ -66,7 +69,7 @@ public class SensorConfig
 			accelerometer = null;//new OurBuiltInAccelerometer();
 			forkLiftBottom = new LimitSwitch(LIMIT_SWITCH_BOTTOM, false);
 			forkLiftTop = new LimitSwitch(LIMIT_SWITCH_TOP, false);
-			//gyro = new Gyroscope(GYROSCOPE_PORT);
+			gyro = new AHRS(new SerialPort(57600, SerialPort.Port.kMXP));
 			autoModeSelectSwitch = new AutonomousSwitches(AUTO_SWITCH_ONES, AUTO_SWITCH_TWOS, AUTO_SWITCH_FOURS);
 			visionAssist = new Camera();
 			led = new CANTalon(LED_PORT);

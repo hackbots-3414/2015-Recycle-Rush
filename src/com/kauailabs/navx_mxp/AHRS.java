@@ -10,6 +10,8 @@
 
 package com.kauailabs.navx_mxp;
 
+import org.usfirst.frc.team3414.sensors.IMeasureDirection;
+
 import com.kauailabs.nav6.frc.IMU;
 import com.kauailabs.navx_mxp.AHRSProtocol.AHRSUpdate;
 
@@ -31,7 +33,7 @@ import edu.wpi.first.wpilibj.SerialPort;
  * @author Scott
  */
 
-public class AHRS extends IMU {
+public class AHRS extends IMU implements IMeasureDirection {
 
 	static final byte    NAVX_MXP_DEFAULT_UPDATE_RATE_HZ      = 60;
    
@@ -454,5 +456,23 @@ public class AHRS extends IMU {
      */
     public float getDisplacementY() {
     	return displacement[1];
+    }
+
+    @Override
+    public double getChangeInDegreesPerSecond()
+    {
+	return 0;
+    }
+
+    @Override
+    public double getDegrees()
+    {
+	return Math.toDegrees(Math.atan(getVelocityY()/getVelocityX()));
+    }
+
+    @Override
+    public double getRadians()
+    {
+	return Math.atan(getVelocityY()/getVelocityX());
     }
 }
