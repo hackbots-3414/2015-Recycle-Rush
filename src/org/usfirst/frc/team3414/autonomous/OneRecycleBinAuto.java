@@ -4,10 +4,7 @@ import org.usfirst.frc.team3414.actuators.ActuatorConfig;
 import org.usfirst.frc.team3414.actuators.ILiftAssist;
 import org.usfirst.frc.team3414.sensors.ITimeEventHandler;
 import org.usfirst.frc.team3414.sensors.SensorConfig;
-import org.usfirst.frc.team3414.sensors.SweetSpotMode;
-
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import org.usfirst.frc.team3414.sensors.SweetSpotMode;
 
 /**
  * 
@@ -18,7 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class OneRecycleBinAuto implements AutonomousProcedure
 {
-	private IDriverAssist driverAssist;
+//	private IDriverAssist driverAssist;
 	private AutonomousProcedure driveIntoZone;
 	private ILiftAssist forkLift;
 	private ITimeEventHandler clock;
@@ -27,59 +24,57 @@ public class OneRecycleBinAuto implements AutonomousProcedure
 	public OneRecycleBinAuto()
 	{
 		super();
-		// SmartDashboard.putBoolean("Doing Bin 1", false);
-		driverAssist = AutonomousConfig.getInstance().getDriveAssist();
+//		driverAssist = AutonomousConfig.getInstance().getDriveAssist();
 		forkLift = ActuatorConfig.getInstance().getForklift();
-		this.clock = SensorConfig.getInstance().getClock();
+		clock = SensorConfig.getInstance().getClock();
 		driveIntoZone = new DriveIntoAuto();
 	}
 
 	@Override
+	/**
+	 * ForkLift moves down for either 4 seconds or until finished moving
+	 * ForkLift moves up for either 2 seconds or until finished moving
+	 * Move backward into the autonomous zone
+	 * Drop recycle bin at bottom
+	 */
 	public void doAuto()
 	{
-		// SmartDashboard.putBoolean("Doing Bin 1", true);
-		// Moves to bottom level of lifting positions
-
-		// driverAssist.binSweetSpot(SweetSpotMode.TOTE_WIDE); // Moves toward
-		// recycle bin that is placed in front of the robot at the beginning of
-		// a match
-		// driverAssist.correctRotation(SweetSpotMode.TOTE_WIDE); // Correct
-		// rotation in front of the recycle bin
-		
+		// ForkLift moves down for either 4 seconds or until finished moving
 		long idA = clock.addTimeListener((event) -> {
-			forkLift.setEStopAllAction(true);
+			forkLift.setEStopAllAction(false);
 
-		}, RUNTIME + 2000, true);
+		}, RUNTIME + 2000, false);
 		
 		forkLift.previousToteLength();
 		
 		clock.removeListener(idA);
-		forkLift.setEStopAllAction(false);
+		forkLift.setEStopAllAction(true);
 		
-		
+		// ForkLift moves up for either 2 seconds or until finished moving
 		long idB = clock.addTimeListener((event) -> {
-			forkLift.setEStopAllAction(true);
+			forkLift.setEStopAllAction(false);
 
-		}, RUNTIME, true);
+		}, RUNTIME, false);
 		
 		forkLift.nextToteLength();
 		
 		clock.removeListener(idB);
 		forkLift.setEStopAllAction(false);
 		
-		// forkLift.downLift(); // Pick up recycle bin
-		// Timer.delay(0.75);
-		// forkLift.stopLift();
-		// Timer.delay(0.1);
-		// forkLift.upLift();
-		// Timer.delay(0.75);
 		// Move backward into the autonomous zone
 		driveIntoZone.doAuto();
-		// forkLift.calibrate();
+		
 		// Drop recycle bin
 		forkLift.goToBottomLimit();
-		// forkLift.previousBinLength();
 
+		
+		
+		// Moves to bottom level of lifting positions
+				// driverAssist.binSweetSpot(SweetSpotMode.TOTE_WIDE); // Moves toward
+				// recycle bin that is placed in front of the robot at the beginning of
+				// a match
+				// driverAssist.correctRotation(SweetSpotMode.TOTE_WIDE); // Correct
+				// rotation in front of the recycle bin
 	}
 
 }

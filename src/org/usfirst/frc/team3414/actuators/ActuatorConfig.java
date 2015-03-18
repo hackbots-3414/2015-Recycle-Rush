@@ -5,6 +5,7 @@ import org.usfirst.frc.team3414.sensors.SensorConfig;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ActuatorConfig
 {
@@ -32,6 +33,8 @@ public class ActuatorConfig
 	private CANTalon rightRear;
 	private Talon suckingLeft;
 	private Talon suckingRight;
+	private IMotor left;
+	private IMotor right;
 	private Talon ledTalon;
 	private SpeedController leftFrontInvert;
 	private SpeedController leftRearInvert;
@@ -50,6 +53,9 @@ public class ActuatorConfig
 			suckingRight = new Talon(SUCKING_MOTOR_RIGHT);
 			ledTalon = new Talon(LED_PORT);
 			
+			left = new Motor(suckingLeft, false);
+			right = new Motor(suckingRight, true);
+			
 			leftFrontInvert = new InverseController(leftFront);
 			leftRearInvert = new InverseController(leftRear);
 			
@@ -58,7 +64,7 @@ public class ActuatorConfig
 			motor = new EncodedMotor(new CANTalon(LIFT_MOTOR), sensors.getForkLiftEncoder());
 			servo = new Servo(LIFTER_GRIP);
 			forklift = new Forklift(motor, sensors.getForkLiftTop(), sensors.getForkLiftBottom(), servo, sensors.getClock());
-			sucker = new Sucker(new Motor(suckingLeft, false), new Motor(suckingRight, false));
+			sucker = new Sucker(left, right);
 		} catch (Exception e)
 		{
 			e.printStackTrace();
@@ -92,6 +98,7 @@ public class ActuatorConfig
 	
 	public ISucker getSucker()
 	{
+		SmartDashboard.putBoolean("got sucker", false);
 		return sucker;
 	}
 }
