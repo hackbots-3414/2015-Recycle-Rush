@@ -17,8 +17,8 @@ public class ActuatorConfig
 	private static final int MOTOR_RIGHT_FRONT = 3;
 	private static final int MOTOR_RIGHT_REAR = 4;
 	
-	private static final int SUCKING_MOTOR_LEFT;
-	private static final int SUCKING_MOTOR_RIGHT;
+	private static final int SUCKING_MOTOR_LEFT = 0;
+	private static final int SUCKING_MOTOR_RIGHT = 1;
 	
 	private static final int LED_PORT = 8;
 	
@@ -30,8 +30,8 @@ public class ActuatorConfig
 	private CANTalon rightFront;
 	private CANTalon leftRear;
 	private CANTalon rightRear;
-	private CANTalon suckingLeft;
-	private CANTalon suckingRight;
+	private Talon suckingLeft;
+	private Talon suckingRight;
 	private Talon ledTalon;
 	private SpeedController leftFrontInvert;
 	private SpeedController leftRearInvert;
@@ -46,8 +46,8 @@ public class ActuatorConfig
 			rightFront = new CANTalon(MOTOR_RIGHT_FRONT);
 			leftRear = new CANTalon(MOTOR_LEFT_REAR);
 			rightRear = new CANTalon(MOTOR_RIGHT_REAR);
-			suckingLeft = new CANTalon(SUCKING_MOTOR_LEFT);
-			suckingRight = new CANTalon(SUCKING_MOTOR_RIGHT);
+			suckingLeft = new Talon(SUCKING_MOTOR_LEFT);
+			suckingRight = new Talon(SUCKING_MOTOR_RIGHT);
 			ledTalon = new Talon(LED_PORT);
 			
 			leftFrontInvert = new InverseController(leftFront);

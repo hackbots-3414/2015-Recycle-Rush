@@ -11,16 +11,24 @@ public class Sucker implements ISucker
 	rightShooterMotor = rightMotor;
     }
     
-    public void In(double speed)
+    final double MOTOR_SPEED = 1.0;
+    
+    public void in()
     {
-	leftMotor.down(speed);
-	rightMotor.up(speed);
+	leftMotor.down(MOTOR_SPEED);
+	rightMotor.up(MOTOR_SPEED);
     }
     
-    public void Out(double speed)
+    public void out()
     {
-	leftMotor.up(speed);
-	rightMotor.down(speed);
+	leftMotor.up(MOTOR_SPEED);
+	rightMotor.down(MOTOR_SPEED);
+    }
+    
+    public void stop()
+    {
+	leftMotor.up(0.0);
+	rightMotor.down(0.0);
     }
     
 }
