@@ -25,8 +25,10 @@ public class MecanumDrive implements IDriveTrain, ITimeListener
 	private ExecutorService threadpool;
 
 	private static final double ROTATE_CONSTANT = 0.5;
-	private double ROTATE_SECONDS_PER_DEGREE;
-	private double ROTATE_POWER_INTO_MOTORS;
+	
+	private double ROTATE_SECONDS_PER_DEGREE = 0;
+	
+	private double ROTATE_POWER_INTO_MOTORS = 0.5;
 
 	private static final int SAFETY_TIMEOUT = 500;
 	private long eventID;

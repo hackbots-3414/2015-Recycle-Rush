@@ -69,7 +69,6 @@ public class SensorConfig
 			accelerometer = null;//new OurBuiltInAccelerometer();
 			forkLiftBottom = new LimitSwitch(LIMIT_SWITCH_BOTTOM, false);
 			forkLiftTop = new LimitSwitch(LIMIT_SWITCH_TOP, false);
-			gyro = new AHRS(new SerialPort(57600, SerialPort.Port.kMXP));
 			autoModeSelectSwitch = new AutonomousSwitches(AUTO_SWITCH_ONES, AUTO_SWITCH_TWOS, AUTO_SWITCH_FOURS);
 			visionAssist = new Camera();
 			led = new CANTalon(LED_PORT);

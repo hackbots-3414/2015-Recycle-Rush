@@ -10,8 +10,6 @@
 
 package com.kauailabs.navx_mxp;
 
-import org.usfirst.frc.team3414.sensors.IMeasureDirection;
-
 import com.kauailabs.nav6.frc.IMU;
 import com.kauailabs.navx_mxp.AHRSProtocol.AHRSUpdate;
 
@@ -33,7 +31,7 @@ import edu.wpi.first.wpilibj.SerialPort;
  * @author Scott
  */
 
-public class AHRS extends IMU implements IMeasureDirection {
+public class AHRS extends IMU {
 
 	static final byte    NAVX_MXP_DEFAULT_UPDATE_RATE_HZ      = 60;
    
@@ -55,7 +53,7 @@ public class AHRS extends IMU implements IMeasureDirection {
     volatile boolean altitude_valid;
     volatile boolean is_magnetometer_calibrated;
     volatile boolean magnetic_disturbance;
-    
+   
     /**
      * Constructs the AHRS class, overriding the default update rate
      * with a custom rate which may be from 4 to 60, representing
@@ -66,6 +64,8 @@ public class AHRS extends IMU implements IMeasureDirection {
      * @param serial_port SerialPort object to use
      * @param update_rate_hz Custom Update Rate (Hz)
      */
+    private double changeInDegrees = 0;
+    private double previousDegrees;
     public AHRS(SerialPort serial_port, byte update_rate_hz) {
         super(serial_port,update_rate_hz);
         ahrs_update_data = new AHRSProtocol.AHRSUpdate();
@@ -456,23 +456,5 @@ public class AHRS extends IMU implements IMeasureDirection {
      */
     public float getDisplacementY() {
     	return displacement[1];
-    }
-
-    @Override
-    public double getChangeInDegreesPerSecond()
-    {
-	return 0;
-    }
-
-    @Override
-    public double getDegrees()
-    {
-	return Math.toDegrees(Math.atan(getVelocityY()/getVelocityX()));
-    }
-
-    @Override
-    public double getRadians()
-    {
-	return Math.atan(getVelocityY()/getVelocityX());
     }
 }
