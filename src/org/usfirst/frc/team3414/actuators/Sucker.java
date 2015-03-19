@@ -4,17 +4,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Sucker implements ISucker
 {
-	IMotor leftMotor;
-	IMotor rightMotor;
+	private IMotor leftMotor;
+	private IMotor rightMotor;
 
 	public Sucker(IMotor leftShooterMotor, IMotor rightShooterMotor)
 	{
 		SmartDashboard.putBoolean("got sucker", true);
-		leftShooterMotor = leftMotor;
-		rightShooterMotor = rightMotor;
+		leftMotor = leftShooterMotor;
+		rightMotor = rightShooterMotor;
 	}
 
-	final double MOTOR_SPEED = 1.0;
+	private final double MOTOR_SPEED = 1.0;
 
 	public void in()
 	{
