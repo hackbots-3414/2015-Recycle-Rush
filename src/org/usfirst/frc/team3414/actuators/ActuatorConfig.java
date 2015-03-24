@@ -98,7 +98,6 @@ public class ActuatorConfig
 	
 	public ISucker getSucker()
 	{
-		SmartDashboard.putBoolean("got sucker", false);
 		return sucker;
 	}
 }

@@ -19,6 +19,7 @@ public class AutonomousControl
 //	private AutonomousProcedure twoYellowToteAuto;
 //	private AutonomousProcedure threeYellowToteAuto;
 	private AutonomousProcedure oneRecycleBinAuto;
+	private AutonomousProcedure binWithSuckers;
 //	private AutonomousProcedure twoRecycleBinAuto;
 
 	ISwitch switches;
@@ -32,6 +33,7 @@ public class AutonomousControl
 //		oneYellowToteAuto = new OneYellowToteAuto();
 //		twoYellowToteAuto = new TwoYellowToteAuto();
 //		threeYellowToteAuto = new ThreeYellowToteAuto();
+		binWithSuckers = new BinWithSuckersAuto();
 		oneRecycleBinAuto = new OneRecycleBinAuto();
 //		twoRecycleBinAuto = new TwoRecycleBinAuto();
 		
@@ -46,6 +48,7 @@ public class AutonomousControl
 	 */
 	public void doAuto()
 	{
+//		binWithSuckers.doAuto();
 		oneRecycleBinAuto.doAuto();
 
 		
