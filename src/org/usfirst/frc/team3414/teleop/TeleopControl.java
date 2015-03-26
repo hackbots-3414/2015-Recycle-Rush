@@ -37,12 +37,12 @@ public class TeleopControl
 	private final JoystickButtons DOWN = JoystickButtons.TWO;
 	// private final JoystickButtons UP = JoystickButtons.NINE;
 	// private final JoystickButtons DOWN = JoystickButtons.TEN;
-	private final JoystickButtons SUCKER_IN = JoystickButtons.FIVE;
+	private final JoystickButtons SUCKER_IN = JoystickButtons.SEVEN;
 	// private final JoystickButtons SUCKER_IN = JoystickButtons.ELEVEN;
 	// private final JoystickButtons SUCKER_OUT = JoystickButtons.TWELVE;
-	private final JoystickButtons SUCKER_OUT = JoystickButtons.SIX;
-	private final JoystickButtons SUCKER_RIGHT = JoystickButtons.SEVEN;
-	private final JoystickButtons SUCKER_LEFT = JoystickButtons.EIGHT;
+	private final JoystickButtons SUCKER_OUT = JoystickButtons.EIGHT;
+	private final JoystickButtons SUCKER_RIGHT = JoystickButtons.FIVE;
+	private final JoystickButtons SUCKER_LEFT = JoystickButtons.SIX;
 	private final JoystickButtons IS_SUCKER_AUTO = JoystickButtons.THREE;
 
 	private final JoystickSide LEFT = JoystickSide.LEFT;
@@ -77,10 +77,12 @@ public class TeleopControl
 
 		this.driveEventHandler = new ButtonEventHandler(driverControl);
 		this.liftEventHandler = new ButtonEventHandler(lifterControl);
+		
 	}
 
 	private void displayStuff()
 	{
+		SensorConfig.getInstance().getAutoModeSelectSwitch().whichOneIsIt();
 		Display.getInstance().setJoyData(driverControl.getMagnitude(LEFT), driverControl.getDirection(LEFT), driverControl.getTwist(RIGHT));
 		Display.getInstance().setButtonData(driverControl.getButton(OVERRIDE_BUTTON), lifterControl.getButton(SUCKER_RIGHT), lifterControl.getButton(SUCKER_LEFT), lifterControl.getButton(SUCKER_IN), lifterControl.getButton(SUCKER_OUT), lifterControl.getButton(UP), lifterControl.getButton(DOWN));
 		

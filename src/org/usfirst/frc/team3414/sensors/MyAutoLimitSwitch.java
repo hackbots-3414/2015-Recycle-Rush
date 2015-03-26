@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
  * Called by AutonomousSwitches.java
  */
 
-public class MyAutoLimitSwitch implements ISwitch
+public class MyAutoLimitSwitch
 {
 	private boolean inverse;
 	private SwitchPositions position;
@@ -20,6 +20,10 @@ public class MyAutoLimitSwitch implements ISwitch
 		this.inverse = inverse;
 		this.limitSwitch = new DigitalInput(channel);
 		
+	}
+	
+	public boolean isIt() {
+		return limitSwitch.get();
 	}
 
 	public SwitchPositions get()

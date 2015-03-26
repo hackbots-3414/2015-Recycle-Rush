@@ -36,6 +36,14 @@ public class Sucker implements ISucker
 		leftMotor.up(MOTOR_SPEED);
 		rightMotor.down(MOTOR_SPEED);
 	}
+	
+	public void setLeftMotor(double speed) {
+		leftMotor.up(speed);
+	}
+	
+	public void setRightMotor(double speed) {
+		rightMotor.up(speed);
+	}
 
 	public void stop()
 	{

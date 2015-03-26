@@ -15,15 +15,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class AutonomousSwitches implements ISwitch
 {
-	MyAutoLimitSwitch one;
-	MyAutoLimitSwitch two;
-	MyAutoLimitSwitch four;
+	private MyAutoLimitSwitch one;
+	private MyAutoLimitSwitch two;
+	private MyAutoLimitSwitch four;
+//	private double set;
 
 	public AutonomousSwitches(int channelOnes, int channelTwos, int channelFours)
 	{
 		one = new MyAutoLimitSwitch(channelOnes, false);
 		two = new MyAutoLimitSwitch(channelTwos, false);
 		four = new MyAutoLimitSwitch(channelFours, false);
+//		set = SmartDashboard.getBoolean("Auto Mode");
 		//SmartDashboard.putBoolean("BIN 1", false);
 		//SmartDashboard.putBoolean("Something Else", false);
 	}
@@ -37,6 +39,17 @@ public class AutonomousSwitches implements ISwitch
 	 * @generated
 	 * @ordered
 	 */
+	
+	public void whichOneIsIt() {
+//		double a = SmartDashboard.getNumber("Auto Mode");
+//		switch (a) {
+//		case 1:
+//			SmartDashboard.putNumber("Auto Set: ", set);
+			
+		SmartDashboard.putBoolean("One:", one.isIt());
+		SmartDashboard.putBoolean("Two:", two.isIt());
+		SmartDashboard.putBoolean("Four:", four.isIt());
+	}
 
 	public SwitchPositions get()
 	{

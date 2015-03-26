@@ -7,5 +7,7 @@ public interface ISucker
     public void right();
     public void left();
     public void stop();
+    public void setRightMotor(double speed);
+    public void setLeftMotor(double speed);
     public void setInSpeed(double speed);
 }

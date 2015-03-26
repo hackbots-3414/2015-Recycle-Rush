@@ -10,4 +10,5 @@ import org.usfirst.frc.team3414.autonomous.SwitchPositions;
 public interface ISwitch
 {
 	public SwitchPositions get();
+	public void whichOneIsIt();
 }
